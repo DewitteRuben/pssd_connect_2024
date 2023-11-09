@@ -15,7 +15,7 @@ const Name = () => {
   return (
     <Box height="100%" paddingX={8}>
       <VStack height="100%" justifyContent="center" spacing={8}>
-        <Text fontSize="xx-large" fontWeight="bold">
+        <Text fontSize="x-large" fontWeight="bold">
           My first name is
         </Text>
         <FormikNameForm onSubmit={onNameSubmit} />

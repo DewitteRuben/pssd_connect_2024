@@ -33,7 +33,7 @@ const EmailRegistration = () => {
   return (
     <Box height="100%" paddingX={8}>
       <VStack height="100%" justifyContent="center" spacing={8}>
-        <Text fontSize="xx-large" fontWeight="bold">
+        <Text fontSize="x-large" fontWeight="bold">
           Create your account
         </Text>
         <FormikEmailRegistrationForm onSubmit={onEmailRegSubmit} />

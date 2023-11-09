@@ -20,7 +20,7 @@ const AddPhotos = () => {
   return (
     <Box height="100%" paddingX={8}>
       <VStack width="100%" height="100%" justifyContent="center" spacing={8}>
-        <Text fontSize="xx-large" fontWeight="bold">
+        <Text fontSize="x-large" fontWeight="bold">
           Add photos
         </Text>
         <Text fontSize="sm">Choose at least one image to continue</Text>

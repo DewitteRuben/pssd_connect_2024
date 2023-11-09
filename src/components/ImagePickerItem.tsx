@@ -1,5 +1,7 @@
 import React from "react";
 import styled from "styled-components";
+import { MdClose } from "react-icons/md";
+import { Box, Icon } from "@chakra-ui/react";
 
 const Input = styled.input`
   display: none;
@@ -15,6 +17,20 @@ const Label = styled.label`
   display: inline-block;
   padding: 6px 12px;
   cursor: pointer;
+`;
+
+const CloseIcon = styled(Icon)`
+  position: absolute;
+  top: -5px;
+  right: -5px;
+  border: 1px solid var(--chakra-colors-green-500);
+  border-radius: 50%;
+  cursor: pointer;
+  padding: 2px;
+  background-color: var(--chakra-colors-green-500);
+  fill: white;
+  width: 20px;
+  height: 20px;
 `;
 
 const readFile = (file: File): Promise<string> => {
@@ -40,14 +56,26 @@ const ImagePickerItem: React.FC<ImagePickerItemProps> = ({ onSelect }) => {
     const res = await readFile(file);
     if (onSelect) {
       onSelect(res);
-      setBase64(res);
     }
+
+    setBase64(res);
+  };
+
+  const onClearImageClick = () => {
+    if (onSelect) {
+      onSelect("");
+    }
+
+    setBase64("");
   };
 
   return (
-    <Label style={{ backgroundImage: `url(${base64})` }}>
-      <Input accept="image/*" onChange={handleOnChange} type="file" />
-    </Label>
+    <Box position="relative">
+      <Label style={{ backgroundImage: `url(${base64})` }}>
+        <Input accept="image/*" onChange={handleOnChange} type="file" />
+      </Label>
+      {base64 && <CloseIcon onClick={onClearImageClick} as={MdClose} />}
+    </Box>
   );
 };
 

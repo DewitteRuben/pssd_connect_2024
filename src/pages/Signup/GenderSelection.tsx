@@ -17,7 +17,7 @@ const GenderSelection = () => {
   return (
     <Box height="100%" paddingX={8}>
       <VStack height="100%" justifyContent="center" spacing={8}>
-        <Text fontSize="xx-large" fontWeight="bold">
+        <Text fontSize="x-large" fontWeight="bold">
           I am a
         </Text>
         <FormikGenderSelectionForm onSubmit={onGenderSubmit} />

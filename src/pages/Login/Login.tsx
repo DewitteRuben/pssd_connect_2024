@@ -28,8 +28,8 @@ const Login = observer(() => {
   return (
     <Box height="100%" paddingX={8}>
       <VStack height="100%" justifyContent="center" spacing={8}>
-        <Text fontSize="xx-large" fontWeight="bold">
-          Log into your PSSD Dating account
+        <Text fontSize="x-large" fontWeight="bold">
+          Log into PSSD Social
         </Text>
         <FormikLoginForm onSubmit={onLoginFormSubmit}></FormikLoginForm>
       </VStack>
