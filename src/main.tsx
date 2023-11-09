@@ -11,7 +11,7 @@ import App from './pages/App/App';
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
     <ChakraProvider>
-      <Container maxW='1600px' minHeight='100vh'>
+      <Container padding="0" maxW='1600px' minHeight='100vh'>
         <BrowserRouter basename="/">
           <App />
         </BrowserRouter>
