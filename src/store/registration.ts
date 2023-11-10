@@ -10,12 +10,13 @@ const registrationFlow = [
   "showme",
   "pssd-duration",
   "photos",
+  "location",
 ] as const;
 type Step = (typeof registrationFlow)[number];
 
 export class RegistrationStore {
   public finishedRegistration = false;
-  public step: Step = "photos";
+  public step: Step = "location";
 
   private userData: Record<string, any> = {};
 
