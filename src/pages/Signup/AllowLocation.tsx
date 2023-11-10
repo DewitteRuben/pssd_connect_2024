@@ -3,6 +3,7 @@ import { observer } from "mobx-react";
 import { RegistrationStoreContext } from "../../store/registration";
 import React from "react";
 import LocationButton from "../../components/LocationButton";
+import RegistrationViewContainer from "../../components/RegistrationViewContainer";
 
 const AllowLocation = () => {
   const registration = React.useContext(RegistrationStoreContext);
@@ -13,32 +14,27 @@ const AllowLocation = () => {
   };
 
   return (
-    <Box height="100%" paddingX={8}>
-      <VStack height="100%" justifyContent="center" spacing={8}>
-        <Text fontSize="x-large" fontWeight="bold">
-          Enable location
-        </Text>
-        {!pos && (
-          <>
-            <Text align="center">
-              You'll need to enable your location in order to use this app
-            </Text>
-            <LocationButton onChange={handleOnLocation} />
-          </>
-        )}
+    <RegistrationViewContainer title="Enable location">
+      {!pos && (
+        <>
+          <Text align="center">
+            We use your location to show you potential matches in your area.
+          </Text>
+          <LocationButton onChange={handleOnLocation} />
+        </>
+      )}
 
-        {/* // TODO: display actual location here */}
-        
-        {pos && (
-          <>
-            <Text align="center">We've successfully read your location</Text>
-            <Button colorScheme="green" size="lg" type="submit">
-              CONTINUE
-            </Button>
-          </>
-        )}
-      </VStack>
-    </Box>
+      {/* // TODO: display actual location here */}
+
+      {pos && (
+        <>
+          <Text align="center">We've successfully read your location</Text>
+          <Button colorScheme="green" size="lg" type="submit">
+            CONTINUE
+          </Button>
+        </>
+      )}
+    </RegistrationViewContainer>
   );
 };
 

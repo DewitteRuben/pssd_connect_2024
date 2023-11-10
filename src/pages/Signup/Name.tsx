@@ -1,8 +1,8 @@
-import { Box, Text, VStack } from "@chakra-ui/react";
 import FormikNameForm, { NamePayload } from "../../components/NameForm";
 import { observer } from "mobx-react";
 import { RegistrationStoreContext } from "../../store/registration";
 import React from "react";
+import RegistrationViewContainer from "../../components/RegistrationViewContainer";
 
 const Name = () => {
   const registration = React.useContext(RegistrationStoreContext);
@@ -13,14 +13,9 @@ const Name = () => {
   };
 
   return (
-    <Box height="100%" paddingX={8}>
-      <VStack height="100%" justifyContent="center" spacing={8}>
-        <Text fontSize="x-large" fontWeight="bold">
-          My first name is
-        </Text>
-        <FormikNameForm onSubmit={onNameSubmit} />
-      </VStack>
-    </Box>
+    <RegistrationViewContainer title="My first name is">
+      <FormikNameForm onSubmit={onNameSubmit} />
+    </RegistrationViewContainer>
   );
 };
 

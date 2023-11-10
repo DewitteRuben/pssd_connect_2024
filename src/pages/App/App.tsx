@@ -15,6 +15,7 @@ import ShowMeSelection from "../Signup/ShowMeSelection";
 import PSSDDurationSelection from "../Signup/PSSDDurationSelection";
 import AddPhotos from "../Signup/AddPhotos";
 import AllowLocation from "../Signup/AllowLocation";
+import AppModeSelection from "../Signup/AppModeSelection";
 
 export const ProtectedRoute = observer(() => {
   const auth = React.useContext(AuthStoreContext);
@@ -51,6 +52,7 @@ const App = observer(() => {
         <Route path="name" element={<Name />} />
         <Route path="birthdate" element={<Birthdate />} />
         <Route path="gender" element={<GenderSelection />} />
+        <Route path="mode" element={<AppModeSelection />} />
         <Route path="showme" element={<ShowMeSelection />} />
         <Route path="pssd-duration" element={<PSSDDurationSelection />} />
         <Route path="photos" element={<AddPhotos />} />

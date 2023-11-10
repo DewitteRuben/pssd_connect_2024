@@ -5,6 +5,7 @@ import React from "react";
 import FormikGenderSelectionForm, {
   GenderSelectionPayload,
 } from "../../components/GenderSelectionForm";
+import RegistrationViewContainer from "../../components/RegistrationViewContainer";
 
 const GenderSelection = () => {
   const registration = React.useContext(RegistrationStoreContext);
@@ -15,14 +16,9 @@ const GenderSelection = () => {
   };
 
   return (
-    <Box height="100%" paddingX={8}>
-      <VStack height="100%" justifyContent="center" spacing={8}>
-        <Text fontSize="x-large" fontWeight="bold">
-          I am a
-        </Text>
-        <FormikGenderSelectionForm onSubmit={onGenderSubmit} />
-      </VStack>
-    </Box>
+    <RegistrationViewContainer title="I am a">
+      <FormikGenderSelectionForm onSubmit={onGenderSubmit} />
+    </RegistrationViewContainer>
   );
 };
 

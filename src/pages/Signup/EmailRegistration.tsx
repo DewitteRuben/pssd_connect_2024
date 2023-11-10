@@ -7,6 +7,7 @@ import { RegistrationStoreContext } from "../../store/registration";
 import React from "react";
 import { AuthStoreContext } from "../../store/auth";
 import { AuthError } from "firebase/auth";
+import RegistrationViewContainer from "../../components/RegistrationViewContainer";
 
 const EmailRegistration = () => {
   const auth = React.useContext(AuthStoreContext);
@@ -17,7 +18,6 @@ const EmailRegistration = () => {
     try {
       await auth.createUserWithEmailAndPassword(email, password);
       registration.nextStep();
-
     } catch (e) {
       const err = e as AuthError;
       toast({
@@ -31,14 +31,9 @@ const EmailRegistration = () => {
   };
 
   return (
-    <Box height="100%" paddingX={8}>
-      <VStack height="100%" justifyContent="center" spacing={8}>
-        <Text fontSize="x-large" fontWeight="bold">
-          Create your account
-        </Text>
-        <FormikEmailRegistrationForm onSubmit={onEmailRegSubmit} />
-      </VStack>
-    </Box>
+    <RegistrationViewContainer title="Create your account">
+      <FormikEmailRegistrationForm onSubmit={onEmailRegSubmit} />
+    </RegistrationViewContainer>
   );
 };
 

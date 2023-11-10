@@ -1,6 +1,6 @@
-import { Box, Text, VStack } from "@chakra-ui/react";
 import FormikPhoneNumberForm from "../../components/PhoneNumberForm";
 import { observer } from "mobx-react";
+import RegistrationViewContainer from "../../components/RegistrationViewContainer";
 
 const PhoneNumber = observer(() => {
   const onPhoneNumberSubmit = async (payload: any) => {
@@ -8,14 +8,9 @@ const PhoneNumber = observer(() => {
   };
 
   return (
-    <Box height="100%" paddingX={8}>
-      <VStack height="100%" justifyContent="center" spacing={8}>
-        <Text fontSize="x-large" fontWeight="bold">
-          My number is
-        </Text>
-        <FormikPhoneNumberForm onSubmit={onPhoneNumberSubmit} />
-      </VStack>
-    </Box>
+    <RegistrationViewContainer title="My first name is">
+      <FormikPhoneNumberForm onSubmit={onPhoneNumberSubmit} />
+    </RegistrationViewContainer>
   );
 });
 

@@ -5,6 +5,7 @@ import React from "react";
 import FormikPrefGenderForm, {
   PSSDDurationSelectionPayload,
 } from "../../components/PSSDDurationSelectionForm";
+import RegistrationViewContainer from "../../components/RegistrationViewContainer";
 
 const PSSDDurationSelection = () => {
   const registration = React.useContext(RegistrationStoreContext);
@@ -15,14 +16,9 @@ const PSSDDurationSelection = () => {
   };
 
   return (
-    <Box height="100%" paddingX={8}>
-      <VStack height="100%" justifyContent="center" spacing={8}>
-        <Text fontSize="x-large" fontWeight="bold">
-          I've had PSSD for
-        </Text>
-        <FormikPrefGenderForm onSubmit={onGenderSubmit} />
-      </VStack>
-    </Box>
+    <RegistrationViewContainer title="I've had PSSD for">
+      <FormikPrefGenderForm onSubmit={onGenderSubmit} />
+    </RegistrationViewContainer>
   );
 };
 

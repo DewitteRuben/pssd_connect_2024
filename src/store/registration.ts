@@ -7,6 +7,7 @@ const registrationFlow = [
   "name",
   "birthdate",
   "gender",
+  "mode",
   "showme",
   "pssd-duration",
   "photos",
@@ -16,7 +17,7 @@ type Step = (typeof registrationFlow)[number];
 
 export class RegistrationStore {
   public finishedRegistration = false;
-  public step: Step = "location";
+  public step: Step = "mode";
 
   private userData: Record<string, any> = {};
 
