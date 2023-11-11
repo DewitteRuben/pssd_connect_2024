@@ -6,6 +6,7 @@ import {
   VStack,
   Box,
   FormHelperText,
+  Text,
 } from "@chakra-ui/react";
 import { Form, FormikProps, withFormik } from "formik";
 import { observer } from "mobx-react";
@@ -13,14 +14,16 @@ import * as Yup from "yup";
 import { FormikSubmit } from "../types/formik";
 import { SingleDatepicker } from "chakra-dayzed-datepicker";
 import differenceInYears from "date-fns/differenceInYears";
+import React from "react";
 
 const BirthdateSchema = Yup.object().shape({
   birthdate: Yup.date()
     .required("Your birthdate is required")
-    .test("ageCheck", "You must be 18 or older in order to use this app", (value) => {
-      console.log("test");
-      return differenceInYears(new Date(), new Date(value)) >= 18;
-    }),
+    .test(
+      "ageCheck",
+      "You must be 18 or older in order to use this app",
+      (value) => differenceInYears(new Date(), new Date(value)) >= 18
+    ),
 });
 
 export type BirthdateFormValues = {
@@ -30,20 +33,36 @@ export type BirthdateFormValues = {
 export type BirthdatePayload = BirthdateFormValues & FormikSubmit;
 
 const BirthdateForm = (props: FormikProps<BirthdateFormValues>) => {
-  const { errors, values, handleSubmit, isSubmitting, isValid, setFieldValue } = props;
+  const {
+    errors,
+    values,
+    handleSubmit,
+    isSubmitting,
+    isValid,
+    setFieldValue,
+    initialValues,
+  } = props;
+
+  const [birthdate, setBirthdate] = React.useState(initialValues.birthdate);
+  const [age, setAge] = React.useState<number>();
 
   const onDateChange = (date: Date) => {
     setFieldValue("birthdate", date);
+    setBirthdate(date);
+    setAge(differenceInYears(new Date(), birthdate));
   };
 
-  console.log(Boolean(errors.birthdate));
+  React.useEffect(() => {
+    setAge(differenceInYears(new Date(), birthdate));
+  }, [birthdate]);
 
-  console.log(typeof errors.birthdate);
-  console.log(errors.birthdate);
   return (
     <Box width="100%">
       <Form onSubmit={handleSubmit}>
         <VStack spacing={6} alignItems="start">
+          <Text fontSize="sm">
+            We only show your age to potential matches, not your birthday.
+          </Text>
           <FormControl isInvalid={Boolean(errors.birthdate)}>
             <SingleDatepicker
               name="birthdate"
@@ -51,10 +70,8 @@ const BirthdateForm = (props: FormikProps<BirthdateFormValues>) => {
               onDateChange={onDateChange}
             />
 
-            {Boolean(errors.birthdate) ? (
+            {Boolean(errors.birthdate) && (
               <FormErrorMessage>{errors.birthdate as string}</FormErrorMessage>
-            ) : (
-              <FormHelperText>Your age will be public.</FormHelperText>
             )}
           </FormControl>
           <Button
@@ -73,9 +90,12 @@ const BirthdateForm = (props: FormikProps<BirthdateFormValues>) => {
 };
 
 const FormikBirthdateForm = observer(
-  withFormik<{ onSubmit: (payload: BirthdatePayload) => void }, BirthdateFormValues>({
-    mapPropsToValues: () => ({
-      birthdate: new Date("2000-01-01"),
+  withFormik<
+    { onSubmit: (payload: BirthdatePayload) => void; initialValues: { birthdate: Date } },
+    BirthdateFormValues
+  >({
+    mapPropsToValues: ({ initialValues }) => ({
+      birthdate: initialValues.birthdate,
     }),
     validationSchema: BirthdateSchema,
     validateOnMount: true,

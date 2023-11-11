@@ -1,42 +1,88 @@
 import { makeAutoObservable } from "mobx";
 import React from "react";
+import { autoSave } from "./localstorage";
 
-const registrationFlow = [
-  "email",
-  "phone",
-  "name",
-  "birthdate",
-  "gender",
-  "mode",
-  "showme",
-  "pssd-duration",
-  "photos",
-  "location",
-] as const;
-type Step = (typeof registrationFlow)[number];
+export type Step =
+  | "email"
+  | "phone"
+  | "name"
+  | "birthdate"
+  | "gender"
+  | "mode"
+  | "showme"
+  | "pssd-duration"
+  | "photos"
+  | "location";
+
+export type Mode = "dating" | "friends";
 
 export class RegistrationStore {
   public finishedRegistration = false;
-  public step: Step = "mode";
+  public mode: Mode = "dating";
+  public step: Step = "email";
 
   private userData: Record<string, any> = {};
+  private registrationFlow = [
+    { step: "email", datingOnly: false, goBack: false, done: false },
+    { step: "phone", datingOnly: false, goBack: false, done: false },
+    { step: "name", datingOnly: false, goBack: true, done: false },
+    { step: "birthdate", datingOnly: false, goBack: true, done: false },
+    { step: "gender", datingOnly: false, goBack: true, done: false },
+    { step: "mode", datingOnly: false, goBack: true, done: false },
+    { step: "showme", datingOnly: true, goBack: true, done: false },
+    { step: "pssd-duration", datingOnly: false, goBack: true, done: false },
+    { step: "photos", datingOnly: false, goBack: true, done: false },
+    { step: "location", datingOnly: false, goBack: true, done: false },
+  ];
 
   constructor() {
     makeAutoObservable(this);
+    autoSave(this, "registration");
+  }
+
+  getData(key: string) {
+    return this.userData[key];
   }
 
   setData(key: string, value: any) {
     this.userData[key] = value;
   }
 
-  nextStep() {
-    const curIndex = registrationFlow.indexOf(this.step);
+  setMode(mode: Mode) {
+    this.mode = mode;
+  }
 
-    if (curIndex + 2 > registrationFlow.length) {
+  getFirstUnfinishedStep() {
+    return this.registrationFlow
+      .filter((rf) => rf.datingOnly === (this.mode === "dating"))
+      .find((rf) => !rf.done);
+  }
+
+  getStep(step: Step) {
+    return this.registrationFlow.find((rf) => rf.step === step);
+  }
+
+  nextStep() {
+    const curIndex = this.registrationFlow.findIndex((rf) => rf.step === this.step);
+
+    let index = curIndex + 1;
+    let nextStep = this.registrationFlow.at(index);
+    if (this.mode !== "dating") {
+      while (nextStep?.datingOnly) {
+        nextStep = this.registrationFlow.at(index + 1);
+        index++;
+      }
+    }
+
+    if (!nextStep) {
       throw new Error("no more steps left in registration flow");
     }
 
-    this.setStep(registrationFlow[curIndex + 1] as Step);
+    this.registrationFlow[curIndex].done = true;
+
+    this.setStep(nextStep.step as Step);
+
+    return nextStep;
   }
 
   setStep(step: Step) {

@@ -70,9 +70,15 @@ const PrefGenderForm = (props: FormikProps<PrefGenderFormValues>) => {
 };
 
 const FormikPrefGenderForm = observer(
-  withFormik<{ onSubmit: (payload: PrefGenderPayload) => void }, PrefGenderFormValues>({
-    mapPropsToValues: () => ({
-      prefGender: "women",
+  withFormik<
+    {
+      onSubmit: (payload: PrefGenderPayload) => void;
+      initialValues: { prefGender: string };
+    },
+    PrefGenderFormValues
+  >({
+    mapPropsToValues: ({ initialValues }) => ({
+      prefGender: initialValues.prefGender,
     }),
 
     validationSchema: PrefGenderSchema,

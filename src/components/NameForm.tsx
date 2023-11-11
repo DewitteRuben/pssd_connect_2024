@@ -7,6 +7,7 @@ import {
   VStack,
   Box,
   FormHelperText,
+  Text,
 } from "@chakra-ui/react";
 import { Form, FormikProps, withFormik } from "formik";
 import { observer } from "mobx-react";
@@ -14,11 +15,11 @@ import * as Yup from "yup";
 import { FormikSubmit } from "../types/formik";
 
 const NameSchema = Yup.object().shape({
-  name: Yup.string().required("Required"),
+  firstName: Yup.string().required("Required"),
 });
 
 export type NameFormValues = {
-  name: string;
+  firstName: string;
 };
 
 export type NamePayload = NameFormValues & FormikSubmit;
@@ -39,23 +40,19 @@ const NameForm = (props: FormikProps<NameFormValues>) => {
     <Box width="100%">
       <Form onSubmit={handleSubmit}>
         <VStack spacing={6} alignItems="start">
-          <FormControl isInvalid={Boolean(errors.name && touched.name)}>
+          <Text fontSize="sm">You won't be able to change this later.</Text>
+          <FormControl isInvalid={Boolean(errors.firstName && touched.firstName)}>
             <Input
-              name="name"
-              placeholder="First name"
+              name="firstName"
+              placeholder="Add your first name"
               onChange={handleChange}
               onBlur={handleBlur}
-              value={values.name}
+              value={values.firstName}
             />
 
-            {Boolean(errors.name && touched.name) ? (
-              <FormErrorMessage>{errors.name}</FormErrorMessage>
-            ) : (
-              <FormHelperText>
-                This is how it will appear on PSSD Social.
-              </FormHelperText>
+            {Boolean(errors.firstName && touched.firstName) && (
+              <FormErrorMessage>{errors.firstName}</FormErrorMessage>
             )}
-
           </FormControl>
           <Button
             colorScheme="green"
@@ -73,17 +70,20 @@ const NameForm = (props: FormikProps<NameFormValues>) => {
 };
 
 const FormikNameForm = observer(
-  withFormik<{ onSubmit: (payload: NamePayload) => void }, NameFormValues>({
-    mapPropsToValues: () => ({
-      name: "",
+  withFormik<
+    { onSubmit: (payload: NamePayload) => void; initialValues: { firstName: string } },
+    NameFormValues
+  >({
+    mapPropsToValues: ({ initialValues }) => ({
+      firstName: initialValues.firstName,
     }),
     validationSchema: NameSchema,
     validateOnMount: true,
 
     handleSubmit: async (values, { props, setSubmitting }) => {
-      const { name } = values;
+      const { firstName } = values;
 
-      props.onSubmit({ name, setSubmitting });
+      props.onSubmit({ firstName, setSubmitting });
     },
 
     displayName: "NameForm",

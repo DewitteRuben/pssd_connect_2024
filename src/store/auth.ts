@@ -4,15 +4,12 @@ import {
   AuthError,
   AuthErrorCodes,
   ConfirmationResult,
-  PhoneAuthProvider,
   RecaptchaVerifier,
   User,
   browserLocalPersistence,
   linkWithPhoneNumber,
   createUserWithEmailAndPassword,
-  linkWithCredential,
   signInWithEmailAndPassword,
-  signInWithPhoneNumber,
 } from "firebase/auth";
 import React from "react";
 

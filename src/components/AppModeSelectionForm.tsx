@@ -24,16 +24,8 @@ export type AppModeSelectionFormValues = {
 export type AppModeSelectionPayload = AppModeSelectionFormValues & FormikSubmit;
 
 const AppModeSelectionForm = (props: FormikProps<AppModeSelectionFormValues>) => {
-  const {
-    errors,
-    values,
-    touched,
-    handleSubmit,
-    isSubmitting,
-    isValid,
-    handleBlur,
-    handleChange,
-  } = props;
+  const { errors, values, touched, handleSubmit, isSubmitting, isValid, handleChange } =
+    props;
 
   return (
     <Box width="100%">
@@ -68,9 +60,15 @@ const AppModeSelectionForm = (props: FormikProps<AppModeSelectionFormValues>) =>
 };
 
 const FormikAppModeSelectionForm = observer(
-  withFormik<{ onSubmit: (payload: AppModeSelectionPayload) => void }, AppModeSelectionFormValues>({
-    mapPropsToValues: () => ({
-      mode: "dating",
+  withFormik<
+    {
+      onSubmit: (payload: AppModeSelectionPayload) => void;
+      initialValues: { mode: string };
+    },
+    AppModeSelectionFormValues
+  >({
+    mapPropsToValues: ({ initialValues }) => ({
+      mode: initialValues.mode,
     }),
 
     validationSchema: AppModeSelectionSchema,

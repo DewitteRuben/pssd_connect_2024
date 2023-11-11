@@ -1,6 +1,5 @@
 import { Button } from "@chakra-ui/react";
 import { observer } from "mobx-react";
-import pssdsAPI from "../api/pssds";
 import React from "react";
 
 function getPosition(options?: PositionOptions): Promise<GeolocationPosition> {
@@ -9,7 +8,25 @@ function getPosition(options?: PositionOptions): Promise<GeolocationPosition> {
       return reject(new Error("geolocation not supported on this browser"));
     }
 
-    navigator.geolocation.getCurrentPosition(resolve, reject, options);
+    navigator.geolocation.getCurrentPosition(
+      (pos) => {
+        // Needs to be stored in a regular object to make it serializable
+        resolve({
+          coords: {
+            accuracy: pos.coords.accuracy,
+            altitude: pos.coords.altitude,
+            altitudeAccuracy: pos.coords.altitudeAccuracy,
+            heading: pos.coords.heading,
+            latitude: pos.coords.latitude,
+            longitude: pos.coords.longitude,
+            speed: pos.coords.speed,
+          },
+          timestamp: pos.timestamp,
+        });
+      },
+      reject,
+      options
+    );
   });
 }
 
@@ -33,6 +50,7 @@ const LocationButton: React.FC<LocationButtonProps> = ({ onChange }) => {
       setPosition(pos);
     } catch (error) {
       // TODO: add toast
+      console.error(error);
     } finally {
       setGrabbingLocation(false);
     }

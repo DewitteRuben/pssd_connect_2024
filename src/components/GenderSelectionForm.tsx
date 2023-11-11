@@ -42,11 +42,11 @@ const GenderSelectionForm = (props: FormikProps<GenderSelectionFormValues>) => {
           <FormControl isInvalid={Boolean(errors.gender && touched.gender)}>
             <RadioGroup name="gender" value={values.gender}>
               <Stack>
-                <Radio onChange={handleChange} value="man">
-                  <Text fontSize="lg">Man</Text>
-                </Radio>
                 <Radio onChange={handleChange} value="woman">
                   <Text fontSize="lg">Woman</Text>
+                </Radio>
+                <Radio onChange={handleChange} value="man">
+                  <Text fontSize="lg">Man</Text>
                 </Radio>
                 <Radio onChange={handleChange} value="other">
                   <Text fontSize="lg">Other</Text>
@@ -71,11 +71,14 @@ const GenderSelectionForm = (props: FormikProps<GenderSelectionFormValues>) => {
 
 const FormikGenderSelectionForm = observer(
   withFormik<
-    { onSubmit: (payload: GenderSelectionPayload) => void },
+    {
+      onSubmit: (payload: GenderSelectionPayload) => void;
+      initialValues: { gender: string };
+    },
     GenderSelectionFormValues
   >({
-    mapPropsToValues: () => ({
-      gender: "man",
+    mapPropsToValues: ({ initialValues }) => ({
+      gender: initialValues.gender,
     }),
 
     validationSchema: GenderSelectionSchema,

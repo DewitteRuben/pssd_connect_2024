@@ -1,23 +1,29 @@
-import { Box, Text, VStack } from "@chakra-ui/react";
+import React from "react";
 import { observer } from "mobx-react";
 import { RegistrationStoreContext } from "../../store/registration";
-import React from "react";
+import { useNavigate } from "react-router-dom";
 import FormikGenderSelectionForm, {
   GenderSelectionPayload,
 } from "../../components/GenderSelectionForm";
 import RegistrationViewContainer from "../../components/RegistrationViewContainer";
 
 const GenderSelection = () => {
+  const navigate = useNavigate();
   const registration = React.useContext(RegistrationStoreContext);
+  const gender = registration.getData("gender");
 
   const onGenderSubmit = async (payload: GenderSelectionPayload) => {
     registration.setData("gender", payload.gender);
-    registration.nextStep();
+    const next = registration.nextStep();
+    navigate(next.step);
   };
 
   return (
-    <RegistrationViewContainer title="I am a">
-      <FormikGenderSelectionForm onSubmit={onGenderSubmit} />
+    <RegistrationViewContainer title="How do you identify?">
+      <FormikGenderSelectionForm
+        initialValues={{ gender: gender ?? "woman" }}
+        onSubmit={onGenderSubmit}
+      />
     </RegistrationViewContainer>
   );
 };

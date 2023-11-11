@@ -2,6 +2,8 @@ import React from "react";
 import styled from "styled-components";
 import { MdClose } from "react-icons/md";
 import { Box, Icon } from "@chakra-ui/react";
+import { uploadImageFile } from "../firebase/storage";
+import { AuthStoreContext } from "../store/auth";
 
 const Input = styled.input`
   display: none;
@@ -33,19 +35,24 @@ const CloseIcon = styled(Icon)`
   height: 20px;
 `;
 
-const readFile = (file: File): Promise<string> => {
+const readFile = (file: File): Promise<{ base64: string; file: File }> => {
   return new Promise((res, rej) => {
     var reader = new FileReader();
     reader.addEventListener("load", () => {
-      res(reader.result as string);
+      res({ base64: reader.result as string, file });
     });
     reader.addEventListener("error", rej);
     reader.readAsDataURL(file);
   });
 };
 
+export type ImagePickerResult = {
+  base64: string;
+  file: File;
+};
+
 type ImagePickerItemProps = {
-  onSelect?: (base64_data: string) => void;
+  onSelect?: (result: ImagePickerResult | null) => void;
 };
 
 const ImagePickerItem: React.FC<ImagePickerItemProps> = ({ onSelect }) => {
@@ -53,17 +60,17 @@ const ImagePickerItem: React.FC<ImagePickerItemProps> = ({ onSelect }) => {
 
   const handleOnChange = async (e: any) => {
     const [file] = e.target.files;
-    const res = await readFile(file);
+    const result = await readFile(file);
     if (onSelect) {
-      onSelect(res);
+      onSelect(result);
     }
 
-    setBase64(res);
+    setBase64(result.base64);
   };
 
   const onClearImageClick = () => {
     if (onSelect) {
-      onSelect("");
+      onSelect(null);
     }
 
     setBase64("");

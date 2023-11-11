@@ -1,10 +1,11 @@
 import React from "react";
-import ImagePickerItem from "./ImagePickerItem";
+import ImagePickerItem, { ImagePickerResult } from "./ImagePickerItem";
 import { Grid } from "@chakra-ui/react";
 
 export type ImagePickerEntry = {
   id: number;
   base64?: string;
+  file?: File;
 };
 
 type ImageManagerProps = {
@@ -17,9 +18,14 @@ const ImageManager: React.FC<ImageManagerProps> = ({ size, onChange }) => {
     [...Array(size ?? 6).keys()].map((id) => ({ id }))
   );
 
-  const handleOnImageSelect = (id: number) => (base64_data: string) => {
+  const handleOnImageSelect = (id: number) => (result: ImagePickerResult | null) => {
     const currentImgIndex = images.findIndex((img) => img.id === id);
-    const updatedTodo = { ...images[currentImgIndex], base64: base64_data };
+    const updatedTodo = {
+      ...images[currentImgIndex],
+      base64: result ? result.base64 : undefined,
+      file: result ? result.file : undefined,
+    };
+
     const newImages = [
       ...images.slice(0, currentImgIndex),
       updatedTodo,
@@ -27,7 +33,7 @@ const ImageManager: React.FC<ImageManagerProps> = ({ size, onChange }) => {
     ];
 
     if (onChange) {
-      onChange(newImages)
+      onChange(newImages);
     }
 
     setImages(newImages);

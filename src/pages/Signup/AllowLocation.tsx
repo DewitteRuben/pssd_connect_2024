@@ -1,16 +1,25 @@
-import { Box, Button, Text, VStack } from "@chakra-ui/react";
+import { Button, Text } from "@chakra-ui/react";
 import { observer } from "mobx-react";
 import { RegistrationStoreContext } from "../../store/registration";
 import React from "react";
 import LocationButton from "../../components/LocationButton";
 import RegistrationViewContainer from "../../components/RegistrationViewContainer";
+import { useNavigate } from "react-router-dom";
 
 const AllowLocation = () => {
+  const navigate = useNavigate();
+
   const registration = React.useContext(RegistrationStoreContext);
   const [pos, setPos] = React.useState<GeolocationPosition>();
 
   const handleOnLocation = (pos: GeolocationPosition) => {
     setPos(pos);
+    registration.setData("location", pos);
+  };
+
+  const onContinue = () => {
+    const next = registration.nextStep();
+    navigate(next.step);
   };
 
   return (
@@ -29,7 +38,7 @@ const AllowLocation = () => {
       {pos && (
         <>
           <Text align="center">We've successfully read your location</Text>
-          <Button colorScheme="green" size="lg" type="submit">
+          <Button onSubmit={onContinue} colorScheme="green" size="lg" type="submit">
             CONTINUE
           </Button>
         </>
