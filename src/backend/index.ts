@@ -1,6 +1,7 @@
 import express from "express";
 import { PositionStackAPI } from "./geolocation";
 import cors from "cors";
+import userRoute from "./routes/user_route";
 
 const app = express();
 
@@ -21,6 +22,8 @@ app.post("/location/lookup", async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 });
+
+app.use("/user", userRoute);
 
 app.get("/health", (_, res) => res.send("ok"));
 
