@@ -17,6 +17,7 @@ import { FormikSubmit } from "../types/formik";
 import countries from "../assets/countries.json";
 import { AuthStoreContext } from "../store/auth";
 import React from "react";
+import { useStore } from "../store/store";
 
 const PhoneNumberSchema = Yup.object().shape({
   country_code: Yup.string(),
@@ -47,7 +48,7 @@ const PhoneNumberForm = (props: FormikProps<PhoneNumberFormValues>) => {
   const [verificationSuccess, setVerificationSuccess] = React.useState(false);
   const toast = useToast();
 
-  const auth = React.useContext(AuthStoreContext);
+  const { auth } = useStore()
 
   const onPhoneNumberChange = (e: any) => {
     e.preventDefault();

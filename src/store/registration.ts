@@ -1,6 +1,8 @@
-import { makeAutoObservable, toJS } from "mobx";
-import React from "react";
+import { makeAutoObservable } from "mobx";
 import { autoSave } from "./localstorage";
+import pssdsAPI from "../api/pssds";
+import { User } from "../backend/src/database/user/user";
+import { RootStore } from "./store";
 
 export type Step =
   | "email"
@@ -16,12 +18,17 @@ export type Step =
 
 export type Mode = "dating" | "friends";
 
+type UserWithoutUID = Partial<Omit<User, "uid">>;
+
 export class RegistrationStore {
-  public isFinished = true;
+  private root: RootStore;
   public mode: Mode = "dating";
   public step: Step = "email";
 
-  private userData: Record<string, any> = {};
+  private registrationData: UserWithoutUID = {
+    completedRegistration: false,
+  };
+
   private registrationFlow = [
     { step: "email", datingOnly: false, goBack: false, done: false },
     { step: "phone", datingOnly: false, goBack: false, done: false },
@@ -35,17 +42,18 @@ export class RegistrationStore {
     { step: "location", datingOnly: false, goBack: true, done: false },
   ];
 
-  constructor() {
+  constructor(root: RootStore) {
+    this.root = root;
     makeAutoObservable(this);
     autoSave(this, "registration");
   }
 
-  getData(key: string) {
-    return this.userData[key];
+  getData(key: keyof UserWithoutUID) {
+    return this.registrationData[key];
   }
 
-  setData(key: string, value: any) {
-    this.userData[key] = value;
+  setData(key: keyof UserWithoutUID, value: any) {
+    this.registrationData[key] = value;
   }
 
   setMode(mode: Mode) {
@@ -71,6 +79,31 @@ export class RegistrationStore {
     if (!prevStep) return true;
 
     return prevStep.done;
+  }
+
+  async finishRegistration() {
+    this.setData("completedRegistration", true);
+
+    const curStep = this.registrationFlow.find((rf) => rf.step === this.step);
+    if (curStep) {
+      curStep.done = true;
+    }
+
+    const user = this.root.auth.user;
+    if (!user) {
+      throw new Error("Firebase user was not found, invalid state!");
+    }
+
+    const newUser = {
+      uid: user.uid,
+      ...this.registrationData,
+    } as User;
+
+    return pssdsAPI.createUser(newUser);
+  }
+
+  get isFinished() {
+    return this.registrationData.completedRegistration;
   }
 
   nextStep() {
@@ -100,7 +133,3 @@ export class RegistrationStore {
     this.step = step;
   }
 }
-
-const registrationStore = new RegistrationStore();
-
-export const RegistrationStoreContext = React.createContext(registrationStore);

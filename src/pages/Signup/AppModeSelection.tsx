@@ -9,7 +9,7 @@ import { useNavigate } from "react-router-dom";
 
 const AppModeSelection = () => {
   const navigate = useNavigate();
-  const registration = React.useContext(RegistrationStoreContext);
+  const { registration } = useStore()
   const mode = registration.getData("mode") ?? "dating";
 
   const onSubmit = async (payload: AppModeSelectionPayload) => {

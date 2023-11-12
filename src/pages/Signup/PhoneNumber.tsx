@@ -3,13 +3,12 @@ import FormikPhoneNumberForm, {
 } from "../../components/PhoneNumberForm";
 import { observer } from "mobx-react";
 import RegistrationViewContainer from "../../components/RegistrationViewContainer";
-import { RegistrationStoreContext } from "../../store/registration";
-import React from "react";
 import { useNavigate } from "react-router-dom";
+import { useStore } from "../../store/store";
 
 const PhoneNumber = () => {
   const navigate = useNavigate();
-  const registration = React.useContext(RegistrationStoreContext);
+  const { registration } = useStore()
 
   const onPhoneNumberSubmit = async (payload: PhoneNumberFormPayload) => {
     registration.setData("countryCode", payload.country_code);

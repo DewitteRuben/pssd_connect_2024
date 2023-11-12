@@ -1,13 +1,16 @@
 import { Box, Text, VStack } from "@chakra-ui/react";
 import FormikLoginForm, { LoginFormPayload } from "../../components/LoginForm";
 import { observer } from "mobx-react";
-import { AuthStoreContext } from "../../store/auth";
-import React from "react";
-import { useNavigate } from "react-router-dom";
+import { Navigate, useNavigate } from "react-router-dom";
+import { useStore } from "../../store/store";
 
 const Login = observer(() => {
-  const auth = React.useContext(AuthStoreContext);
+  const { registration, auth } = useStore();
   const navigate = useNavigate();
+
+  if (auth.loggedIn && registration.isFinished) {
+    return <Navigate replace to="/" />;
+  }
 
   const onLoginFormSubmit = async ({
     email,

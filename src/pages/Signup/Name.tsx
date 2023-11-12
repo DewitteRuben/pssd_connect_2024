@@ -1,13 +1,12 @@
 import FormikNameForm, { NamePayload } from "../../components/NameForm";
 import { observer } from "mobx-react";
-import { RegistrationStoreContext } from "../../store/registration";
-import React from "react";
 import RegistrationViewContainer from "../../components/RegistrationViewContainer";
 import { useNavigate } from "react-router-dom";
+import { useStore } from "../../store/store";
 
 const Name = () => {
-  const registration = React.useContext(RegistrationStoreContext);
-  const firstName = registration.getData("firstName");
+  const { registration } = useStore();
+  const firstName = registration.getData("firstName") as string;
   const navigate = useNavigate();
 
   const onNameSubmit = async (payload: NamePayload) => {

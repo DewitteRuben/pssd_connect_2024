@@ -1,11 +1,11 @@
-import mongoose, { Types, model } from "mongoose";
+import mongoose, { model } from "mongoose";
 
 const Schema = mongoose.Schema;
-const ObjectId = Schema.ObjectId;
 
 export type User = {
-  userid: Types.ObjectId;
+  uid: string;
   email: string;
+  completedRegistration: boolean;
   countryCode: string;
   phoneNumber: string;
   firstName: string;
@@ -30,8 +30,9 @@ export type User = {
 };
 
 const UserSchema = new Schema<User>({
-  userid: ObjectId,
+  uid: String,
   email: String,
+  completedRegistration: Boolean,
   countryCode: String,
   phoneNumber: String,
   firstName: String,

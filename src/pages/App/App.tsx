@@ -1,12 +1,10 @@
 import { Routes, Route, Outlet, Navigate, useParams } from "react-router-dom";
 import Login from "../Login/Login";
 import { observer } from "mobx-react";
-import React from "react";
-import { AuthStoreContext } from "../../store/auth";
 import Home from "../Home/Home";
 import Entry from "../Entry/Entry";
 import EmailRegistration from "../Signup/EmailRegistration";
-import { RegistrationStoreContext, Step } from "../../store/registration";
+import { Step } from "../../store/registration";
 import PhoneNumber from "../Signup/PhoneNumber";
 import Name from "../Signup/Name";
 import Birthdate from "../Signup/Birthdate";
@@ -18,10 +16,10 @@ import AllowLocation from "../Signup/AllowLocation";
 import AppModeSelection from "../Signup/AppModeSelection";
 import { Box, Spinner } from "@chakra-ui/react";
 import { runInAction } from "mobx";
+import { useStore } from "../../store/store";
 
 export const ProtectedRoute = observer(() => {
-  const auth = React.useContext(AuthStoreContext);
-  const registration = React.useContext(RegistrationStoreContext);
+  const { auth, registration } = useStore();
 
   if (!registration.isFinished) {
     return <Navigate to="/signup" replace />;
@@ -31,12 +29,17 @@ export const ProtectedRoute = observer(() => {
 });
 
 export const RegRouteHandler = observer(() => {
-  const registration = React.useContext(RegistrationStoreContext);
+  const { registration, auth, user } = useStore();
+
   const { step } = useParams<{ step: Step }>();
 
   if (!step) {
     const curStep = registration.step;
     return <Navigate replace to={`/signup/${curStep}`} />;
+  }
+
+  if (user.exists && auth.loggedIn) {
+    return <Navigate replace to="/" />;
   }
 
   const requestedStep = registration.getStep(step);
@@ -78,7 +81,7 @@ export const RegRouteHandler = observer(() => {
 });
 
 const App = observer(() => {
-  const auth = React.useContext(AuthStoreContext);
+  const { auth } = useStore();
 
   if (!auth.isReady) {
     return (

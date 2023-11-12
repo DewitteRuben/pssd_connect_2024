@@ -1,13 +1,12 @@
 import React from "react";
 import { Button, Progress, Text } from "@chakra-ui/react";
 import { observer } from "mobx-react";
-import { RegistrationStoreContext } from "../../store/registration";
 import { useNavigate } from "react-router-dom";
 import ImageManager, { ImagePickerEntry } from "../../components/ImageManager";
 import RegistrationViewContainer from "../../components/RegistrationViewContainer";
-import { AuthStoreContext } from "../../store/auth";
 import { uploadImageFile } from "../../firebase/storage";
 import styled from "styled-components";
+import { useStore } from "../../store/store";
 
 const ProgressBar = styled(Progress)`
   width: 100%;
@@ -29,8 +28,7 @@ const AddPhotos = () => {
   const [uploadProgress, setUploadProgress] = React.useState({});
   const [isUploading, setIsUploading] = React.useState(false);
 
-  const auth = React.useContext(AuthStoreContext);
-  const registration = React.useContext(RegistrationStoreContext);
+  const { auth, registration } = useStore();
   const navigate = useNavigate();
   const hasNoImage = images.filter((img) => img.base64).length === 0;
 

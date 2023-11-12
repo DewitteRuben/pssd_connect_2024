@@ -3,17 +3,14 @@ import FormikEmailRegistrationForm, {
   EmailRegistrationPayload,
 } from "../../components/EmailRegistrationForm";
 import { observer } from "mobx-react";
-import { RegistrationStoreContext } from "../../store/registration";
-import React from "react";
-import { AuthStoreContext } from "../../store/auth";
 import { AuthError } from "firebase/auth";
 import RegistrationViewContainer from "../../components/RegistrationViewContainer";
 import { useNavigate } from "react-router-dom";
+import { useStore } from "../../store/store";
 
 const EmailRegistration = () => {
-  const auth = React.useContext(AuthStoreContext);
+  const { auth, registration } = useStore();
   const navigate = useNavigate();
-  const registration = React.useContext(RegistrationStoreContext);
   const toast = useToast();
 
   const onEmailRegSubmit = async ({ email, password }: EmailRegistrationPayload) => {

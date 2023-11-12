@@ -1,15 +1,16 @@
 import { Button, Text } from "@chakra-ui/react";
 import { observer } from "mobx-react";
-import { RegistrationStoreContext } from "../../store/registration";
 import React from "react";
 import LocationButton from "../../components/LocationButton";
 import RegistrationViewContainer from "../../components/RegistrationViewContainer";
 import { useNavigate } from "react-router-dom";
+import { useStore } from "../../store/store";
 
 const AllowLocation = () => {
   const navigate = useNavigate();
 
-  const registration = React.useContext(RegistrationStoreContext);
+  const { registration } = useStore();
+
   const [pos, setPos] = React.useState<GeolocationPosition>();
 
   const handleOnLocation = (pos: GeolocationPosition) => {
@@ -17,9 +18,13 @@ const AllowLocation = () => {
     registration.setData("location", pos);
   };
 
-  const onContinue = () => {
-    const next = registration.nextStep();
-    navigate(next.step);
+  const onContinue = async () => {
+    const { success } = await registration.finishRegistration();
+    if (!success) {
+      throw new Error("failed to create account!!!");
+    }
+
+    navigate("/");
   };
 
   return (
@@ -38,8 +43,8 @@ const AllowLocation = () => {
       {pos && (
         <>
           <Text align="center">We've successfully read your location</Text>
-          <Button onSubmit={onContinue} colorScheme="green" size="lg" type="submit">
-            CONTINUE
+          <Button onClick={onContinue} colorScheme="green" size="lg">
+            FINISH REGISTRATION
           </Button>
         </>
       )}

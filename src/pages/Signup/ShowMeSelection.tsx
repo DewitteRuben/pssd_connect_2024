@@ -1,16 +1,15 @@
 import { observer } from "mobx-react";
-import { RegistrationStoreContext } from "../../store/registration";
-import React from "react";
 import FormikPrefGenderForm, {
   PrefGenderPayload,
 } from "../../components/ShowMeSelectionForm";
 import RegistrationViewContainer from "../../components/RegistrationViewContainer";
 import { useNavigate } from "react-router-dom";
+import { useStore } from "../../store/store";
 
 const ShowMeSelection = () => {
   const navigate = useNavigate();
-  const registration = React.useContext(RegistrationStoreContext);
-  const prefGender = registration.getData("prefGender") ?? "women";
+  const { registration } = useStore();
+  const prefGender = (registration.getData("prefGender") as string) ?? "women";
 
   const onGenderSubmit = async (payload: PrefGenderPayload) => {
     registration.setData("prefGender", payload.prefGender);

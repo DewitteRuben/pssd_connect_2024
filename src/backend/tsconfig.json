@@ -3,20 +3,17 @@
     "lib": ["ESNext"],
     "module": "esnext",
     "target": "esnext",
-    "moduleResolution": "bundler",
-    "moduleDetection": "force",
-    "allowImportingTsExtensions": true,
-    "noEmit": true,
+    "moduleResolution": "Node",
     "composite": true,
     "strict": true,
+    "outDir": "dist",
+    "resolveJsonModule": true,
     "downlevelIteration": true,
     "skipLibCheck": true,
     "jsx": "react-jsx",
     "allowSyntheticDefaultImports": true,
     "forceConsistentCasingInFileNames": true,
-    "allowJs": true,
-    "types": [
-      "bun-types" // add Bun global
-    ]
-  }
+    "allowJs": true
+  },
+  "include": ["src/", "src/serviceAccountKey.json"]
 }
