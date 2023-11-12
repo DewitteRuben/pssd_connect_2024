@@ -1,6 +1,9 @@
 import { Box, Button, Text, VStack } from "@chakra-ui/react";
+import { useNavigate } from "react-router-dom";
 
 const Entry = () => {
+  const navigate = useNavigate();
+
   return (
     <Box backgroundColor="#14dbc3" height="100%">
       <VStack height="100%" justifyContent="center" spacing={8}>
@@ -13,10 +16,22 @@ const Entry = () => {
         >
           PSSD Dating
         </Text>
-        <Button rounded="full" colorScheme="green" size="lg" variant="solid">
+        <Button
+          rounded="full"
+          onClick={() => navigate("/login")}
+          colorScheme="green"
+          size="lg"
+          variant="solid"
+        >
           Login
         </Button>
-        <Button rounded="full" colorScheme="green" size="lg" variant="solid">
+        <Button
+          rounded="full"
+          onClick={() => navigate("/signup")}
+          colorScheme="green"
+          size="lg"
+          variant="solid"
+        >
           Sign up
         </Button>
       </VStack>

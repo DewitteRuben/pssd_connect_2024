@@ -27,7 +27,7 @@ export const ProtectedRoute = observer(() => {
     return <Navigate to="/signup" replace />;
   }
 
-  return auth.loggedIn ? <Outlet /> : <Navigate to="/login" replace />;
+  return auth.loggedIn ? <Outlet /> : <Navigate to="/splash" replace />;
 });
 
 export const RegRouteHandler = observer(() => {
@@ -99,6 +99,7 @@ const App = observer(() => {
       <Route element={<ProtectedRoute />}>
         <Route path="/" element={<Home />} />
       </Route>
+      <Route path="/splash" element={<Entry />} />
       <Route path="/entry" element={<Entry />} />
       <Route path="/login" element={<Login />} />
       <Route path="/signup" element={<RegRouteHandler />}>
