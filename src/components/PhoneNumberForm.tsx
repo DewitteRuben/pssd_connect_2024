@@ -70,8 +70,6 @@ const PhoneNumberForm = (props: FormikProps<PhoneNumberFormValues>) => {
     setIsVerifying(true);
 
     const { success, message } = await auth.confirmVerification(values.verification_code);
-    console.log({ success, message });
-
     if (!success) {
       toast({
         title: "Failed to verify code",

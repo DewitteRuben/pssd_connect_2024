@@ -39,7 +39,7 @@ export const RegRouteHandler = observer(() => {
     return <Navigate replace to={`/signup/${registration.step}`}></Navigate>;
   }
 
-  if (!requestedStep?.done && requestedStep?.step !== registration.step) {
+  if (!registration.canStep(requestedStep?.step as Step)) {
     const firstUnfinishedStep = registration.getFirstUnfinishedStep();
     return <Navigate replace to={`/signup/${firstUnfinishedStep?.step}`} />;
   }

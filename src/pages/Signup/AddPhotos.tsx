@@ -32,7 +32,6 @@ const AddPhotos = () => {
   const auth = React.useContext(AuthStoreContext);
   const registration = React.useContext(RegistrationStoreContext);
   const navigate = useNavigate();
-
   const hasNoImage = images.filter((img) => img.base64).length === 0;
 
   const handleOnContinueClick = async () => {

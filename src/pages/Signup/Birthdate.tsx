@@ -20,7 +20,9 @@ const Birthdate = () => {
   return (
     <RegistrationViewContainer title="When's your birthday?">
       <FormikBirthdateForm
-        initialValues={{ birthdate: birthdate ? new Date(birthdate) : birthdate }}
+        initialValues={{
+          birthdate: birthdate ? new Date(birthdate) : new Date("2000-01-01"),
+        }}
         onSubmit={onBirthdateSubmit}
       />
     </RegistrationViewContainer>

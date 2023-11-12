@@ -1,4 +1,4 @@
-import { makeAutoObservable } from "mobx";
+import { makeAutoObservable, toJS } from "mobx";
 import React from "react";
 import { autoSave } from "./localstorage";
 
@@ -54,12 +54,23 @@ export class RegistrationStore {
 
   getFirstUnfinishedStep() {
     return this.registrationFlow
-      .filter((rf) => rf.datingOnly === (this.mode === "dating"))
+      .filter((rf) => {
+        if (this.mode !== "dating" && rf.datingOnly) return false;
+        return true;
+      })
       .find((rf) => !rf.done);
   }
 
   getStep(step: Step) {
     return this.registrationFlow.find((rf) => rf.step === step);
+  }
+
+  canStep(step: Step) {
+    const indexOfStep = this.registrationFlow.findIndex((rf) => rf.step === step);
+    const prevStep = this.registrationFlow[indexOfStep - 1];
+    if (!prevStep) return true;
+
+    return prevStep.done;
   }
 
   nextStep() {
