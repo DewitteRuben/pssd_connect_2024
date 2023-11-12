@@ -21,6 +21,11 @@ import { runInAction } from "mobx";
 
 export const ProtectedRoute = observer(() => {
   const auth = React.useContext(AuthStoreContext);
+  const registration = React.useContext(RegistrationStoreContext);
+
+  if (!registration.isFinished) {
+    return <Navigate to="/signup" replace />;
+  }
 
   return auth.loggedIn ? <Outlet /> : <Navigate to="/login" replace />;
 });

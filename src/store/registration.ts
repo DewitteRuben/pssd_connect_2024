@@ -17,7 +17,7 @@ export type Step =
 export type Mode = "dating" | "friends";
 
 export class RegistrationStore {
-  public finishedRegistration = false;
+  public isFinished = false;
   public mode: Mode = "dating";
   public step: Step = "email";
 
