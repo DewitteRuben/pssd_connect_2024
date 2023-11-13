@@ -59,6 +59,10 @@ export class AuthStore {
     return this.ready;
   }
 
+  logout() {
+    return firebaseAuth.signOut();
+  }
+
   async signIn(email: string, password: string) {
     return signInWithEmailAndPassword(firebaseAuth, email, password);
   }

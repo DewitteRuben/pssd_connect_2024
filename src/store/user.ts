@@ -37,12 +37,12 @@ export class UserStore {
 
     if (!firebaseUID) {
       this.initialized = true;
+      this.user = null;
       return;
     }
 
     try {
       this.user = (await pssdsAPI.getUser(firebaseUID)).result;
-      console.log(toJS(this.user));
     } catch (error) {
       console.error("Failed to get user", error);
     } finally {
