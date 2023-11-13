@@ -33,13 +33,13 @@ export const RegRouteHandler = observer(() => {
 
   const { step } = useParams<{ step: Step }>();
 
+  if (user.exists && auth.loggedIn) {
+    return <Navigate replace to="/" />;
+  }
+
   if (!step) {
     const curStep = registration.step;
     return <Navigate replace to={`/signup/${curStep}`} />;
-  }
-
-  if (user.exists && auth.loggedIn) {
-    return <Navigate replace to="/" />;
   }
 
   const requestedStep = registration.getStep(step);
@@ -81,9 +81,9 @@ export const RegRouteHandler = observer(() => {
 });
 
 const App = observer(() => {
-  const { auth } = useStore();
+  const { auth, user } = useStore();
 
-  if (!auth.isReady) {
+  if (!auth.isReady || !user.isInitialized) {
     return (
       <Box
         width="100vw"

@@ -1,16 +1,16 @@
 import { observer } from "mobx-react";
-import { Mode, RegistrationStoreContext } from "../../store/registration";
-import React from "react";
+import { Mode } from "../../store/registration";
 import FormikAppModeSelectionForm, {
   AppModeSelectionPayload,
 } from "../../components/AppModeSelectionForm";
 import RegistrationViewContainer from "../../components/RegistrationViewContainer";
 import { useNavigate } from "react-router-dom";
+import { useStore } from "../../store/store";
 
 const AppModeSelection = () => {
   const navigate = useNavigate();
-  const { registration } = useStore()
-  const mode = registration.getData("mode") ?? "dating";
+  const { registration } = useStore();
+  const mode = (registration.getData("mode") as string) ?? "dating";
 
   const onSubmit = async (payload: AppModeSelectionPayload) => {
     registration.setData("mode", payload.mode);

@@ -33,8 +33,6 @@ export class UserStore {
   }
 
   async updateUser() {
-    console.log("calling updateUser");
-
     const firebaseUID = this.root.auth.user?.uid;
 
     if (!firebaseUID) {
