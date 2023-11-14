@@ -100,7 +100,7 @@ const App = observer(() => {
   return (
     <Routes>
       <Route element={<ProtectedRoute />}>
-        <Route path="/" element={<Home />} />
+        <Route path="/*" element={<Home />} />
       </Route>
       <Route path="/splash" element={<Entry />} />
       <Route path="/entry" element={<Entry />} />
