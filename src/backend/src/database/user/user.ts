@@ -2,6 +2,46 @@ import mongoose, { model } from "mongoose";
 
 const Schema = mongoose.Schema;
 
+export type UserProfile = {
+  school: string;
+  jobTitle: string;
+  about: string;
+  company: string;
+};
+
+export type UserPSSDInfo = {
+  duration: string;
+  symptoms: string[];
+  medications: string[];
+};
+
+export type UserPreferences = {
+  genderPreference: GenderPreference;
+  showAge: boolean;
+  ageStart: number;
+  ageEnd: number;
+  maxDistance: number;
+  global: boolean;
+  showDistance: boolean;
+  showMe: boolean;
+};
+
+export type UserLocation = {
+  coords: {
+    accuracy: number;
+    altitude: number;
+    altitudeAccuracy: number;
+    heading: number;
+    latitude: number;
+    longitude: number;
+    speed: number;
+  };
+  timestamp: number;
+};
+
+export type Gender = "man" | "woman" | "other";
+export type GenderPreference = "men" | "women" | "everyone";
+
 export type User = {
   uid: string;
   email: string;
@@ -9,39 +49,48 @@ export type User = {
   countryCode: string;
   phoneNumber: string;
   firstName: string;
-  birthdate: string;
-  gender: string;
+  birthdate: string | Date;
+  gender: Gender;
   mode: string;
-  prefGender: string;
-  pssd_duration: string;
+  profile: UserProfile;
+  preferences: UserPreferences;
+  pssd: UserPSSDInfo;
   images: string[];
-  location: {
-    coords: {
-      accuracy: number;
-      altitude: number;
-      altitudeAccuracy: number;
-      heading: number;
-      latitude: number;
-      longitude: number;
-      speed: number;
-    };
-    timestamp: number;
-  };
+  location: UserLocation;
 };
 
 const UserSchema = new Schema<User>({
-  uid: String,
-  email: String,
-  completedRegistration: Boolean,
-  countryCode: String,
-  phoneNumber: String,
-  firstName: String,
-  birthdate: String,
-  gender: String,
-  mode: String,
-  prefGender: String,
-  pssd_duration: String,
-  images: [String],
+  uid: { required: true, type: String },
+  email: { required: true, type: String },
+  completedRegistration: { required: true, type: Boolean },
+  countryCode: { required: true, type: String },
+  phoneNumber: { required: true, type: String },
+  firstName: { required: true, type: String },
+  birthdate: { required: true, type: String },
+  gender: { required: true, type: String },
+  mode: { required: true, type: String },
+  images: { required: true, type: [String] },
+  preferences: {
+    genderPreference: { required: true, type: String },
+    showAge: { type: Boolean, default: true },
+    ageStart: Number, // calculated based on entered age
+    ageEnd: Number, // calculated based on entered age
+    maxDistance: { type: Number, default: 100 },
+    global: { type: Boolean, default: true },
+    showDistance: { type: Boolean, default: true },
+    showMe: { type: Boolean, default: true },
+  },
+  profile: {
+    school: { type: String, default: "" },
+    jobTitle: { type: String, default: "" },
+    about: { type: String, default: "" },
+    company: { type: String, default: "" },
+  },
+  pssd: {
+    duration: { required: true, type: String },
+    symptoms: [String],
+    medications: [String],
+  },
   location: {
     coords: {
       accuracy: Number,

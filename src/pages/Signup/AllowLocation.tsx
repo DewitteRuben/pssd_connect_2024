@@ -5,6 +5,7 @@ import LocationButton from "../../components/LocationButton";
 import RegistrationViewContainer from "../../components/RegistrationViewContainer";
 import { useNavigate } from "react-router-dom";
 import { useStore } from "../../store/store";
+import { UserLocation } from "../../backend/src/database/user/user";
 
 const AllowLocation = () => {
   const navigate = useNavigate();
@@ -15,11 +16,11 @@ const AllowLocation = () => {
 
   const handleOnLocation = (pos: GeolocationPosition) => {
     setPos(pos);
-    registration.setData("location", pos);
+    registration.updateRegistrationData({ location: pos as UserLocation });
   };
 
   const onContinue = async () => {
-    const { success } = await registration.finishRegistration();
+    const { success } = await registration.finish();
     if (!success) {
       throw new Error("failed to create account!!!");
     }

@@ -8,11 +8,14 @@ import { useStore } from "../../store/store";
 
 const PhoneNumber = () => {
   const navigate = useNavigate();
-  const { registration } = useStore()
+  const { registration } = useStore();
 
   const onPhoneNumberSubmit = async (payload: PhoneNumberFormPayload) => {
-    registration.setData("countryCode", payload.country_code);
-    registration.setData("phoneNumber", payload.phone_number);
+    registration.updateRegistrationData({
+      countryCode: payload.country_code,
+      phoneNumber: payload.phone_number,
+    });
+
     const next = registration.nextStep();
     navigate(next.step);
   };

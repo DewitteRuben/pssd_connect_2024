@@ -6,7 +6,16 @@ type CircularImageProps = {
 };
 
 const CircularImage: React.FC<CircularImageProps> = ({ src, alt }) => {
-  return <Image border="1px solid gray" borderRadius="full" boxSize="150px" src={src} alt={alt} />;
+  return (
+    <Image
+      objectFit="cover"
+      border="1px solid gray"
+      borderRadius="full"
+      boxSize="150px"
+      src={src}
+      alt={alt}
+    />
+  );
 };
 
 export default CircularImage;

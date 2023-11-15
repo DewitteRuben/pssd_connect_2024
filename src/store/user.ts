@@ -1,4 +1,4 @@
-import { makeAutoObservable, reaction, toJS } from "mobx";
+import { makeAutoObservable, reaction, runInAction, toJS } from "mobx";
 import { RootStore } from "./store";
 import { User } from "../backend/src/database/user/user";
 import pssdsAPI from "../api/pssds";
@@ -36,17 +36,30 @@ export class UserStore {
     const firebaseUID = this.root.auth.user?.uid;
 
     if (!firebaseUID) {
-      this.initialized = true;
-      this.user = null;
+      runInAction(() => {
+        this.initialized = true;
+        this.user = null;
+      });
       return;
     }
 
     try {
-      this.user = (await pssdsAPI.getUser(firebaseUID)).result;
+      const { success, message, result } = await pssdsAPI.getUser(firebaseUID);
+      if (success) {
+        runInAction(() => {
+          this.user = result;
+        });
+
+        return
+      }
+
+      throw new Error(message)
     } catch (error) {
-      console.error("Failed to get user", error);
+      console.warn("Failed to get user", error);
     } finally {
-      this.initialized = true;
+      runInAction(() => {
+        this.initialized = true;
+      });
     }
   }
 }

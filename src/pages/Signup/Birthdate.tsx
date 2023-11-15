@@ -7,11 +7,11 @@ import { useStore } from "../../store/store";
 
 const Birthdate = () => {
   const navigate = useNavigate();
-  const { registration } = useStore()
+  const { registration } = useStore();
   const birthdate = registration.getData("birthdate") as string;
 
   const onBirthdateSubmit = async (payload: BirthdatePayload) => {
-    registration.setData("birthdate", payload.birthdate);
+    registration.updateRegistrationData({ birthdate: payload.birthdate });
     const next = registration.nextStep();
     navigate(next.step);
   };

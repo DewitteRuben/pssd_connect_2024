@@ -13,7 +13,7 @@ const AppModeSelection = () => {
   const mode = (registration.getData("mode") as string) ?? "dating";
 
   const onSubmit = async (payload: AppModeSelectionPayload) => {
-    registration.setData("mode", payload.mode);
+    registration.updateRegistrationData({ mode: payload.mode });
     registration.setMode(payload.mode as Mode);
     const next = registration.nextStep();
     navigate(next.step);

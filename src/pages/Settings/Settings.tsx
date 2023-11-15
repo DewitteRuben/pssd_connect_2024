@@ -6,17 +6,24 @@ import {
   Divider,
   Heading,
   IconButton,
+  RangeSlider,
+  RangeSliderFilledTrack,
+  RangeSliderThumb,
+  RangeSliderTrack,
   Switch,
   Text,
 } from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
 import { useStore } from "../../store/store";
+import AgeRangeSlider from "../../components/AgeRangeSlider";
 
 const Settings = () => {
-  const { user } = useStore();
+  const {
+    user: { user: userData },
+  } = useStore();
   const navigate = useNavigate();
 
-  if (!user.user) {
+  if (!userData) {
     throw new Error("Invalid state! User not found");
   }
 
@@ -45,7 +52,7 @@ const Settings = () => {
             <Box display="flex" justifyContent="space-between">
               <Text>Phone number</Text>
               <Text>
-                {user.user.countryCode} {user.user.phoneNumber}
+                {userData.countryCode} {userData.phoneNumber}
               </Text>
             </Box>
           </CardBody>
@@ -57,7 +64,7 @@ const Settings = () => {
           <CardBody>
             <Box display="flex" justifyContent="space-between">
               <Text>Now looking in</Text>
-              <Text>{user.user.location.coords.latitude}</Text>
+              <Text>{userData.location.coords.latitude}</Text>
             </Box>
           </CardBody>
         </Card>
@@ -67,7 +74,7 @@ const Settings = () => {
               <Heading color="green" size="xs">
                 I'm interest in
               </Heading>
-              <Text>{user.user.prefGender}</Text>
+              <Text>{userData.preferences.genderPreference}</Text>
             </Box>
           </CardBody>
         </Card>
@@ -83,7 +90,11 @@ const Settings = () => {
                 <Heading color="green" size="xs">
                   Global
                 </Heading>
-                <Switch size="md" marginLeft={4} />
+                <Switch
+                  defaultChecked={userData.preferences.global}
+                  size="md"
+                  marginLeft={4}
+                />
               </Box>
               <Text fontSize="sm">
                 Going global will allow you to see people nearby and from around the world
@@ -97,30 +108,23 @@ const Settings = () => {
               <Heading color="green" size="xs">
                 Max. distance
               </Heading>
-              <Text>72km</Text>
+              <Text>{userData.preferences.maxDistance} km</Text>
             </Box>
           </CardBody>
         </Card>
         <Card marginY={4}>
           <CardBody>
             <Box>
-              <Heading color="green" size="xs">
+              <Heading color="green" marginBottom={2} size="xs">
                 Age range
               </Heading>
-              <Text>72km</Text>
+              <AgeRangeSlider
+                start={userData.preferences.ageStart}
+                end={userData.preferences.ageEnd}
+              />
             </Box>
           </CardBody>
-        </Card> 
-        <Card marginY={4}>
-          <CardBody>
-            <Box>
-              <Heading color="green" size="xs">
-                Age range
-              </Heading>
-              <Text>72km</Text>
-            </Box>
-          </CardBody>
-        </Card> 
+        </Card>
       </Box>
     </Box>
   );

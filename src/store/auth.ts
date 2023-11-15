@@ -11,11 +11,10 @@ import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
 } from "firebase/auth";
-import React from "react";
 import { RootStore } from "./store";
 
 export class AuthStore {
-  public user: User | null;
+  public user?: User | null;
   private ready: boolean;
   static RECAPTCHA_CONTAINER = "recaptcha-container";
   private confirmationResult: ConfirmationResult | null;
@@ -24,8 +23,6 @@ export class AuthStore {
 
   constructor(root: RootStore) {
     this.root = root;
-
-    this.user = null;
     this.ready = false;
     this.confirmationResult = null;
     this.captchaVerifier = new RecaptchaVerifier(

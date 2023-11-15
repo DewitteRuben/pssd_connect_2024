@@ -15,7 +15,7 @@ const uploadImageFile = (
   user: User,
   file: File,
   progressCallback?: (percentage: number, name: string, task: UploadTask) => void
-) => {
+): Promise<string> => {
   // Upload file and metadata to the object 'images/mountains.jpg'
   const uniqueID = uuidv4();
   const stringGen = new UrlSafeString();

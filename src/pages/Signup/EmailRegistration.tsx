@@ -18,7 +18,7 @@ const EmailRegistration = () => {
       await auth.createUserWithEmailAndPassword(email, password);
 
       const next = registration.nextStep();
-      registration.setData("email", email);
+      registration.updateRegistrationData({ email });
       navigate(next.step);
     } catch (e) {
       const err = e as AuthError;

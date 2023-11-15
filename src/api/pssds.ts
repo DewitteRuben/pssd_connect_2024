@@ -3,6 +3,7 @@ import { LocationData } from "../backend/src/geolocation";
 
 type MongoDBResult<T> = {
   success: boolean;
+  message?: string;
   code: number;
   result: T;
 };

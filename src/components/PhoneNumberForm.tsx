@@ -15,7 +15,6 @@ import { observer } from "mobx-react";
 import * as Yup from "yup";
 import { FormikSubmit } from "../types/formik";
 import countries from "../assets/countries.json";
-import { AuthStoreContext } from "../store/auth";
 import React from "react";
 import { useStore } from "../store/store";
 
@@ -48,14 +47,17 @@ const PhoneNumberForm = (props: FormikProps<PhoneNumberFormValues>) => {
   const [verificationSuccess, setVerificationSuccess] = React.useState(false);
   const toast = useToast();
 
-  const { auth } = useStore()
+  const { auth } = useStore();
 
   const onPhoneNumberChange = (e: any) => {
     e.preventDefault();
     const { value } = e.target;
     const regex = /^(0*[1-9][0-9]*(\.[0-9]*)?|0*\.[0-9]*[1-9][0-9]*)$/;
     if (!value || /\s/.test(value.toString()) || regex.test(value.toString())) {
-      setFieldValue("phone_number", value.toString().split(/\s+/).join(""));
+      setFieldValue(
+        "phone_number",
+        value.toString().split(/\s+/).join("").replace(/\D+/g, "")
+      );
     }
   };
 

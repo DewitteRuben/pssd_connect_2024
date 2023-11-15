@@ -10,7 +10,7 @@ const Name = () => {
   const navigate = useNavigate();
 
   const onNameSubmit = async (payload: NamePayload) => {
-    registration.setData("firstName", payload.firstName);
+    registration.updateRegistrationData({ firstName: payload.firstName });
     const next = registration.nextStep();
     navigate(next.step);
   };

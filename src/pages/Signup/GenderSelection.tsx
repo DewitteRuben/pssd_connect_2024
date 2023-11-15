@@ -5,14 +5,18 @@ import FormikGenderSelectionForm, {
 } from "../../components/GenderSelectionForm";
 import RegistrationViewContainer from "../../components/RegistrationViewContainer";
 import { useStore } from "../../store/store";
+import { Gender } from "../../backend/src/database/user/user";
 
 const GenderSelection = () => {
   const navigate = useNavigate();
   const { registration } = useStore();
-  const gender = registration.getData("gender") as string;
+  const gender = registration.getData("gender") as Gender;
 
   const onGenderSubmit = async (payload: GenderSelectionPayload) => {
-    registration.setData("gender", payload.gender);
+    registration.updateRegistrationData({
+      gender: payload.gender,
+      preferences: { genderPreference: payload.gender === "man" ? "women" : "men" },
+    });
     const next = registration.nextStep();
     navigate(next.step);
   };

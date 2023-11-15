@@ -1,0 +1,193 @@
+{
+    "city": "",
+    "phoneNumber": "",
+    "deleted": false,
+    "info": {
+        "school": "",
+        "jobTitle": "",
+        "about": "",
+        "company": ""
+    },
+    "email": "rubendewitte1998@gmail.com",
+    "firstName": "Ruben",
+    "birthday": {
+        "__datatype__": "timestamp",
+        "value": {
+            "_seconds": 631152000,
+            "_nanoseconds": 0
+        }
+    },
+    "gender": "male",
+    "pssdInfo": {
+        "duration": "6to12months",
+        "symptoms": [
+            {
+                "custom": false,
+                "name": "Erectile dysfunction",
+                "checked": false,
+                "id": 0
+            },
+            {
+                "custom": false,
+                "name": "Loss of vaginal lubrication",
+                "checked": false,
+                "id": 1
+            },
+            {
+                "custom": false,
+                "name": "Genital numbness",
+                "checked": false,
+                "id": 2
+            },
+            {
+                "custom": false,
+                "name": "Anorgasmia",
+                "checked": false,
+                "id": 3
+            },
+            {
+                "custom": false,
+                "name": "Reduced sexual desire/libido",
+                "checked": false,
+                "id": 4
+            },
+            {
+                "custom": false,
+                "name": "Loss of sexual desire/libido",
+                "checked": false,
+                "id": 5
+            },
+            {
+                "custom": false,
+                "name": "Reduced ability to become sexually aroused",
+                "checked": false,
+                "id": 6
+            },
+            {
+                "custom": false,
+                "name": "Genital pain",
+                "checked": true,
+                "id": 7
+            },
+            {
+                "custom": false,
+                "name": "Anhedonia",
+                "checked": true,
+                "id": 8
+            },
+            {
+                "custom": false,
+                "name": "Emotional blunting/numbing",
+                "checked": false,
+                "id": 9
+            },
+            {
+                "custom": false,
+                "name": "Difficulty thinking or concentrating\n(\"brain fog\")",
+                "checked": false,
+                "id": 10
+            },
+            {
+                "custom": false,
+                "name": "Issues with memory and recall",
+                "checked": false,
+                "id": 11
+            },
+            {
+                "custom": false,
+                "name": "Inability to feel certain emotions\n(love, fear, ...)",
+                "checked": false,
+                "id": 12
+            },
+            {
+                "custom": false,
+                "name": "Depersonalization",
+                "checked": false,
+                "id": 13
+            },
+            {
+                "custom": false,
+                "name": "Derealization",
+                "checked": false,
+                "id": 14
+            }
+        ],
+        "cognitivePercentage": 50,
+        "emotionalPercentage": 61,
+        "medications": [],
+        "intimacyAbility": "willing",
+        "sexualPercentage": 50
+    },
+    "photos": [
+        {
+            "index": 0,
+            "refName": "VeEYFQ3yMVYiFDbtGaKWqWtDaxr2/71231145-1977-45e1-8b23-cebd54f57068-6ba106f5-6c62-4fbd-8c6b-58d842184d9f.jpeg",
+            "uri": "https://firebasestorage.googleapis.com/v0/b/pssd-app.appspot.com/o/VeEYFQ3yMVYiFDbtGaKWqWtDaxr2%2F71231145-1977-45e1-8b23-cebd54f57068-6ba106f5-6c62-4fbd-8c6b-58d842184d9f.jpeg?alt=media&token=0a931d0f-8f01-4c60-8b99-803613c55d16"
+        },
+        {
+            "index": 1,
+            "refName": "VeEYFQ3yMVYiFDbtGaKWqWtDaxr2/9088fb12-8985-4f4d-b5e9-bc3210c6874e-5d40e523-ed59-4ab1-bb4d-8efc5ad3ab03.jpeg",
+            "uri": "https://firebasestorage.googleapis.com/v0/b/pssd-app.appspot.com/o/VeEYFQ3yMVYiFDbtGaKWqWtDaxr2%2F9088fb12-8985-4f4d-b5e9-bc3210c6874e-5d40e523-ed59-4ab1-bb4d-8efc5ad3ab03.jpeg?alt=media&token=be7200f7-d26b-49d4-8598-4e7741bd36ec"
+        }
+    ],
+    "registrationStep": "HomePage",
+    "initialized": true,
+    "location": {
+        "locationData": {
+            "continent": "North America",
+            "country": "United States",
+            "distance": 0.067,
+            "confidence": 0.8,
+            "latitude": 37.4221,
+            "locality": "Mountain View",
+            "county": "Santa Clara County",
+            "administrative_area": null,
+            "label": "Googleplex, Mountain View, CA, USA",
+            "type": "venue",
+            "country_code": "USA",
+            "number": null,
+            "street": null,
+            "neighbourhood": "Charleston Terrace",
+            "name": "Googleplex",
+            "region": "California",
+            "postal_code": null,
+            "region_code": "CA",
+            "longitude": -122.08475
+        },
+        "mocked": false,
+        "coords": {
+            "altitude": 0,
+            "heading": 0,
+            "latitude": 37.4226711,
+            "altitudeAccuracy": 0,
+            "accuracy": 899.9990234375,
+            "speed": 0,
+            "longitude": -122.0849872
+        },
+        "timestamp": 1697996946616
+    },
+    "preferences": {
+        "ageRange": [
+            18,
+            30
+        ],
+        "visibility": "visible",
+        "genderPreference": "female",
+        "showAge": true,
+        "ageStart": 18,
+        "maxDistance": 11,
+        "global": true,
+        "showDistance": true,
+        "showMe": true,
+        "ageEnd": 40
+    },
+    "relationships": {
+        "dislikes": [],
+        "matches": [],
+        "unmatches": [],
+        "likes": [
+            "z7NdoduFZcfarxenp4nd0gMoSLu2"
+        ]
+    },
+    "__collections__": {}
+}

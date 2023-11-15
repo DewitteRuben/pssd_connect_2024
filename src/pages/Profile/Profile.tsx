@@ -10,7 +10,7 @@ import { differenceInYears } from "date-fns";
 import { useNavigate } from "react-router-dom";
 
 const Profile = () => {
-  const { user } = useStore();
+  const { userData: user } = useStore();
   const navigate = useNavigate();
 
   if (!user.user) {

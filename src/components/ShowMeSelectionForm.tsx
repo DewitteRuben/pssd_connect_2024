@@ -14,11 +14,11 @@ import { observer } from "mobx-react";
 import { FormikSubmit } from "../types/formik";
 
 const PrefGenderSchema = Yup.object().shape({
-  prefGender: Yup.string(),
+  genderPreference: Yup.string(),
 });
 
 export type PrefGenderFormValues = {
-  prefGender: string;
+  genderPreference: string;
 };
 
 export type PrefGenderPayload = PrefGenderFormValues & FormikSubmit;
@@ -39,8 +39,8 @@ const PrefGenderForm = (props: FormikProps<PrefGenderFormValues>) => {
     <Box width="100%">
       <Form onSubmit={handleSubmit}>
         <VStack spacing={6} alignItems="start">
-          <FormControl isInvalid={Boolean(errors.prefGender && touched.prefGender)}>
-            <RadioGroup name="prefGender" value={values.prefGender}>
+          <FormControl isInvalid={Boolean(errors.genderPreference && touched.genderPreference)}>
+            <RadioGroup name="genderPreference" value={values.genderPreference}>
               <Stack>
                 <Radio onChange={handleChange} value="men">
                   <Text fontSize="lg">Men</Text>
@@ -73,21 +73,21 @@ const FormikPrefGenderForm = observer(
   withFormik<
     {
       onSubmit: (payload: PrefGenderPayload) => void;
-      initialValues: { prefGender: string };
+      initialValues: { genderPreference: string };
     },
     PrefGenderFormValues
   >({
     mapPropsToValues: ({ initialValues }) => ({
-      prefGender: initialValues.prefGender,
+      genderPreference: initialValues.genderPreference,
     }),
 
     validationSchema: PrefGenderSchema,
     validateOnMount: true,
 
     handleSubmit: async (values, { props, setSubmitting }) => {
-      const { prefGender: PrefGender } = values;
+      const { genderPreference: PrefGender } = values;
 
-      props.onSubmit({ prefGender: PrefGender, setSubmitting });
+      props.onSubmit({ genderPreference: PrefGender, setSubmitting });
     },
 
     displayName: "PrefGenderForm",

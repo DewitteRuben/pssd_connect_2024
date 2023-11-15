@@ -8,10 +8,10 @@ import { useStore } from "../../store/store";
 
 const PSSDDurationSelection = () => {
   const navigate = useNavigate();
-  const { registration } = useStore()
+  const { registration } = useStore();
 
   const onGenderSubmit = async (payload: PSSDDurationSelectionPayload) => {
-    registration.setData("pssd_duration", payload.duration);
+    registration.updateRegistrationData({ pssd: { duration: payload.duration } });
     const next = registration.nextStep();
     navigate(next.step);
   };

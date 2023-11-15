@@ -38,7 +38,7 @@ const AddPhotos = () => {
       throw new Error("no images were selected");
     }
 
-    const imageUploadTasks = [];
+    const imageUploadTasks: Promise<string>[] = [];
     for (const image of images) {
       if (image.file) {
         const imageUploadTask = uploadImageFile(
@@ -55,7 +55,7 @@ const AddPhotos = () => {
     try {
       setIsUploading(true);
       const imageURLs = await Promise.all(imageUploadTasks);
-      registration.setData("images", imageURLs);
+      registration.updateRegistrationData({ images: imageURLs });
       const next = registration.nextStep();
       navigate(next.step);
     } catch (error) {

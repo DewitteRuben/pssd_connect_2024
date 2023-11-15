@@ -3,6 +3,9 @@ import { autoSave } from "./localstorage";
 import pssdsAPI from "../api/pssds";
 import { User } from "../backend/src/database/user/user";
 import { RootStore } from "./store";
+import { RecursivePartial } from "../types/global";
+import _ from "lodash";
+import { differenceInYears } from "date-fns";
 
 export type Step =
   | "email"
@@ -18,15 +21,19 @@ export type Step =
 
 export type Mode = "dating" | "friends";
 
-type UserWithoutUID = Partial<Omit<User, "uid">>;
+type UserWithoutUID = Omit<User, "uid">;
+type OptionalUserWithoutUID = RecursivePartial<UserWithoutUID>;
 
 export class RegistrationStore {
   private root: RootStore;
   public mode: Mode = "dating";
   public step: Step = "email";
 
-  private registrationData: UserWithoutUID = {
+  public registrationData: OptionalUserWithoutUID = {
     completedRegistration: false,
+    preferences: {
+      genderPreference: "women",
+    },
   };
 
   private registrationFlow = [
@@ -48,12 +55,12 @@ export class RegistrationStore {
     autoSave(this, "registration");
   }
 
-  getData(key: keyof UserWithoutUID) {
+  getData(key: keyof OptionalUserWithoutUID) {
     return this.registrationData[key];
   }
 
-  setData(key: keyof UserWithoutUID, value: any) {
-    this.registrationData[key] = value;
+  updateRegistrationData(payload: OptionalUserWithoutUID) {
+    this.registrationData = _.merge(this.registrationData, payload);
   }
 
   setMode(mode: Mode) {
@@ -81,8 +88,16 @@ export class RegistrationStore {
     return prevStep.done;
   }
 
-  async finishRegistration() {
-    this.setData("completedRegistration", true);
+  async finish() {
+    // calculate max and min age difference using the half-your-age-plus-7 rule
+    const age = differenceInYears(new Date(), this.registrationData.birthdate! as Date);
+    const ageStart = Math.floor(age / 2) + 7;
+    const ageEnd = (age - 7) * 2;
+
+    this.updateRegistrationData({
+      completedRegistration: true,
+      preferences: { ageStart, ageEnd },
+    });
 
     const curStep = this.registrationFlow.find((rf) => rf.step === this.step);
     if (curStep) {

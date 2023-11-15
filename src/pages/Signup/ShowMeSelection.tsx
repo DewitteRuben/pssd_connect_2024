@@ -5,21 +5,31 @@ import FormikPrefGenderForm, {
 import RegistrationViewContainer from "../../components/RegistrationViewContainer";
 import { useNavigate } from "react-router-dom";
 import { useStore } from "../../store/store";
+import { UserPreferences } from "../../backend/src/database/user/user";
 
 const ShowMeSelection = () => {
   const navigate = useNavigate();
   const { registration } = useStore();
-  const prefGender = (registration.getData("prefGender") as string) ?? "women";
+  const preferences = registration.getData("preferences") as UserPreferences;
+  const { genderPreference } = preferences;
 
   const onGenderSubmit = async (payload: PrefGenderPayload) => {
-    registration.setData("prefGender", payload.prefGender);
+    registration.updateRegistrationData({
+      preferences: {
+        genderPreference: payload.genderPreference,
+      },
+    });
+
     const next = registration.nextStep();
     navigate(next.step);
   };
 
   return (
     <RegistrationViewContainer title="Who are you interested in?">
-      <FormikPrefGenderForm initialValues={{ prefGender }} onSubmit={onGenderSubmit} />
+      <FormikPrefGenderForm
+        initialValues={{ genderPreference }}
+        onSubmit={onGenderSubmit}
+      />
     </RegistrationViewContainer>
   );
 };
