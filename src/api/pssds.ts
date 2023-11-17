@@ -32,6 +32,20 @@ class PSSDSocialApi {
     return result as T;
   }
 
+  private async put<T>(endpoint: string, payload: any) {
+    const headers = new Headers();
+
+    headers.append("Content-Type", "application/json");
+
+    const result = await fetch(this.getEndpointURL(endpoint), {
+      method: "PUT",
+      headers,
+      body: JSON.stringify(payload),
+    }).then((e) => e.json());
+
+    return result as T;
+  }
+
   private async get<T>(endpoint: string) {
     const result = await fetch(this.getEndpointURL(endpoint)).then((e) => e.json());
     return result as T;
@@ -43,6 +57,10 @@ class PSSDSocialApi {
 
   getUser(uid: string): Promise<MongoDBResult<User>> {
     return this.get("/user/" + uid);
+  }
+
+  updateUser(user: User) {
+    return this.put("/user", user);
   }
 
   async locationReverseLookup(

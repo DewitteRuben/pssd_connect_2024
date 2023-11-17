@@ -12,20 +12,63 @@ import {
   RangeSliderTrack,
   Switch,
   Text,
+  useToast,
 } from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
 import { useStore } from "../../store/store";
 import AgeRangeSlider from "../../components/AgeRangeSlider";
+import DistanceSlider from "../../components/DistanceSlider";
 
 const Settings = () => {
-  const {
-    user: { user: userData },
-  } = useStore();
+  const { user: userStore } = useStore();
   const navigate = useNavigate();
+  const toast = useToast();
+
+  const userData = userStore.user;
 
   if (!userData) {
     throw new Error("Invalid state! User not found");
   }
+
+  const handleOnAgeRangeChange = async ({ min, max }: { min: number; max: number }) => {
+    try {
+      await userStore.updateUser({ preferences: { ageStart: min, ageEnd: max } });
+      toast({
+        title: "Preferred age range",
+        description: "We've successfully updated your prefered age range",
+        status: "success",
+        isClosable: true,
+      });
+    } catch (error) {
+      console.error("Failed to update age range", error);
+      toast({
+        title: "Preferred age range",
+        description: "Failed to update your prefered age range",
+        status: "error",
+        isClosable: true,
+      });
+    }
+  };
+
+  const handleOnDistanceChange = async (maxDistance: number) => {
+    try {
+      await userStore.updateUser({ preferences: { maxDistance } });
+      toast({
+        title: "Max. distance",
+        description: "We've successfully updated your max. distance",
+        status: "success",
+        isClosable: true,
+      });
+    } catch (error) {
+      console.error("Failed to update age range", error);
+      toast({
+        title: "Max. distance",
+        description: "Failed to update your max. distance",
+        status: "error",
+        isClosable: true,
+      });
+    }
+  };
 
   return (
     <Box>
@@ -108,7 +151,10 @@ const Settings = () => {
               <Heading color="green" size="xs">
                 Max. distance
               </Heading>
-              <Text>{userData.preferences.maxDistance} km</Text>
+              <DistanceSlider
+                onChange={handleOnDistanceChange}
+                max={userData.preferences.maxDistance}
+              />
             </Box>
           </CardBody>
         </Card>
@@ -119,6 +165,7 @@ const Settings = () => {
                 Age range
               </Heading>
               <AgeRangeSlider
+                onChange={handleOnAgeRangeChange}
                 start={userData.preferences.ageStart}
                 end={userData.preferences.ageEnd}
               />

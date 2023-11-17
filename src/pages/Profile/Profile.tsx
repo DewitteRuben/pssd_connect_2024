@@ -10,15 +10,17 @@ import { differenceInYears } from "date-fns";
 import { useNavigate } from "react-router-dom";
 
 const Profile = () => {
-  const { userData: user } = useStore();
+  const {
+    user: { user: userData },
+  } = useStore();
   const navigate = useNavigate();
 
-  if (!user.user) {
+  if (!userData) {
     throw new Error("Invalid state! User does not exist");
   }
 
-  const firstImage = user.user.images[0];
-  const age = differenceInYears(new Date(), new Date(user.user.birthdate));
+  const firstImage = userData.images[0];
+  const age = differenceInYears(new Date(), new Date(userData.birthdate));
 
   return (
     <Box display="flex" flexDirection="column" height="100%" padding="16px">
@@ -31,7 +33,7 @@ const Profile = () => {
       >
         <CircularImage src={firstImage} />
         <Text fontSize="2xl" marginTop="8px" fontWeight="bold">
-          {user.user?.firstName}, {age}
+          {userData?.firstName}, {age}
         </Text>
       </Box>
       <Box display="flex" justifyContent="space-around" marginTop="50px">

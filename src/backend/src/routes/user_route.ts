@@ -32,6 +32,18 @@ router.get("/:uid", async (req, res, next) => {
   }
 });
 
+router.put("/", async (req, res, next) => {
+  const { uid, ...rest } = req.body as User;
+
+  try {
+    const obj = await UserModel.findOneAndUpdate({ uid }, { ...rest }).exec();
+    return res.status(200).json(successResponse(obj?.toJSON()));
+  } catch (e) {
+    const err = e as Error;
+    return next(new ExpressError({ code: 500, message: err.message }));
+  }
+});
+
 router.post("/", async (req, res, next) => {
   const { uid, ...rest } = req.body as User;
 
