@@ -2,8 +2,6 @@ import React from "react";
 import styled from "styled-components";
 import { MdClose } from "react-icons/md";
 import { Box, Icon } from "@chakra-ui/react";
-import { uploadImageFile } from "../firebase/storage";
-import { AuthStoreContext } from "../store/auth";
 
 const Input = styled.input`
   display: none;
