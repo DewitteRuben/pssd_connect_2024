@@ -18,6 +18,7 @@ import { useNavigate } from "react-router-dom";
 import { useStore } from "../../store/store";
 import AgeRangeSlider from "../../components/AgeRangeSlider";
 import DistanceSlider from "../../components/DistanceSlider";
+import React from "react";
 
 const Settings = () => {
   const { user: userStore } = useStore();
@@ -26,9 +27,21 @@ const Settings = () => {
 
   const userData = userStore.user;
 
+  const [isGlobal, setIsGlobal] = React.useState(userData?.preferences.global ?? false);
+
   if (!userData) {
     throw new Error("Invalid state! User not found");
   }
+
+  const prettyGenderPreference = () => {
+    const genderPreference = userData.preferences.genderPreference;
+    return genderPreference.charAt(0).toUpperCase() + genderPreference.slice(1);
+  };
+
+  const handleGlobalToggle = (ev: React.ChangeEvent<HTMLInputElement>) => {
+    setIsGlobal(ev.target.checked);
+    userStore.updateUser({ preferences: { global: ev.target.checked } });
+  };
 
   const handleOnAgeRangeChange = async ({ min, max }: { min: number; max: number }) => {
     try {
@@ -107,7 +120,11 @@ const Settings = () => {
           <CardBody>
             <Box display="flex" justifyContent="space-between">
               <Text>Now looking in</Text>
-              <Text>{userData.location.coords.latitude}</Text>
+              <Text>
+                {userData.preferences.global
+                  ? "Globally"
+                  : userData.location.coords.latitude}
+              </Text>
             </Box>
           </CardBody>
         </Card>
@@ -115,9 +132,9 @@ const Settings = () => {
           <CardBody>
             <Box>
               <Heading color="green" size="xs">
-                I'm interest in
+                I'm interested in
               </Heading>
-              <Text>{userData.preferences.genderPreference}</Text>
+              <Text>{prettyGenderPreference()}</Text>
             </Box>
           </CardBody>
         </Card>
@@ -134,7 +151,8 @@ const Settings = () => {
                   Global
                 </Heading>
                 <Switch
-                  defaultChecked={userData.preferences.global}
+                  onChange={handleGlobalToggle}
+                  isChecked={isGlobal}
                   size="md"
                   marginLeft={4}
                 />
@@ -151,6 +169,12 @@ const Settings = () => {
               <Heading color="green" size="xs">
                 Max. distance
               </Heading>
+              {userData.preferences.global && (
+                <Text color="darkred" marginBottom={2} fontSize="xs">
+                  Global mode is enabled, the max. distance is ignored.
+                </Text>
+              )}
+
               <DistanceSlider
                 onChange={handleOnDistanceChange}
                 max={userData.preferences.maxDistance}

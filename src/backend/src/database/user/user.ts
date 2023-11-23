@@ -7,6 +7,7 @@ export type UserProfile = {
   jobTitle: string;
   about: string;
   company: string;
+  city: string;
 };
 
 export type UserPSSDInfo = {
@@ -87,6 +88,7 @@ const UserSchema = new Schema<User>({
     jobTitle: { type: String, default: "" },
     about: { type: String, default: "" },
     company: { type: String, default: "" },
+    city: { type: String, default: "" },
   },
   pssd: {
     duration: { required: true, type: String },

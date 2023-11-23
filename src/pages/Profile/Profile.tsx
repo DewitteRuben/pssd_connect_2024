@@ -1,13 +1,15 @@
-import { Box, IconButton, Text } from "@chakra-ui/react";
+import { Box, Text } from "@chakra-ui/react";
 import CircularImage from "../../components/CircularImage";
 import { useStore } from "../../store/store";
 import { observer } from "mobx-react";
-import { SettingsIcon } from "@chakra-ui/icons";
 import IconButtonWithText from "../../components/IconButtonWithText";
-import { AiOutlineCamera, AiOutlineEdit } from "react-icons/ai";
+import {  AiOutlineEdit } from "react-icons/ai";
 import { FiSettings } from "react-icons/fi";
 import { differenceInYears } from "date-fns";
 import { useNavigate } from "react-router-dom";
+import { GiHealthNormal } from "react-icons/gi";
+import { IoMdHeartEmpty } from "react-icons/io";
+import { FaRegHeart } from "react-icons/fa";
 
 const Profile = () => {
   const {
@@ -42,7 +44,7 @@ const Profile = () => {
           text="Settings"
           icon={<FiSettings />}
         />
-        <IconButtonWithText text="Add Media" icon={<AiOutlineCamera />} />
+        <IconButtonWithText text="PSSD" icon={<FaRegHeart />} />
         <IconButtonWithText
           text="Edit Profile"
           onClick={() => navigate("/profile/info")}

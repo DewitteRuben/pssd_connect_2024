@@ -12,6 +12,10 @@ type DistanceSliderProps = {
   onChange?: (max: number) => void;
 };
 
+const kmToMiles = (km: number) => {
+  return (km * 0.621371).toFixed(2);
+};
+
 const DistanceSlider: React.FC<DistanceSliderProps> = ({ max: defaultMax, onChange }) => {
   const [max, setMax] = React.useState(defaultMax);
 
@@ -41,7 +45,7 @@ const DistanceSlider: React.FC<DistanceSliderProps> = ({ max: defaultMax, onChan
         </RangeSliderTrack>
         <RangeSliderThumb index={0}></RangeSliderThumb>
       </RangeSlider>
-      <Text>{max}</Text>
+      <Text>{max} km ({kmToMiles(max)} mi.)</Text>
     </>
   );
 };
