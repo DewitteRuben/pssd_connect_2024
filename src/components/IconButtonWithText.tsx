@@ -22,6 +22,7 @@ const IconButtonWithText: React.FC<IconButtonWithText> = ({ text, icon, onClick 
         variant="solid"
         aria-label={text}
         fontSize="24px"
+        marginBottom="8px"
         icon={icon}
       />
       <Text>{text}</Text>

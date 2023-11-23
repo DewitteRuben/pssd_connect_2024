@@ -20,12 +20,12 @@ const AllowLocation = () => {
   };
 
   const onContinue = async () => {
-    const { success } = await registration.finish();
-    if (!success) {
-      throw new Error("failed to create account!!!");
+    try {
+      await registration.finish();
+      navigate("/");
+    } catch (error) {
+      console.error('Failed to finish registration')
     }
-
-    navigate("/");
   };
 
   return (

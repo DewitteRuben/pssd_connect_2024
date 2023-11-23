@@ -42,8 +42,12 @@ const Profile = () => {
           text="Settings"
           icon={<FiSettings />}
         />
-        <IconButtonWithText text="Add media" icon={<AiOutlineCamera />} />
-        <IconButtonWithText text="Edit info" icon={<AiOutlineEdit />} />
+        <IconButtonWithText text="Add Media" icon={<AiOutlineCamera />} />
+        <IconButtonWithText
+          text="Edit Profile"
+          onClick={() => navigate("/profile/info")}
+          icon={<AiOutlineEdit />}
+        />
       </Box>
     </Box>
   );

@@ -46,6 +46,7 @@ export type User = {
   uid: string;
   email: string;
   completedRegistration: boolean;
+  registrationInProgress: boolean;
   countryCode: string;
   phoneNumber: string;
   firstName: string;
@@ -63,6 +64,7 @@ const UserSchema = new Schema<User>({
   uid: { required: true, type: String },
   email: { required: true, type: String },
   completedRegistration: { required: true, type: Boolean },
+  registrationInProgress: { required: true, type: Boolean },
   countryCode: { required: true, type: String },
   phoneNumber: { required: true, type: String },
   firstName: { required: true, type: String },

@@ -21,7 +21,7 @@ import { useStore } from "../../store/store";
 export const ProtectedRoute = observer(() => {
   const { auth, registration } = useStore();
 
-  if (!registration.isFinished) {
+  if (!registration.isFinished && registration.isInProgress) {
     return <Navigate to="/signup" replace />;
   }
 

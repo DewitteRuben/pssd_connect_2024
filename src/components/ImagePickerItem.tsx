@@ -51,10 +51,11 @@ export type ImagePickerResult = {
 
 type ImagePickerItemProps = {
   onSelect?: (result: ImagePickerResult | null) => void;
+  defaultImage?: string;
 };
 
-const ImagePickerItem: React.FC<ImagePickerItemProps> = ({ onSelect }) => {
-  const [base64, setBase64] = React.useState<string>();
+const ImagePickerItem: React.FC<ImagePickerItemProps> = ({ onSelect, defaultImage }) => {
+  const [base64, setBase64] = React.useState<string>(defaultImage ?? "");
 
   const handleOnChange = async (e: any) => {
     const [file] = e.target.files;

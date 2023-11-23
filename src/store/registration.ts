@@ -30,6 +30,7 @@ export class RegistrationStore {
   public step: Step = "email";
 
   public registrationData: OptionalUserWithoutUID = {
+    registrationInProgress: false,
     completedRegistration: false,
     preferences: {
       genderPreference: "women",
@@ -114,14 +115,28 @@ export class RegistrationStore {
       ...this.registrationData,
     } as User;
 
-    return pssdsAPI.createUser(newUser);
+    const { success } = await pssdsAPI.createUser(newUser);
+    if (!success) {
+      throw new Error("failed to create account!!!");
+    }
+
+
+    return this.root.user.fetchUser()
   }
 
   get isFinished() {
     return this.registrationData.completedRegistration;
   }
 
+  get isInProgress() {
+    return this.registrationData.registrationInProgress;
+  }
+
   nextStep() {
+    if (!this.registrationData.registrationInProgress) {
+      this.updateRegistrationData({ registrationInProgress: true });
+    }
+
     const curIndex = this.registrationFlow.findIndex((rf) => rf.step === this.step);
 
     let index = curIndex + 1;

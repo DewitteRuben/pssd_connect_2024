@@ -5,39 +5,55 @@ import { Grid } from "@chakra-ui/react";
 export type ImagePickerEntry = {
   id: number;
   base64?: string;
+  defaultImage?: string;
   file?: File;
+  existing?: boolean;
 };
 
-type ImageManagerProps = {
+type ImagePickerProps = {
+  defaultImages?: string[];
   size?: number;
   onChange?: (images: ImagePickerEntry[]) => void;
 };
 
-const ImageManager: React.FC<ImageManagerProps> = ({ size, onChange }) => {
+const ImagePicker: React.FC<ImagePickerProps> = ({ size, onChange, defaultImages }) => {
   const [images, setImages] = React.useState<ImagePickerEntry[]>(
-    [...Array(size ?? 6).keys()].map((id) => ({ id }))
+    [...Array(size ?? 6).keys()].map((id, index) => ({
+      id,
+      ...(defaultImages?.[index]
+        ? { defaultImage: defaultImages?.[index], existing: true }
+        : {}),
+    }))
   );
 
   const handleOnImageSelect = (id: number) => (result: ImagePickerResult | null) => {
     const currentImgIndex = images.findIndex((img) => img.id === id);
-    const updatedTodo = {
+    const updatedImageItem = {
       ...images[currentImgIndex],
+      defaultImage: result ? images[currentImgIndex].defaultImage : undefined,
       base64: result ? result.base64 : undefined,
       file: result ? result.file : undefined,
     };
 
     const newImages = [
       ...images.slice(0, currentImgIndex),
-      updatedTodo,
+      updatedImageItem,
       ...images.slice(currentImgIndex + 1),
     ];
 
+    console.log(newImages);
     if (onChange) {
       onChange(newImages);
     }
 
     setImages(newImages);
   };
+
+  React.useEffect(() => {
+    if (onChange) {
+      onChange(images);
+    }
+  }, [images, defaultImages]);
 
   return (
     <Grid
@@ -49,10 +65,14 @@ const ImageManager: React.FC<ImageManagerProps> = ({ size, onChange }) => {
       rowGap={6}
     >
       {images.map((img) => (
-        <ImagePickerItem key={img.id} onSelect={handleOnImageSelect(img.id)} />
+        <ImagePickerItem
+          defaultImage={img.defaultImage}
+          key={img.id}
+          onSelect={handleOnImageSelect(img.id)}
+        />
       ))}
     </Grid>
   );
 };
 
-export default ImageManager;
+export default ImagePicker;

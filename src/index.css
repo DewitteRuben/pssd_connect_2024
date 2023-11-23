@@ -1,7 +1,15 @@
-body > #root > div {
-  height: 100vh;
+html {
+  box-sizing: border-box;
+  -moz-box-sizing: border-box;
 }
 
-* {
+*,
+*:before,
+*:after {
   font-family: "Raleway", sans-serif;
+  box-sizing: inherit;
+}
+
+body > #root > div {
+  height: 100vh;
 }

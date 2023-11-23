@@ -54,7 +54,10 @@ export class UserStore {
   }
 
   updateUser(userPayload: RecursivePartial<User>) {
-    this.user = _.merge(this.user, userPayload);
+    this.user = _.mergeWith({}, this.user, userPayload, (a, b) =>
+      _.isArray(b) ? b : undefined
+    );
+
     return this.updateRemoteUser();
   }
 

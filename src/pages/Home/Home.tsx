@@ -18,6 +18,7 @@ import Settings from "../Settings/Settings";
 import Match from "../Match/Match";
 import React from "react";
 import _ from "lodash";
+import Info from "../Info/Info";
 
 const TabIcon = styled(Icon)`
   width: 24px;
@@ -76,6 +77,7 @@ const Home = () => {
         <Routes>
           <Route path="profile" element={<Profile />} />
           <Route path="profile/settings" element={<Settings />} />
+          <Route path="profile/info" element={<Info />} />
           <Route path="/" element={<Match />} />
 
           <Route path="messages" element={<p>Messages</p>} />
