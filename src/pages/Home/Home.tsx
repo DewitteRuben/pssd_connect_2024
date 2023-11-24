@@ -19,6 +19,7 @@ import Match from "../Match/Match";
 import React from "react";
 import _ from "lodash";
 import Info from "../Info/Info";
+import PSSD from "../PSSD/PSSD";
 
 const TabIcon = styled(Icon)`
   width: 24px;
@@ -78,6 +79,7 @@ const Home = () => {
           <Route path="profile" element={<Profile />} />
           <Route path="profile/settings" element={<Settings />} />
           <Route path="profile/info" element={<Info />} />
+          <Route path="profile/pssd" element={<PSSD />} />
           <Route path="/" element={<Match />} />
 
           <Route path="messages" element={<p>Messages</p>} />

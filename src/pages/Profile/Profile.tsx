@@ -3,7 +3,7 @@ import CircularImage from "../../components/CircularImage";
 import { useStore } from "../../store/store";
 import { observer } from "mobx-react";
 import IconButtonWithText from "../../components/IconButtonWithText";
-import {  AiOutlineEdit } from "react-icons/ai";
+import { AiOutlineEdit } from "react-icons/ai";
 import { FiSettings } from "react-icons/fi";
 import { differenceInYears } from "date-fns";
 import { useNavigate } from "react-router-dom";
@@ -44,7 +44,11 @@ const Profile = () => {
           text="Settings"
           icon={<FiSettings />}
         />
-        <IconButtonWithText text="PSSD" icon={<FaRegHeart />} />
+        <IconButtonWithText
+          onClick={() => navigate("/profile/pssd")}
+          text="PSSD"
+          icon={<FaRegHeart />}
+        />
         <IconButtonWithText
           text="Edit Profile"
           onClick={() => navigate("/profile/info")}
