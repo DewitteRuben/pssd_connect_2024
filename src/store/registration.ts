@@ -1,4 +1,4 @@
-import { makeAutoObservable } from "mobx";
+import { makeAutoObservable, runInAction } from "mobx";
 import { autoSave } from "./localstorage";
 import pssdsAPI from "../api/pssds";
 import { User } from "../backend/src/database/user/user";
@@ -24,6 +24,23 @@ export type Mode = "dating" | "friends";
 type UserWithoutUID = Omit<User, "uid">;
 type OptionalUserWithoutUID = RecursivePartial<UserWithoutUID>;
 
+const initRegistrationFlow = () => {
+  return [
+    { step: "email", datingOnly: false, goBack: false, done: false },
+    { step: "phone", datingOnly: false, goBack: false, done: false },
+    { step: "name", datingOnly: false, goBack: true, done: false },
+    { step: "birthdate", datingOnly: false, goBack: true, done: false },
+    { step: "gender", datingOnly: false, goBack: true, done: false },
+    { step: "mode", datingOnly: false, goBack: true, done: false },
+    { step: "showme", datingOnly: true, goBack: true, done: false },
+    { step: "pssd-duration", datingOnly: false, goBack: true, done: false },
+    { step: "photos", datingOnly: false, goBack: true, done: false },
+    { step: "location", datingOnly: false, goBack: true, done: false },
+  ];
+};
+
+const REGISTRATION_LOCALSTORAGE_KEY = "registration"
+
 export class RegistrationStore {
   private root: RootStore;
   public mode: Mode = "dating";
@@ -37,27 +54,20 @@ export class RegistrationStore {
     },
   };
 
-  private registrationFlow = [
-    { step: "email", datingOnly: false, goBack: false, done: false },
-    { step: "phone", datingOnly: false, goBack: false, done: false },
-    { step: "name", datingOnly: false, goBack: true, done: false },
-    { step: "birthdate", datingOnly: false, goBack: true, done: false },
-    { step: "gender", datingOnly: false, goBack: true, done: false },
-    { step: "mode", datingOnly: false, goBack: true, done: false },
-    { step: "showme", datingOnly: true, goBack: true, done: false },
-    { step: "pssd-duration", datingOnly: false, goBack: true, done: false },
-    { step: "photos", datingOnly: false, goBack: true, done: false },
-    { step: "location", datingOnly: false, goBack: true, done: false },
-  ];
+  private registrationFlow = initRegistrationFlow();
 
   constructor(root: RootStore) {
     this.root = root;
     makeAutoObservable(this);
-    autoSave(this, "registration");
+    autoSave(this, REGISTRATION_LOCALSTORAGE_KEY);
   }
 
   getData(key: keyof OptionalUserWithoutUID) {
     return this.registrationData[key];
+  }
+
+  deleteStoredData() {
+    localStorage.removeItem(REGISTRATION_LOCALSTORAGE_KEY)
   }
 
   updateRegistrationData(payload: OptionalUserWithoutUID) {
@@ -120,8 +130,7 @@ export class RegistrationStore {
       throw new Error("failed to create account!!!");
     }
 
-
-    return this.root.user.fetchUser()
+    return this.root.user.fetchUser();
   }
 
   get isFinished() {

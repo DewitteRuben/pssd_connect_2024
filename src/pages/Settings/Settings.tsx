@@ -9,18 +9,18 @@ import {
   IconButton,
   Switch,
   Text,
+  useDisclosure,
   useToast,
 } from "@chakra-ui/react";
-import { useNavigate } from "react-router-dom";
 import { useStore } from "../../store/store";
 import AgeRangeSlider from "../../components/AgeRangeSlider";
 import DistanceSlider from "../../components/DistanceSlider";
 import React from "react";
 import Header from "../../components/Header";
+import RemoveAccountModal from "../../components/RemoveAccountModal";
 
 const Settings = () => {
   const { user: userStore } = useStore();
-  const navigate = useNavigate();
   const toast = useToast();
 
   const userData = userStore.user;
@@ -83,7 +83,7 @@ const Settings = () => {
 
   return (
     <Box>
-      <Header path="/profile" title="Settings"/>
+      <Header path="/profile" title="Settings" />
       <Box paddingX="16px" paddingBottom="16px">
         <Heading size="sm" marginY={4}>
           Account settings
@@ -184,9 +184,7 @@ const Settings = () => {
         <Heading size="sm" marginY={4}>
           Account maintenance
         </Heading>
-        <Button colorScheme="green" size="md" type="submit">
-          Remove account
-        </Button>
+        <RemoveAccountModal />
       </Box>
     </Box>
   );

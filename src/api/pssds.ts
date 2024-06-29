@@ -78,6 +78,20 @@ class PSSDSocialApi {
     return result as T;
   }
 
+  private async delete<T>(endpoint: string) {
+    const headers = new Headers();
+    const jwtTokenId = await this.getToken();
+
+    headers.append("Authorization", `Bearer ${jwtTokenId}`);
+
+    const result = await fetch(this.getEndpointURL(endpoint), {
+      method: "DELETE",
+      headers,
+    }).then((e) => e.json());
+
+    return result as T;
+  }
+
   createUser(user: User) {
     return this.post<{ success: boolean; user?: User }>("/user", user);
   }
@@ -88,6 +102,10 @@ class PSSDSocialApi {
 
   updateUser(user: User) {
     return this.put("/user", user);
+  }
+  
+  deleteUser(uid: string) {
+    return this.delete("/user/" + uid);
   }
 
   async locationReverseLookup(

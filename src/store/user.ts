@@ -53,12 +53,28 @@ export class UserStore {
     }
   }
 
+  private async deleteRemoteUser() {
+    if (!this.user) return;
+
+    try {
+      this.remoteUpdateTask = pssdsAPI.deleteUser(this.user.uid);
+    } catch (error) {
+      console.error("Failed to delete remote user", error);
+    }
+  }
+
   updateUser(userPayload: RecursivePartial<User>) {
     this.user = _.mergeWith({}, this.user, userPayload, (a, b) =>
       _.isArray(b) ? b : undefined
     );
 
     return this.updateRemoteUser();
+  }
+
+  async deleteUser() {
+    this.root.registration.deleteStoredData();
+
+    return this.deleteRemoteUser();
   }
 
   async fetchUser() {
