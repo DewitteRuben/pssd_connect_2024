@@ -1,15 +1,12 @@
 import { ArrowBackIcon } from "@chakra-ui/icons";
 import {
   Box,
+  Button,
   Card,
   CardBody,
   Divider,
   Heading,
   IconButton,
-  RangeSlider,
-  RangeSliderFilledTrack,
-  RangeSliderThumb,
-  RangeSliderTrack,
   Switch,
   Text,
   useToast,
@@ -19,6 +16,7 @@ import { useStore } from "../../store/store";
 import AgeRangeSlider from "../../components/AgeRangeSlider";
 import DistanceSlider from "../../components/DistanceSlider";
 import React from "react";
+import Header from "../../components/Header";
 
 const Settings = () => {
   const { user: userStore } = useStore();
@@ -85,21 +83,8 @@ const Settings = () => {
 
   return (
     <Box>
-      <Box display="flex" alignItems="center" padding="12px">
-        <IconButton
-          background="none"
-          aria-label="back"
-          cursor="pointer"
-          boxSize="36px"
-          onClick={() => navigate("/profile")}
-          as={ArrowBackIcon}
-        />
-        <Heading marginLeft="24px" size="md">
-          Settings
-        </Heading>
-      </Box>
-      <Divider />
-      <Box paddingX="16px">
+      <Header path="/profile" title="Settings"/>
+      <Box paddingX="16px" paddingBottom="16px">
         <Heading size="sm" marginY={4}>
           Account settings
         </Heading>
@@ -196,6 +181,12 @@ const Settings = () => {
             </Box>
           </CardBody>
         </Card>
+        <Heading size="sm" marginY={4}>
+          Account maintenance
+        </Heading>
+        <Button colorScheme="green" size="md" type="submit">
+          Remove account
+        </Button>
       </Box>
     </Box>
   );

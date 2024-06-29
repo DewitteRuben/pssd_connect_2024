@@ -6,6 +6,7 @@ import React, { ChangeEventHandler } from "react";
 import { UserPSSDInfo } from "../../backend/src/database/user/user";
 import { useDebounce } from "use-debounce";
 import EditableList from "../../components/EditableList";
+import Header from "../../components/Header";
 
 const presetSymptoms = [
   "Erectile dysfunction",
@@ -98,20 +99,7 @@ const PSSD = () => {
 
   return (
     <Box>
-      <Box display="flex" alignItems="center" padding="12px">
-        <IconButton
-          background="none"
-          aria-label="back"
-          cursor="pointer"
-          boxSize="36px"
-          onClick={() => navigate("/profile")}
-          as={ArrowBackIcon}
-        />
-        <Heading marginLeft="24px" size="md">
-          Edit PSSD Info
-        </Heading>
-      </Box>
-      <Divider />
+      <Header path="/profile" title="Edit PSSD Info" />
       <Box paddingX="16px">
         <Heading size="sm" marginY={4}>
           I've had PSSD for

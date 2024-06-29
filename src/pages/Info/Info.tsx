@@ -1,5 +1,13 @@
 import { ArrowBackIcon } from "@chakra-ui/icons";
-import { Box, Divider, Heading, IconButton, Input, Select, Textarea } from "@chakra-ui/react";
+import {
+  Box,
+  Divider,
+  Heading,
+  IconButton,
+  Input,
+  Select,
+  Textarea,
+} from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
 import { useStore } from "../../store/store";
 import ProfileImageManager from "../../components/ProfileImageManager";
@@ -7,6 +15,7 @@ import { ImagePickerEntry } from "../../components/ImagePicker";
 import React, { ChangeEventHandler } from "react";
 import { Gender, UserProfile } from "../../backend/src/database/user/user";
 import { useDebounce } from "use-debounce";
+import Header from "../../components/Header";
 
 const Info = () => {
   const { user: userStore } = useStore();
@@ -41,20 +50,7 @@ const Info = () => {
 
   return (
     <Box>
-      <Box display="flex" alignItems="center" padding="12px">
-        <IconButton
-          background="none"
-          aria-label="back"
-          cursor="pointer"
-          boxSize="36px"
-          onClick={() => navigate("/profile")}
-          as={ArrowBackIcon}
-        />
-        <Heading marginLeft="24px" size="md">
-          Edit Profile
-        </Heading>
-      </Box>
-      <Divider />
+      <Header path="/profile" title="Edit profile" />
       <Box paddingX="16px">
         <Box marginY={4}>
           <ProfileImageManager
