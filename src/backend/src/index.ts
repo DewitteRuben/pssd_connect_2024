@@ -4,6 +4,7 @@ import cors from "cors";
 import userRoute from "./routes/user_route.js";
 import { ExpressError } from "./errors.js";
 import { MongoDB } from "./database/mongo.js";
+import { firebaseAuthMiddleware } from "./middleware/firebaseAuth.js";
 
 const app = express();
 await MongoDB.connect();
@@ -31,7 +32,7 @@ app.post("/location/lookup", async (req, res, next) => {
   }
 });
 
-app.use("/user", userRoute);
+app.use("/user", firebaseAuthMiddleware, userRoute);
 app.get("/health", (_, res) => res.send("ok"));
 app.use(
   (
@@ -47,6 +48,6 @@ app.use(
 );
 
 const port = 3000;
-app.listen(port, () => {
+app.listen(port, async () => {
   console.log("Server listening on port", port);
 });
