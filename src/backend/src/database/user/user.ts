@@ -29,13 +29,8 @@ export type UserPreferences = {
 
 export type UserLocation = {
   coords: {
-    accuracy: number;
-    altitude: number;
-    altitudeAccuracy: number;
-    heading: number;
     latitude: number;
     longitude: number;
-    speed: number;
   };
   timestamp: number;
 };
@@ -45,6 +40,8 @@ export type GenderPreference = "men" | "women" | "everyone";
 
 export type User = {
   uid: string;
+  idToken: string;
+  chatToken: string;
   email: string;
   completedRegistration: boolean;
   registrationInProgress: boolean;
@@ -64,6 +61,7 @@ export type User = {
 const UserSchema = new Schema<User>({
   uid: { required: true, type: String },
   email: { required: true, type: String },
+  chatToken: { required: true, type: String },
   completedRegistration: { required: true, type: Boolean },
   registrationInProgress: { required: true, type: Boolean },
   countryCode: { required: true, type: String },
@@ -97,13 +95,8 @@ const UserSchema = new Schema<User>({
   },
   location: {
     coords: {
-      accuracy: Number,
-      altitude: Number,
-      altitudeAccuracy: Number,
-      heading: Number,
       latitude: Number,
       longitude: Number,
-      speed: Number,
     },
     timestamp: Number,
   },

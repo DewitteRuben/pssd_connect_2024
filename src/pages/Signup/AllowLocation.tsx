@@ -16,7 +16,12 @@ const AllowLocation = () => {
 
   const handleOnLocation = (pos: GeolocationPosition) => {
     setPos(pos);
-    registration.updateRegistrationData({ location: pos as UserLocation });
+    registration.updateRegistrationData({
+      location: {
+        coords: { latitude: pos.coords.latitude, longitude: pos.coords.longitude },
+        timestamp: pos.timestamp,
+      } as UserLocation,
+    });
   };
 
   const onContinue = async () => {
@@ -24,7 +29,7 @@ const AllowLocation = () => {
       await registration.finish();
       navigate("/");
     } catch (error) {
-      console.error('Failed to finish registration')
+      console.error("Failed to finish registration");
     }
   };
 
