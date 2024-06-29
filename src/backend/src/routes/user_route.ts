@@ -1,8 +1,9 @@
 import express from "express";
 import { User, UserModel } from "../database/user/user.js";
 import { ExpressError } from "../errors.js";
-import { firebaseUserApi } from "../firebase/firebase.js";
 import { successResponse } from "./helpers.js";
+import { StreamChatClient } from "../getstream.io/index.js";
+import FirebaseApp from "../firebase/firebase.js";
 
 const router = express.Router();
 
@@ -32,11 +33,26 @@ router.get("/:uid", async (req, res, next) => {
   }
 });
 
+router.delete("/:uid", async (req, res, next) => {
+  const { uid } = req.params as { uid: string };
+
+  try {
+    await FirebaseApp.auth().deleteUser(uid)
+    const obj = await UserModel.findOneAndDelete({ uid }).exec();
+    await StreamChatClient.deleteUser(uid)
+
+    return res.status(200).json(successResponse(obj?.toJSON()));
+  } catch (e) {
+    const err = e as Error;
+    return next(new ExpressError({ code: 500, message: err.message }));
+  }
+});
+
 router.put("/", async (req, res, next) => {
   const { uid, ...rest } = req.body as User;
 
   try {
-    const obj = await UserModel.findOneAndUpdate({ uid }, { ...rest }).exec();
+    const obj = await UserModel.findOneAndUpdate({ uid }, { ...rest }).exec();    
     return res.status(200).json(successResponse(obj?.toJSON()));
   } catch (e) {
     const err = e as Error;
@@ -45,7 +61,7 @@ router.put("/", async (req, res, next) => {
 });
 
 router.post("/", async (req, res, next) => {
-  const { uid, ...rest } = req.body as User;
+  const { uid, ...rest } = req.body as Omit<User, "chatToken">;
 
   try {
     const existingUser = await UserModel.findOne({ uid }).exec();
@@ -60,9 +76,11 @@ router.post("/", async (req, res, next) => {
 
     // will throw error if user does not exist
     let firebaseUserExists = true;
-    await firebaseUserApi.getUserById(uid).catch((err) => {
-      firebaseUserExists = false;
-    });
+    await FirebaseApp.auth()
+      .getUser(uid)
+      .catch((err) => {
+        firebaseUserExists = false;
+      });
 
     // TODO: ensure this doesn't cause issues with people guessing Firebase UIDs
     if (!firebaseUserExists) {
@@ -74,7 +92,10 @@ router.post("/", async (req, res, next) => {
       );
     }
 
-    const newUser = await UserModel.create({ uid, ...rest });
+    const streamChatUser = await StreamChatClient.upsertUser({ id: uid, role: "admin" });
+    const token = StreamChatClient.createToken(uid);
+
+    const newUser = await UserModel.create({ uid, chatToken: token, ...rest });
 
     return res.status(200).json(successResponse(newUser.toJSON()));
   } catch (e) {

@@ -29,6 +29,8 @@
     "react-icons": "^4.11.0",
     "react-router-dom": "^6.18.0",
     "react-tinder-card": "^1.6.4",
+    "stream-chat": "^8.37.0",
+    "stream-chat-react": "^11.23.0",
     "styled-components": "^6.1.1",
     "use-debounce": "^10.0.0",
     "uuid": "^9.0.1",
