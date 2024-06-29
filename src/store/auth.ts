@@ -12,6 +12,7 @@ import {
   signInWithEmailAndPassword,
 } from "firebase/auth";
 import { RootStore } from "./store";
+import pssdsAPI from "../api/pssds";
 
 export class AuthStore {
   public user?: User | null;
@@ -40,6 +41,8 @@ export class AuthStore {
       (user) =>
         runInAction(() => {
           this.user = user;
+          pssdsAPI.setFirebaseUser(user);
+
           this.ready = true;
         }),
       (err) => {

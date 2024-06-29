@@ -1,5 +1,7 @@
 import { User } from "../backend/src/database/user/user";
+import { User as FirebaseUser } from "firebase/auth";
 import { LocationData } from "../backend/src/geolocation";
+import { assert } from "console";
 
 type MongoDBResult<T> = {
   success: boolean;
@@ -10,18 +12,32 @@ type MongoDBResult<T> = {
 
 class PSSDSocialApi {
   private baseURL: string;
+  private firebaseUser: FirebaseUser | null = null;
+
   constructor() {
     this.baseURL = "http://localhost:3000";
+  }
+
+  setFirebaseUser(user: FirebaseUser | null) {
+    this.firebaseUser = user;
   }
 
   private getEndpointURL(endpoint: string) {
     return `${this.baseURL}${endpoint}`;
   }
 
+  private getToken() {
+    if (this.firebaseUser === null) throw new Error("Firebase user is not set")
+
+    return this.firebaseUser?.getIdToken();
+  }
+
   private async post<T>(endpoint: string, payload: any) {
     const headers = new Headers();
+    const jwtTokenId = await this.getToken();
 
     headers.append("Content-Type", "application/json");
+    headers.append("Authorization", `Bearer ${jwtTokenId}`);
 
     const result = await fetch(this.getEndpointURL(endpoint), {
       method: "POST",
@@ -34,8 +50,10 @@ class PSSDSocialApi {
 
   private async put<T>(endpoint: string, payload: any) {
     const headers = new Headers();
+    const jwtTokenId = await this.getToken();
 
     headers.append("Content-Type", "application/json");
+    headers.append("Authorization", `Bearer ${jwtTokenId}`);
 
     const result = await fetch(this.getEndpointURL(endpoint), {
       method: "PUT",
@@ -47,7 +65,16 @@ class PSSDSocialApi {
   }
 
   private async get<T>(endpoint: string) {
-    const result = await fetch(this.getEndpointURL(endpoint)).then((e) => e.json());
+    const headers = new Headers();
+    const jwtTokenId = await this.getToken();
+
+    headers.append("Authorization", `Bearer ${jwtTokenId}`);
+
+    const result = await fetch(this.getEndpointURL(endpoint), {
+      method: "GET",
+      headers,
+    }).then((e) => e.json());
+
     return result as T;
   }
 
