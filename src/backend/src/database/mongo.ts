@@ -9,4 +9,10 @@ export class MongoDB {
       pass: "example",
     });
   }
+
+  static async disconnect() {
+    if (this.mongoose) {
+      this.mongoose.disconnect();
+    }
+  }
 }
