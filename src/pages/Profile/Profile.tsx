@@ -7,8 +7,6 @@ import { AiOutlineEdit } from "react-icons/ai";
 import { FiSettings } from "react-icons/fi";
 import { differenceInYears } from "date-fns";
 import { useNavigate } from "react-router-dom";
-import { GiHealthNormal } from "react-icons/gi";
-import { IoMdHeartEmpty } from "react-icons/io";
 import { FaRegHeart } from "react-icons/fa";
 
 const Profile = () => {

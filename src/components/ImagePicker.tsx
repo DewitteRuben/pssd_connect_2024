@@ -41,7 +41,6 @@ const ImagePicker: React.FC<ImagePickerProps> = ({ size, onChange, defaultImages
       ...images.slice(currentImgIndex + 1),
     ];
 
-    console.log(newImages);
     if (onChange) {
       onChange(newImages);
     }

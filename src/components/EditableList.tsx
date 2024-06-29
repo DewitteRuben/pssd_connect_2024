@@ -66,7 +66,6 @@ const EditableList: React.FC<EditableListProps> = ({
   };
 
   React.useEffect(() => {
-    console.log(items, initialItems);
     if (onChange) {
       onChange(items.filter((item) => item.checked).map((item) => item.name));
     }
