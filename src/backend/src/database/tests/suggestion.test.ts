@@ -27,6 +27,8 @@ describe("insert", () => {
     suggestions = await findSuggestionForUser(mockUser1.uid);
     expect(suggestions.find((s) => s.uid === "2")).toBeDefined();
 
+    console.log(suggestions)
+
     await UserModel.updateOne({ uid: mockUser1.uid }, { $set: { preferences: {}} });
   });
 });

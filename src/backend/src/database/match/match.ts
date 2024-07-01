@@ -51,12 +51,13 @@ export const findSuggestionForUser = async (uid: string) => {
     currentDate.getDate()
   );
   const maxBirthdate = new Date(
-    currentDate.getFullYear() - ageEnd - 1,
+    currentDate.getFullYear() - ageEnd,
     currentDate.getMonth(),
     currentDate.getDate()
   );
 
   const age = differenceInYears(currentDate, new Date(birthdate));
+  console.log(age)
   if (global) {
     console.log(requestedGender, otherGenderPreference, age);
     return UserModel.find({

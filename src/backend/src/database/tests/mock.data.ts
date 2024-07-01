@@ -2,14 +2,14 @@ import { User } from "../user/user";
 
 export const mockUser1: User = {
   uid: "1",
-  chatToken: "",
+  chatToken: "test",
   idToken: "",
   email: "rubendewitte1998@gmail.com",
   completedRegistration: true,
   countryCode: "+49",
   phoneNumber: "17647121329",
   firstName: "Ruben",
-  birthdate: "2000-01-01T00:00:00.000Z",
+  birthdate: "2000-01-01T00:00:00.000Z", // Age ~24 years
   gender: "man",
   mode: "dating",
   images: [
@@ -18,7 +18,7 @@ export const mockUser1: User = {
   preferences: {
     genderPreference: "women",
     ageStart: 18,
-    ageEnd: 40,
+    ageEnd: 100,
     showAge: true,
     maxDistance: 100,
     global: true,
@@ -36,14 +36,14 @@ export const mockUser1: User = {
 
 export const mockUser2: User = {
   uid: "2",
-  chatToken: "",
+  chatToken: "test",
   idToken: "",
   email: "bobientje+2@gmail.com",
   completedRegistration: true,
   countryCode: "+49",
   phoneNumber: "17647121329",
   firstName: "Bobientje2",
-  birthdate: "2000-01-01T00:00:00.000Z",
+  birthdate: "1998-05-15T00:00:00.000Z", // Age ~26 years
   gender: "woman",
   mode: "dating",
   images: [
@@ -71,4 +71,331 @@ export const mockUser2: User = {
   },
 };
 
-export const mockUsers: User[] = [mockUser1, mockUser2];
+export const mockUser3: User = {
+  uid: "3",
+  chatToken: "sampleToken3",
+  idToken: "",
+  email: "johnsmith@example.com",
+  completedRegistration: true,
+  countryCode: "+44",
+  phoneNumber: "447987654321",
+  firstName: "John",
+  birthdate: "1999-11-20T00:00:00.000Z", // Age ~24 years
+  gender: "man",
+  mode: "friends",
+  images: ["https://example.com/images/john.jpg"],
+  preferences: {
+    genderPreference: "women",
+    ageStart: 30,
+    ageEnd: 45,
+    showAge: false,
+    maxDistance: 200,
+    global: true,
+    showDistance: true,
+    showMe: false,
+  },
+  registrationInProgress: false,
+  profile: {
+    school: "",
+    jobTitle: "Marketing Specialist",
+    about: "Enjoys hiking and photography.",
+    company: "MarketingPro",
+    city: "London",
+  },
+  pssd: { duration: "less1year", symptoms: ["anxiety"], medications: ["sertraline"] },
+  location: {
+    coords: { latitude: 51.507351, longitude: -0.127758 },
+    timestamp: 1700701949519,
+  },
+};
+
+export const mockUser4: User = {
+  uid: "4",
+  chatToken: "sampleToken4",
+  idToken: "",
+  email: "alice@example.com",
+  completedRegistration: true,
+  countryCode: "+33",
+  phoneNumber: "33612345678",
+  firstName: "Alice",
+  birthdate: "1997-04-10T00:00:00.000Z", // Age ~27 years
+  gender: "woman",
+  mode: "networking",
+  images: ["https://example.com/images/alice.jpg"],
+  preferences: {
+    genderPreference: "everyone",
+    ageStart: 28,
+    ageEnd: 50,
+    showAge: true,
+    maxDistance: 150,
+    global: false,
+    showDistance: true,
+    showMe: true,
+  },
+  registrationInProgress: false,
+  profile: {
+    school: "Paris University",
+    jobTitle: "Designer",
+    about: "Passionate about art and design.",
+    company: "ArtHouse",
+    city: "Paris",
+  },
+  pssd: { duration: "more5years", symptoms: ["insomnia"], medications: ["fluoxetine"] },
+  location: {
+    coords: { latitude: 48.856613, longitude: 2.352222 },
+    timestamp: 1700701949520,
+  },
+};
+
+export const mockUser5: User = {
+  uid: "5",
+  chatToken: "sampleToken5",
+  idToken: "",
+  email: "michael@example.com",
+  completedRegistration: true,
+  countryCode: "+61",
+  phoneNumber: "61412345678",
+  firstName: "Michael",
+  birthdate: "1996-09-30T00:00:00.000Z", // Age ~28 years
+  gender: "man",
+  mode: "dating",
+  images: ["https://example.com/images/michael.jpg"],
+  preferences: {
+    genderPreference: "women",
+    ageStart: 30,
+    ageEnd: 40,
+    showAge: true,
+    maxDistance: 80,
+    global: true,
+    showDistance: false,
+    showMe: true,
+  },
+  registrationInProgress: false,
+  profile: {
+    school: "",
+    jobTitle: "Engineer",
+    about: "Loves to travel and explore new places.",
+    company: "Engineers Inc",
+    city: "Sydney",
+  },
+  pssd: {
+    duration: "3to5years",
+    symptoms: ["low libido"],
+    medications: ["escitalopram"],
+  },
+  location: {
+    coords: { latitude: -33.86882, longitude: 151.209296 },
+    timestamp: 1700701949521,
+  },
+};
+
+export const mockUser6: User = {
+  uid: "6",
+  chatToken: "sampleToken6",
+  idToken: "",
+  email: "emily@example.com",
+  completedRegistration: true,
+  countryCode: "+34",
+  phoneNumber: "34912345678",
+  firstName: "Emily",
+  birthdate: "1997-07-12T00:00:00.000Z", // Age ~26 years
+  gender: "woman",
+  mode: "networking",
+  images: ["https://example.com/images/emily.jpg"],
+  preferences: {
+    genderPreference: "everyone",
+    ageStart: 25,
+    ageEnd: 35,
+    showAge: true,
+    maxDistance: 60,
+    global: true,
+    showDistance: true,
+    showMe: true,
+  },
+  registrationInProgress: false,
+  profile: {
+    school: "Barcelona University",
+    jobTitle: "Consultant",
+    about: "Enthusiastic about business and technology.",
+    company: "ConsultPro",
+    city: "Barcelona",
+  },
+  pssd: { duration: "2to3years", symptoms: ["headaches"], medications: ["citalopram"] },
+  location: {
+    coords: { latitude: 41.385063, longitude: 2.173404 },
+    timestamp: 1700701949522,
+  },
+};
+
+export const mockUser7: User = {
+  uid: "7",
+  chatToken: "sampleToken7",
+  idToken: "",
+  email: "david@example.com",
+  completedRegistration: true,
+  countryCode: "+1",
+  phoneNumber: "14081234567",
+  firstName: "David",
+  birthdate: "1995-11-18T00:00:00.000Z", // Age ~28 years
+  gender: "man",
+  mode: "dating",
+  images: ["https://example.com/images/david.jpg"],
+  preferences: {
+    genderPreference: "women",
+    ageStart: 35,
+    ageEnd: 50,
+    showAge: true,
+    maxDistance: 30,
+    global: false,
+    showDistance: true,
+    showMe: true,
+  },
+  registrationInProgress: false,
+  profile: {
+    school: "University of California",
+    jobTitle: "Entrepreneur",
+    about: "Running my own tech startup.",
+    company: "StartUp Inc",
+    city: "San Francisco",
+  },
+  pssd: {
+    duration: "more5years",
+    symptoms: ["depression"],
+    medications: ["venlafaxine"],
+  },
+  location: {
+    coords: { latitude: 37.774929, longitude: -122.419418 },
+    timestamp: 1700701949523,
+  },
+};
+
+export const mockUser8: User = {
+  uid: "8",
+  chatToken: "sampleToken8",
+  idToken: "",
+  email: "sarah@example.com",
+  completedRegistration: true,
+  countryCode: "+1",
+  phoneNumber: "16041234567",
+  firstName: "Sarah",
+  birthdate: "1998-02-01T00:00:00.000Z", // Age ~26 years
+  gender: "woman",
+  mode: "friends",
+  images: ["https://example.com/images/sarah.jpg"],
+  preferences: {
+    genderPreference: "men",
+    ageStart: 25,
+    ageEnd: 40,
+    showAge: false,
+    maxDistance: 100,
+    global: true,
+    showDistance: false,
+    showMe: true,
+  },
+  registrationInProgress: false,
+  profile: {
+    school: "University of Toronto",
+    jobTitle: "Data Scientist",
+    about: "Data enthusiast and book lover.",
+    company: "DataCorp",
+    city: "Toronto",
+  },
+  pssd: { duration: "1to2years", symptoms: ["dizziness"], medications: ["paroxetine"] },
+  location: {
+    coords: { latitude: 43.65107, longitude: -79.347015 },
+    timestamp: 1700701949524,
+  },
+};
+
+export const mockUser9: User = {
+  uid: "9",
+  chatToken: "sampleToken9",
+  idToken: "",
+  email: "chris@example.com",
+  completedRegistration: true,
+  countryCode: "+81",
+  phoneNumber: "81312345678",
+  firstName: "Chris",
+  birthdate: "2000-09-05T00:00:00.000Z", // Age ~24 years
+  gender: "man",
+  mode: "networking",
+  images: ["https://example.com/images/chris.jpg"],
+  preferences: {
+    genderPreference: "everyone",
+    ageStart: 20,
+    ageEnd: 30,
+    showAge: true,
+    maxDistance: 20,
+    global: false,
+    showDistance: true,
+    showMe: true,
+  },
+  registrationInProgress: false,
+  profile: {
+    school: "Tokyo University",
+    jobTitle: "Researcher",
+    about: "Interested in AI and robotics.",
+    company: "TechLab",
+    city: "Tokyo",
+  },
+  pssd: { duration: "less1year", symptoms: ["headaches"], medications: ["fluoxetine"] },
+  location: {
+    coords: { latitude: 35.689487, longitude: 139.691711 },
+    timestamp: 1700701949525,
+  },
+};
+
+export const mockUser10: User = {
+  uid: "10",
+  chatToken: "sampleToken10",
+  idToken: "",
+  email: "samantha@example.com",
+  completedRegistration: true,
+  countryCode: "+44",
+  phoneNumber: "441234567890",
+  firstName: "Samantha",
+  birthdate: "1998-12-11T00:00:00.000Z", // Age ~25 years
+  gender: "woman",
+  mode: "dating",
+  images: ["https://example.com/images/samantha.jpg"],
+  preferences: {
+    genderPreference: "men",
+    ageStart: 35,
+    ageEnd: 50,
+    showAge: true,
+    maxDistance: 70,
+    global: true,
+    showDistance: true,
+    showMe: true,
+  },
+  registrationInProgress: false,
+  profile: {
+    school: "",
+    jobTitle: "Physician",
+    about: "Caring and compassionate.",
+    company: "HealthCare Plus",
+    city: "Manchester",
+  },
+  pssd: {
+    duration: "3to5years",
+    symptoms: ["low libido"],
+    medications: ["escitalopram"],
+  },
+  location: {
+    coords: { latitude: 53.480759, longitude: -2.242631 },
+    timestamp: 1700701949526,
+  },
+};
+
+export const mockUsers: User[] = [
+  mockUser1,
+  mockUser2,
+  mockUser3,
+  mockUser4,
+  mockUser5,
+  mockUser6,
+  mockUser7,
+  mockUser8,
+  mockUser9,
+  mockUser10,
+];
