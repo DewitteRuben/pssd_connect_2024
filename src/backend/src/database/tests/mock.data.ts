@@ -86,7 +86,7 @@ export const mockUser3: User = {
   images: ["https://example.com/images/john.jpg"],
   preferences: {
     genderPreference: "women",
-    ageStart: 30,
+    ageStart: 18,
     ageEnd: 45,
     showAge: false,
     maxDistance: 200,
@@ -123,8 +123,8 @@ export const mockUser4: User = {
   mode: "networking",
   images: ["https://example.com/images/alice.jpg"],
   preferences: {
-    genderPreference: "everyone",
-    ageStart: 28,
+    genderPreference: "men",
+    ageStart: 18,
     ageEnd: 50,
     showAge: true,
     maxDistance: 150,
@@ -162,7 +162,7 @@ export const mockUser5: User = {
   images: ["https://example.com/images/michael.jpg"],
   preferences: {
     genderPreference: "women",
-    ageStart: 30,
+    ageStart: 18,
     ageEnd: 40,
     showAge: true,
     maxDistance: 80,
@@ -203,8 +203,8 @@ export const mockUser6: User = {
   mode: "networking",
   images: ["https://example.com/images/emily.jpg"],
   preferences: {
-    genderPreference: "everyone",
-    ageStart: 25,
+    genderPreference: "women",
+    ageStart: 18,
     ageEnd: 35,
     showAge: true,
     maxDistance: 60,
@@ -242,7 +242,7 @@ export const mockUser7: User = {
   images: ["https://example.com/images/david.jpg"],
   preferences: {
     genderPreference: "women",
-    ageStart: 35,
+    ageStart: 18,
     ageEnd: 50,
     showAge: true,
     maxDistance: 30,
@@ -284,7 +284,7 @@ export const mockUser8: User = {
   images: ["https://example.com/images/sarah.jpg"],
   preferences: {
     genderPreference: "men",
-    ageStart: 25,
+    ageStart: 18,
     ageEnd: 40,
     showAge: false,
     maxDistance: 100,
@@ -322,7 +322,7 @@ export const mockUser9: User = {
   images: ["https://example.com/images/chris.jpg"],
   preferences: {
     genderPreference: "everyone",
-    ageStart: 20,
+    ageStart: 18,
     ageEnd: 30,
     showAge: true,
     maxDistance: 20,
@@ -360,7 +360,7 @@ export const mockUser10: User = {
   images: ["https://example.com/images/samantha.jpg"],
   preferences: {
     genderPreference: "men",
-    ageStart: 35,
+    ageStart: 18,
     ageEnd: 50,
     showAge: true,
     maxDistance: 70,

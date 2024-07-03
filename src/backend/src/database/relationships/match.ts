@@ -1,7 +1,7 @@
 import { User, UserModel } from "../user/user.js";
 import differenceInYears from "date-fns/differenceInYears/index.js";
 
-export const findSuggestionForUser = async (uid: string) => {
+export const findSuggestionsForUser = async (uid: string) => {
   const user = await UserModel.findOne({ uid }).exec();
 
   if (!user) throw new Error("user with id " + uid + " was not found");
@@ -26,9 +26,9 @@ export const findSuggestionForUser = async (uid: string) => {
     case "women":
       requestedGender = "woman";
       break;
-    case "everyone":
-      requestedGender = { $in: ["man", "woman"] };
-      break;
+    // case "everyone":
+    //   requestedGender = { $in: ["man", "woman"] };
+    //   break;
   }
 
   switch (gender) {
@@ -38,9 +38,9 @@ export const findSuggestionForUser = async (uid: string) => {
     case "woman":
       otherGenderPreference = "women";
       break;
-    case "other":
-      otherGenderPreference = "everyone";
-      break;
+    // case "other":
+    //   otherGenderPreference = "everyone";
+    //   break;
   }
 
   const currentDate = new Date();
@@ -57,9 +57,11 @@ export const findSuggestionForUser = async (uid: string) => {
   );
 
   const age = differenceInYears(currentDate, new Date(birthdate));
-  console.log(age)
+
+  const radiusInKilometers = maxDistance;
+  const radiusInRadians = radiusInKilometers / 6371; // Earth's radius in kilometers
+
   if (global) {
-    console.log(requestedGender, otherGenderPreference, age);
     return UserModel.find({
       mode,
       gender: requestedGender,
@@ -73,11 +75,19 @@ export const findSuggestionForUser = async (uid: string) => {
           { $lte: [{ $toDate: "$birthdate" }, minBirthdate] },
         ],
       },
+      $or: [
+        { "preferences.global": true },
+        {
+          "location.coords": {
+            $geoWithin: {
+              $centerSphere: [[latitude, longitude], radiusInRadians],
+            },
+          },
+        },
+      ],
     }).exec();
   }
 
-  const radiusInKilometers = maxDistance;
-  const radiusInRadians = radiusInKilometers / 6371; // Earth's radius in kilometers
 
   return UserModel.find({
     mode,

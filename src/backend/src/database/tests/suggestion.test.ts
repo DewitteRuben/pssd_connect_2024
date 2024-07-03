@@ -1,4 +1,4 @@
-import { findSuggestionForUser } from "../match/match";
+import { findSuggestionsForUser } from "../relationships/match";
 import { MongoDB } from "../mongo";
 import { UserModel } from "../user/user";
 import { mockUser1, mockUsers } from "./mock.data";
@@ -24,10 +24,21 @@ describe("insert", () => {
     let suggestions;
 
     // generic match
-    suggestions = await findSuggestionForUser(mockUser1.uid);
+    suggestions = await findSuggestionsForUser(mockUser1.uid);
     expect(suggestions.find((s) => s.uid === "2")).toBeDefined();
+    expect(suggestions.find((s) => s.uid === "10")).toBeDefined();
 
     console.log(suggestions)
+
+    // suggestions should not contain:
+    // - people that you disliked or liked
+    // - people that liked or disliked you
+    // - matches
+
+    // matching_engine 
+    // likes
+    // dislikes
+    // matches
 
     await UserModel.updateOne({ uid: mockUser1.uid }, { $set: { preferences: {}} });
   });

@@ -1,4 +1,4 @@
-import mongoose, { model } from "mongoose";
+import mongoose, { MongooseError, model } from "mongoose";
 
 const Schema = mongoose.Schema;
 
@@ -37,6 +37,14 @@ export type UserLocation = {
 
 export type Gender = "man" | "woman" | "other";
 export type GenderPreference = "men" | "women" | "everyone";
+
+export type Relationship = {
+  uid: string;
+  suggestions: string[];
+  likes: string[];
+  dislikes: string[];
+  matches: string[];
+};
 
 export type User = {
   uid: string;
@@ -102,4 +110,32 @@ const UserSchema = new Schema<User>({
   },
 });
 
+UserSchema.pre("save", async function (next) {
+  if (this.isNew) {
+    try {
+      await RelationshipModel.create({
+        uid: this.uid,
+        dislikes: [],
+        likes: [],
+        matches: [],
+        suggestions: [],
+      });
+    } catch (error) {
+      next(error as MongooseError);
+    }
+  }
+
+  next();
+});
+
 export const UserModel = model<User>("user", UserSchema);
+
+const RelationshipSchema = new Schema<Relationship>({
+  uid: { required: true, type: String },
+  dislikes: { required: true, type: [String], ref: "user" },
+  matches: { required: true, type: [String], ref: "user" },
+  likes: { required: true, type: [String], ref: "user" },
+  suggestions: { required: true, type: [String], ref: "user" },
+});
+
+export const RelationshipModel = model<Relationship>("relationships", RelationshipSchema);
