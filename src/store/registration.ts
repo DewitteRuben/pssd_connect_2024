@@ -39,20 +39,24 @@ const initRegistrationFlow = () => {
   ];
 };
 
-const REGISTRATION_LOCALSTORAGE_KEY = "registration"
+const initRegistrationData = () => {
+  return {
+    registrationInProgress: false,
+    completedRegistration: false,
+    preferences: {
+      genderPreference: "women",
+    },
+  } as OptionalUserWithoutUID;
+};
+
+const REGISTRATION_LOCALSTORAGE_KEY = "registration";
 
 export class RegistrationStore {
   private root: RootStore;
   public mode: Mode = "dating";
   public step: Step = "email";
 
-  public registrationData: OptionalUserWithoutUID = {
-    registrationInProgress: false,
-    completedRegistration: false,
-    preferences: {
-      genderPreference: "women",
-    },
-  };
+  public registrationData: OptionalUserWithoutUID = initRegistrationData();
 
   private registrationFlow = initRegistrationFlow();
 
@@ -67,7 +71,12 @@ export class RegistrationStore {
   }
 
   deleteStoredData() {
-    localStorage.removeItem(REGISTRATION_LOCALSTORAGE_KEY)
+    localStorage.removeItem(REGISTRATION_LOCALSTORAGE_KEY);
+  }
+
+  reset() {
+    this.registrationData = initRegistrationData();
+    this.registrationFlow = initRegistrationFlow();
   }
 
   updateRegistrationData(payload: OptionalUserWithoutUID) {
@@ -127,8 +136,11 @@ export class RegistrationStore {
 
     const { success } = await pssdsAPI.createUser(newUser);
     if (!success) {
+      // TODO: handle this more
       throw new Error("failed to create account!!!");
     }
+
+    this.reset();
 
     return this.root.user.fetchUser();
   }

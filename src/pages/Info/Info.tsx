@@ -13,9 +13,9 @@ import { useStore } from "../../store/store";
 import ProfileImageManager from "../../components/ProfileImageManager";
 import { ImagePickerEntry } from "../../components/ImagePicker";
 import React, { ChangeEventHandler } from "react";
-import { Gender, UserProfile } from "../../backend/src/database/user/user";
 import { useDebounce } from "use-debounce";
 import Header from "../../components/Header";
+import { Gender, UserProfile } from "../../backend/src/database/user/types";
 
 const Info = () => {
   const { user: userStore } = useStore();

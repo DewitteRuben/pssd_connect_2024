@@ -1,5 +1,6 @@
 import express from "express";
-import { User, UserModel } from "../database/user/user.js";
+import { UserModel } from "../database/user/user.js";
+import { User } from "../database/user/types.js";
 import { ExpressError } from "../errors.js";
 import { successResponse } from "./helpers.js";
 import { StreamChatClient } from "../getstream.io/index.js";
@@ -37,9 +38,9 @@ router.delete("/:uid", async (req, res, next) => {
   const { uid } = req.params as { uid: string };
 
   try {
-    await FirebaseApp.auth().deleteUser(uid)
+    await FirebaseApp.auth().deleteUser(uid);
     const obj = await UserModel.findOneAndDelete({ uid }).exec();
-    await StreamChatClient.deleteUser(uid)
+    await StreamChatClient.deleteUser(uid);
 
     return res.status(200).json(successResponse(obj?.toJSON()));
   } catch (e) {
@@ -52,7 +53,7 @@ router.put("/", async (req, res, next) => {
   const { uid, ...rest } = req.body as User;
 
   try {
-    const obj = await UserModel.findOneAndUpdate({ uid }, { ...rest }).exec();    
+    const obj = await UserModel.findOneAndUpdate({ uid }, { ...rest }).exec();
     return res.status(200).json(successResponse(obj?.toJSON()));
   } catch (e) {
     const err = e as Error;
@@ -92,8 +93,10 @@ router.post("/", async (req, res, next) => {
       );
     }
 
-    const streamChatUser = await StreamChatClient.upsertUser({ id: uid, role: "admin" });
-    const token = StreamChatClient.createToken(uid);
+    //const streamChatUser = await StreamChatClient.upsertUser({ id: uid, role: "admin" });
+    const token =
+      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiVTF1MnF4cGlDYVBaMGpMSkNnZTVNZnlMbVhCMyJ9.Zpo-ZZ2NMB3BQFRi89vKO8HVFFtvGV209Mz5v7B9-N0" ??
+      StreamChatClient.createToken(uid);
 
     const newUser = await UserModel.create({ uid, chatToken: token, ...rest });
 

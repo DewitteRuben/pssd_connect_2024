@@ -1,4 +1,4 @@
-import { User } from "../user/user";
+import { User } from "../user/types.js";
 
 export const mockUser1: User = {
   uid: "1",

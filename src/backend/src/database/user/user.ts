@@ -1,70 +1,8 @@
 import mongoose, { MongooseError, model } from "mongoose";
+import { RelationshipModel } from "./relationship";
+import { User } from "./types.js";
 
 const Schema = mongoose.Schema;
-
-export type UserProfile = {
-  school: string;
-  jobTitle: string;
-  about: string;
-  company: string;
-  city: string;
-};
-
-export type UserPSSDInfo = {
-  duration: string;
-  symptoms: string[];
-  medications: string[];
-};
-
-export type UserPreferences = {
-  genderPreference: GenderPreference;
-  showAge: boolean;
-  ageStart: number;
-  ageEnd: number;
-  maxDistance: number;
-  global: boolean;
-  showDistance: boolean;
-  showMe: boolean;
-};
-
-export type UserLocation = {
-  coords: {
-    latitude: number;
-    longitude: number;
-  };
-  timestamp: number;
-};
-
-export type Gender = "man" | "woman" | "other";
-export type GenderPreference = "men" | "women" | "everyone";
-
-export type Relationship = {
-  uid: string;
-  suggestions: string[];
-  likes: string[];
-  dislikes: string[];
-  matches: string[];
-};
-
-export type User = {
-  uid: string;
-  idToken: string;
-  chatToken: string;
-  email: string;
-  completedRegistration: boolean;
-  registrationInProgress: boolean;
-  countryCode: string;
-  phoneNumber: string;
-  firstName: string;
-  birthdate: string | Date;
-  gender: Gender;
-  mode: string;
-  profile: UserProfile;
-  preferences: UserPreferences;
-  pssd: UserPSSDInfo;
-  images: string[];
-  location: UserLocation;
-};
 
 const UserSchema = new Schema<User>({
   uid: { required: true, type: String },
@@ -129,13 +67,3 @@ UserSchema.pre("save", async function (next) {
 });
 
 export const UserModel = model<User>("user", UserSchema);
-
-const RelationshipSchema = new Schema<Relationship>({
-  uid: { required: true, type: String },
-  dislikes: { required: true, type: [String], ref: "user" },
-  matches: { required: true, type: [String], ref: "user" },
-  likes: { required: true, type: [String], ref: "user" },
-  suggestions: { required: true, type: [String], ref: "user" },
-});
-
-export const RelationshipModel = model<Relationship>("relationships", RelationshipSchema);

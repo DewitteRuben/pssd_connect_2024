@@ -2,6 +2,7 @@ import express from "express";
 import { PositionStackAPI } from "./geolocation.js";
 import cors from "cors";
 import userRoute from "./routes/user_route.js";
+import relationshipRoute from "./routes/relationship_route.js";
 import { ExpressError } from "./errors.js";
 import { MongoDB } from "./database/mongo.js";
 import { firebaseAuthMiddleware } from "./middleware/firebaseAuth.js";
@@ -33,6 +34,7 @@ app.post("/location/lookup", async (req, res, next) => {
 });
 
 app.use("/user", firebaseAuthMiddleware, userRoute);
+app.use("/relationship", firebaseAuthMiddleware, relationshipRoute);
 app.get("/health", (_, res) => res.send("ok"));
 app.use(
   (

@@ -19,13 +19,18 @@ import { runInAction } from "mobx";
 import { useStore } from "../../store/store";
 
 export const ProtectedRoute = observer(() => {
-  const { auth, registration } = useStore();
+  const {
+    auth,
+    registration,
+    user: { user: userData },
+  } = useStore();
 
   if (!registration.isFinished && registration.isInProgress) {
     return <Navigate to="/signup" replace />;
   }
 
-  return auth.loggedIn ? <Outlet /> : <Navigate to="/splash" replace />;
+  // Firebase auth logged in + user data received from mongodb database
+  return auth.loggedIn && userData ? <Outlet /> : <Navigate to="/splash" replace />;
 });
 
 export const RegRouteHandler = observer(() => {

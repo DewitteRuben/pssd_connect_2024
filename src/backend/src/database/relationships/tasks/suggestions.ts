@@ -1,16 +1,21 @@
-import { Task } from ".";
-import { RelationshipModel } from "../../user/user";
-import { findSuggestionsForUser } from "../match";
+import { Task } from "./index.js";
+import { findSuggestionsForUser } from "../match.js";
+import { RelationshipModel } from "../../user/relationship.js";
 
-class SuggestionTask extends Task {
+export class SuggestionTask extends Task {
   constructor(uid: string) {
     super(uid);
   }
 
-  async execute(): Promise<void> {
-    const suggestions = await findSuggestionsForUser(this.uid);
-    await RelationshipModel.updateOne({ uid: this.uid }, { $set: { suggestions } });
+  async execute(): Promise<any> {
+    const suggestionsResult = await findSuggestionsForUser(this.uid);
+    const suggestionsArray = suggestionsResult.map((s) => s.uid);
 
-    return;
+    await RelationshipModel.updateOne(
+      { uid: this.uid },
+      { $set: { suggestions: suggestionsArray } }
+    );
+
+    return suggestionsArray;
   }
 }

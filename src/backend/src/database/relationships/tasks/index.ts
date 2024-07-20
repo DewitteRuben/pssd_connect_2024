@@ -4,7 +4,11 @@ export abstract class Task {
     this.uid = uid;
   }
 
-  async execute(): Promise<void> {}
+  async execute(): Promise<any> {}
+
+  getUserId() {
+    return this.uid;
+  }
 }
 
 export class TaskQueue {
@@ -31,7 +35,11 @@ export class TaskQueue {
     try {
       this.taskInProgress = true;
 
-      await task.execute();
+      const result = await task.execute();
+
+      console.log(
+        `Executed ${task.constructor.name} for user ${task.getUserId()} with result: ${result}` 
+      );
     } catch (error) {
       console.error("Failed to execute task", error);
     } finally {

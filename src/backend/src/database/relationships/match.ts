@@ -1,4 +1,4 @@
-import { User, UserModel } from "../user/user.js";
+import { UserModel } from "../user/user.js";
 import differenceInYears from "date-fns/differenceInYears/index.js";
 
 export const findSuggestionsForUser = async (uid: string) => {
@@ -87,7 +87,6 @@ export const findSuggestionsForUser = async (uid: string) => {
       ],
     }).exec();
   }
-
 
   return UserModel.find({
     mode,

@@ -81,9 +81,10 @@ const Home = () => {
           <Route path="profile/settings" element={<Settings />} />
           <Route path="profile/info" element={<Info />} />
           <Route path="profile/pssd" element={<PSSD />} />
-          <Route path="/" element={<Match />} />
 
           <Route path="messages" element={<Messages />} />
+
+          <Route path="/" element={<Match />} />
         </Routes>
       </TabPanels>
       <TabList>

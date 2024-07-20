@@ -1,7 +1,6 @@
-import { User } from "../backend/src/database/user/user";
 import { User as FirebaseUser } from "firebase/auth";
 import { LocationData } from "../backend/src/geolocation";
-import { assert } from "console";
+import { User, Relationship } from "../backend/src/database/user/types";
 
 type MongoDBResult<T> = {
   success: boolean;
@@ -27,7 +26,7 @@ class PSSDSocialApi {
   }
 
   private getToken() {
-    if (this.firebaseUser === null) throw new Error("Firebase user is not set")
+    if (this.firebaseUser === null) throw new Error("Firebase user is not set");
 
     return this.firebaseUser?.getIdToken();
   }
@@ -103,9 +102,17 @@ class PSSDSocialApi {
   updateUser(user: User) {
     return this.put("/user", user);
   }
-  
+
   deleteUser(uid: string) {
     return this.delete("/user/" + uid);
+  }
+
+  getSuggestions(uid: string): Promise<MongoDBResult<Relationship>> {
+    return this.get("/relationship/" + uid);
+  }
+
+  runSuggestion(uid: string) {
+    return this.post("/relationship/suggestion/", { uid });
   }
 
   async locationReverseLookup(

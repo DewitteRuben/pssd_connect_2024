@@ -1,6 +1,6 @@
 import { makeAutoObservable, reaction, runInAction, toJS } from "mobx";
+import { User } from "../backend/src/database/user/types";
 import { RootStore } from "./store";
-import { User } from "../backend/src/database/user/user";
 import pssdsAPI from "../api/pssds";
 import { RecursivePartial } from "../types/global";
 import _ from "lodash";
