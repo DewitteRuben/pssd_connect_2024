@@ -109,66 +109,78 @@ const Match = () => {
         relationship.relationships?.suggestions_info.length > 0 && (
           <>
             {relationship.relationships.suggestions_info.map((si) => (
-              <Swipeable
-                key={si.uid}
-                onSwipe={(direction) => onSwipe(direction, si.uid)}
-                preventSwipe={["up", "down"]}
-              >
-                <Box position="relative">
-                  <Image src={si.images[0]} />
-                  <Box
-                    onClick={() => setViewProfile((vp) => !vp)}
-                    position="absolute"
-                    bottom="0"
-                    padding="18px"
-                    width="100%"
-                    backgroundImage="linear-gradient(to bottom, rgba(0,0,0,0.1), rgba(0,0,0,0.9));"
-                  >
-                    <Box position="relative">
-                      <Text fontWeight="bold" color="white" fontSize="24px">
-                        {si.firstName},{" "}
-                        {differenceInYears(new Date(), new Date(si.birthdate) as Date)}
-                      </Text>
-                      <Text color="white" fontSize="16px">
-                        {si.profile.jobTitle ?? si.profile.school}
-                      </Text>
-                      <InfoIcon color="white" />
+              <>
+                <Swipeable
+                  key={si.uid}
+                  onSwipe={(direction) => onSwipe(direction, si.uid)}
+                  preventSwipe={["up", "down"]}
+                >
+                  <Box position="relative">
+                    <Image src={si.images[0]} />
+                    <Box
+                      onClick={() => setViewProfile((vp) => !vp)}
+                      position="absolute"
+                      bottom="0"
+                      padding="18px"
+                      width="100%"
+                      backgroundImage="linear-gradient(to bottom, rgba(0,0,0,0.1), rgba(0,0,0,0.9));"
+                    >
+                      <Box position="relative">
+                        <Text fontWeight="bold" color="white" fontSize="24px">
+                          {si.firstName},{" "}
+                          {differenceInYears(new Date(), new Date(si.birthdate) as Date)}
+                        </Text>
+                        <Text color="white" fontSize="16px">
+                          {si.profile.jobTitle ?? si.profile.school}
+                        </Text>
+                        <InfoIcon color="white" />
+                      </Box>
                     </Box>
                   </Box>
+                </Swipeable>
+                <Box display="flex" justifyContent="center" marginTop="16px" gap="40px">
+                  <IconButton
+                    isRound={true}
+                    variant="solid"
+                    width="60px"
+                    height="60px"
+                    aria-label="undo"
+                    fontSize="36px"
+                    onClick={() => relationship.dislike(si.uid)}
+                    icon={<MdClose color="red" />}
+                  />
+                  <IconButton
+                    isRound={true}
+                    variant="solid"
+                    width="60px"
+                    height="60px"
+                    fontSize="24px"
+                    aria-label="undo"
+                    onClick={() => relationship.like(si.uid)}
+                    icon={<FaHeart color="green" />}
+                  />
                 </Box>
-              </Swipeable>
+              </>
             ))}
           </>
         )}
-      <Box display="flex" justifyContent="center" marginTop="16px" gap="40px">
-        <IconButton
-          isRound={true}
-          variant="solid"
-          width="60px"
-          height="60px"
-          fontSize="24px"
-          aria-label="undo"
-          icon={<FaUndo color="blue" />}
-        />
-        <IconButton
-          isRound={true}
-          variant="solid"
-          width="60px"
-          height="60px"
-          aria-label="undo"
-          fontSize="36px"
-          icon={<MdClose color="red" />}
-        />
-        <IconButton
-          isRound={true}
-          variant="solid"
-          width="60px"
-          height="60px"
-          fontSize="24px"
-          aria-label="undo"
-          icon={<FaHeart color="green" />}
-        />
-      </Box>
+      {!relationship.relationships?.suggestions_info ||
+        (!relationship.relationships?.suggestions_info.length && (
+          <Box
+            display="flex"
+            height="100%"
+            padding="0 30px"
+            textAlign="center"
+            justifyContent="center"
+            alignItems="center"
+            background="1px solid black"
+          >
+            <Text>
+              We've run out of potential matches for you, please check back at a later
+              time.
+            </Text>
+          </Box>
+        ))}
     </Box>
   );
 };
