@@ -101,11 +101,4 @@ router.post("/dislike/:dislikedUid", async (req, res, next) => {
   taskQueue.queue(new DislikeTask(disliker, dislikedUid));
 });
 
-router.post("/suggestion", async (req, res, next) => {
-  const { uid } = req.body as { uid: string };
-
-  console.log({ uid });
-  taskQueue.queue(new SuggestionTask(uid));
-});
-
 export default router;
