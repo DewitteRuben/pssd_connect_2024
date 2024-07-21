@@ -1,6 +1,7 @@
 import { Task } from "./index.js";
 import { findSuggestionsForUser } from "../match.js";
 import { RelationshipModel } from "../../user/relationship.js";
+import { StreamChatClient } from "../../../getstream.io/index.js";
 
 export class SuggestionTask extends Task {
   constructor(uid: string) {
@@ -69,7 +70,7 @@ export class CheckForMatchTask extends Task {
 
     if (!user1LikesUser2 || !user2LikesUser1) return;
 
-    return RelationshipModel.bulkWrite([
+    await RelationshipModel.bulkWrite([
       {
         updateOne: {
           filter: { uid: this.uid },
@@ -83,5 +84,12 @@ export class CheckForMatchTask extends Task {
         },
       },
     ]);
+
+    const channel = StreamChatClient.channel("messaging", {
+      members: [this.uid, this.uid2],
+      created_by_id: this.uid,
+    });
+
+    return channel.create();
   }
 }
