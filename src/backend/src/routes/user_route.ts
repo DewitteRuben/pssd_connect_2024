@@ -5,6 +5,7 @@ import { ExpressError } from "../errors.js";
 import { successResponse } from "./helpers.js";
 import { StreamChatClient } from "../getstream.io/index.js";
 import FirebaseApp from "../firebase/firebase.js";
+import { RelationshipModel } from "../database/user/relationship.js";
 
 const router = express.Router();
 
@@ -38,11 +39,14 @@ router.delete("/:uid", async (req, res, next) => {
   const { uid } = req.params as { uid: string };
 
   try {
-    await FirebaseApp.auth().deleteUser(uid);
-    const obj = await UserModel.findOneAndDelete({ uid }).exec();
-    await StreamChatClient.deleteUser(uid);
+    await Promise.all([
+      FirebaseApp.auth().deleteUser(uid),
+      UserModel.findOneAndDelete({ uid }).exec(),
+      RelationshipModel.findOneAndDelete({ uid }).exec(),
+      StreamChatClient.deleteUser(uid),
+    ]);
 
-    return res.status(200).json(successResponse(obj?.toJSON()));
+    return res.status(200).json(successResponse());
   } catch (e) {
     const err = e as Error;
     return next(new ExpressError({ code: 500, message: err.message }));
@@ -93,10 +97,8 @@ router.post("/", async (req, res, next) => {
       );
     }
 
-    //const streamChatUser = await StreamChatClient.upsertUser({ id: uid, role: "admin" });
-    const token =
-      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiVTF1MnF4cGlDYVBaMGpMSkNnZTVNZnlMbVhCMyJ9.Zpo-ZZ2NMB3BQFRi89vKO8HVFFtvGV209Mz5v7B9-N0" ??
-      StreamChatClient.createToken(uid);
+    const streamChatUser = await StreamChatClient.upsertUser({ id: uid, role: "admin" });
+    const token = StreamChatClient.createToken(uid);
 
     const newUser = await UserModel.create({ uid, chatToken: token, ...rest });
 
