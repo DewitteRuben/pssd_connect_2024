@@ -19,3 +19,33 @@ export class SuggestionTask extends Task {
     return suggestionsArray;
   }
 }
+
+export class LikeTask extends Task {
+  private liked: string;
+  constructor(liker: string, liked: string) {
+    super(liker);
+    this.liked = liked;
+  }
+
+  async execute(): Promise<any> {
+    return RelationshipModel.updateOne(
+      { uid: this.uid },
+      { $addToSet: { likes: this.liked } }
+    );
+  }
+}
+
+export class DislikeTask extends Task {
+  private disliked: string;
+  constructor(disliker: string, liked: string) {
+    super(disliker);
+    this.disliked = liked;
+  }
+
+  async execute(): Promise<any> {
+    return RelationshipModel.updateOne(
+      { uid: this.uid },
+      { $addToSet: { dislikes: this.disliked } }
+    );
+  }
+}

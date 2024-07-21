@@ -38,7 +38,7 @@ export class TaskQueue {
       const result = await task.execute();
 
       console.log(
-        `Executed ${task.constructor.name} for user ${task.getUserId()} with result: ${result}` 
+        `Executed ${task.constructor.name} for user ${task.getUserId()} with result: ${JSON.stringify(result)}` 
       );
     } catch (error) {
       console.error("Failed to execute task", error);

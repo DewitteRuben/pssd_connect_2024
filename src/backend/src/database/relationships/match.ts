@@ -1,3 +1,4 @@
+import { RelationshipModel } from "../user/relationship.js";
 import { UserModel } from "../user/user.js";
 import differenceInYears from "date-fns/differenceInYears/index.js";
 
@@ -61,6 +62,8 @@ export const findSuggestionsForUser = async (uid: string) => {
   const radiusInKilometers = maxDistance;
   const radiusInRadians = radiusInKilometers / 6371; // Earth's radius in kilometers
 
+  const relationships = await RelationshipModel.findOne({ uid }).lean().exec();
+
   if (global) {
     return UserModel.find({
       mode,
@@ -73,6 +76,9 @@ export const findSuggestionsForUser = async (uid: string) => {
           // e.g. gte 1970 and lte 2005
           { $gte: [{ $toDate: "$birthdate" }, maxBirthdate] },
           { $lte: [{ $toDate: "$birthdate" }, minBirthdate] },
+          { $not: { $in: ["$uid", relationships?.likes] } },
+          { $not: { $in: ["$uid", relationships?.dislikes] } },
+          { $not: { $in: ["$uid", relationships?.matches] } },
         ],
       },
       $or: [
@@ -98,6 +104,9 @@ export const findSuggestionsForUser = async (uid: string) => {
       $and: [
         { $gte: [{ $toDate: "$birthdate" }, maxBirthdate] },
         { $lt: [{ $toDate: "$birthdate" }, minBirthdate] },
+        { $not: { $in: ["$uid", relationships?.likes] } },
+        { $not: { $in: ["$uid", relationships?.dislikes] } },
+        { $not: { $in: ["$uid", relationships?.matches] } },
       ],
     },
     "location.coords": {

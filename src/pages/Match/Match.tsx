@@ -47,12 +47,15 @@ const Match = () => {
 
   if (!userData) throw new Error("User data was not found");
 
-  const onSwipe = (direction: string) => {
-    console.log("You swiped: " + direction);
-  };
-
-  const onCardLeftScreen = (myIdentifier: string) => {
-    console.log(myIdentifier + " left the screen");
+  const onSwipe = (direction: string, uid: string) => {
+    switch (direction) {
+      case "left":
+        relationship.dislike(uid);
+        break;
+      case "right":
+        relationship.like(uid);
+        break;
+    }
   };
 
   // {viewProfile && (
@@ -104,36 +107,38 @@ const Match = () => {
     <Box display="flex" flexDirection="column" overflowX="hidden" height="100%">
       {relationship.relationships?.suggestions_info &&
         relationship.relationships?.suggestions_info.length > 0 && (
-          <Swipeable
-            onSwipe={onSwipe}
-            onCardLeftScreen={() => onCardLeftScreen("fooBar")}
-            preventSwipe={["up", "down"]}
-          >
+          <>
             {relationship.relationships.suggestions_info.map((si) => (
-              <Box position="relative" key={si.uid}>
-                <Image src={si.images[0]} />
-                <Box
-                  onClick={() => setViewProfile((vp) => !vp)}
-                  position="absolute"
-                  bottom="0"
-                  padding="18px"
-                  width="100%"
-                  backgroundImage="linear-gradient(to bottom, rgba(0,0,0,0.1), rgba(0,0,0,0.9));"
-                >
-                  <Box position="relative">
-                    <Text fontWeight="bold" color="white" fontSize="24px">
-                      {si.firstName},{" "}
-                      {differenceInYears(new Date(), new Date(si.birthdate) as Date)}
-                    </Text>
-                    <Text color="white" fontSize="16px">
-                      {si.profile.jobTitle ?? si.profile.school}
-                    </Text>
-                    <InfoIcon color="white" />
+              <Swipeable
+                key={si.uid}
+                onSwipe={(direction) => onSwipe(direction, si.uid)}
+                preventSwipe={["up", "down"]}
+              >
+                <Box position="relative">
+                  <Image src={si.images[0]} />
+                  <Box
+                    onClick={() => setViewProfile((vp) => !vp)}
+                    position="absolute"
+                    bottom="0"
+                    padding="18px"
+                    width="100%"
+                    backgroundImage="linear-gradient(to bottom, rgba(0,0,0,0.1), rgba(0,0,0,0.9));"
+                  >
+                    <Box position="relative">
+                      <Text fontWeight="bold" color="white" fontSize="24px">
+                        {si.firstName},{" "}
+                        {differenceInYears(new Date(), new Date(si.birthdate) as Date)}
+                      </Text>
+                      <Text color="white" fontSize="16px">
+                        {si.profile.jobTitle ?? si.profile.school}
+                      </Text>
+                      <InfoIcon color="white" />
+                    </Box>
                   </Box>
                 </Box>
-              </Box>
+              </Swipeable>
             ))}
-          </Swipeable>
+          </>
         )}
       <Box display="flex" justifyContent="center" marginTop="16px" gap="40px">
         <IconButton

@@ -37,6 +37,40 @@ export class RelationshipStore {
     return this.initialized && this.relationships !== null;
   }
 
+  async like(likedUser: string) {
+    const firebaseUID = this.root.auth.user?.uid;
+
+    if (!firebaseUID) return;
+
+    try {
+      const { success, message } = await pssdsAPI.likeUser(firebaseUID, likedUser);
+      if (success) {
+        return;
+      }
+
+      throw new Error(message);
+    } catch (error) {
+      console.warn("Failed to get user", error);
+    }
+  }
+
+  async dislike(dislikedUser: string) {
+    const firebaseUID = this.root.auth.user?.uid;
+
+    if (!firebaseUID) return;
+
+    try {
+      const { success, message } = await pssdsAPI.dislikeUser(firebaseUID, dislikedUser);
+      if (success) {
+        return;
+      }
+
+      throw new Error(message);
+    } catch (error) {
+      console.warn("Failed to get user", error);
+    }
+  }
+
   async fetchRelationships() {
     const firebaseUID = this.root.auth.user?.uid;
 

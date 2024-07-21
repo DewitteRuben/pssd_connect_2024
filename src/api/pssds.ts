@@ -111,6 +111,14 @@ class PSSDSocialApi {
     return this.get("/relationship/" + uid);
   }
 
+  likeUser(uid: string, likedUid: string): Promise<MongoDBResult<{}>> {
+    return this.post("/relationship/like/" + likedUid, { uid });
+  }
+
+  dislikeUser(uid: string, dislikedUid: string): Promise<MongoDBResult<{}>> {
+    return this.post("/relationship/dislike/" + dislikedUid, { uid });
+  }
+
   runSuggestion(uid: string) {
     return this.post("/relationship/suggestion/", { uid });
   }

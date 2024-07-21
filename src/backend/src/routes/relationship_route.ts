@@ -1,6 +1,10 @@
 import express from "express";
 import { taskQueue } from "../database/relationships/tasks";
-import { SuggestionTask } from "../database/relationships/tasks/suggestions";
+import {
+  DislikeTask,
+  LikeTask,
+  SuggestionTask,
+} from "../database/relationships/tasks/suggestions";
 import { RelationshipModel } from "../database/user/relationship";
 import { ExpressError } from "../errors";
 import { successResponse } from "./helpers";
@@ -35,6 +39,23 @@ router.get("/:uid", async (req, res, next) => {
         },
       },
       {
+        $addFields: {
+          suggestions_info: {
+            $filter: {
+              input: "$suggestions_info",
+              as: "suggestion",
+              cond: {
+                $and: [
+                  { $not: { $in: ["$$suggestion.uid", "$likes"] } },
+                  { $not: { $in: ["$$suggestion.uid", "$dislikes"] } },
+                  { $not: { $in: ["$$suggestion.uid", "$matches"] } },
+                ],
+              },
+            },
+          },
+        },
+      },
+      {
         $match: {
           uid,
           suggestions_info: { $ne: [] },
@@ -63,6 +84,20 @@ router.get("/:uid", async (req, res, next) => {
       })
     );
   }
+});
+
+router.post("/like/:likedUid", async (req, res, next) => {
+  const { uid: likerUid } = req.body as { uid: string };
+  const { likedUid } = req.params as { likedUid: string };
+
+  taskQueue.queue(new LikeTask(likerUid, likedUid));
+});
+
+router.post("/dislike/:dislikedUid", async (req, res, next) => {
+  const { uid: disliker } = req.body as { uid: string };
+  const { dislikedUid } = req.params as { dislikedUid: string };
+
+  taskQueue.queue(new DislikeTask(disliker, dislikedUid));
 });
 
 router.post("/suggestion", async (req, res, next) => {
