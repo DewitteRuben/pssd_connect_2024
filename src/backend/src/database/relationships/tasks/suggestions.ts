@@ -49,3 +49,39 @@ export class DislikeTask extends Task {
     );
   }
 }
+
+export class CheckForMatchTask extends Task {
+  private uid2: string;
+
+  constructor(uid: string, uid2: string) {
+    super(uid);
+    this.uid2 = uid2;
+  }
+
+  async execute(): Promise<any> {
+    const [user1, user2] = await Promise.all([
+      RelationshipModel.findOne({ uid: this.uid }).exec(),
+      RelationshipModel.findOne({ uid: this.uid2 }).exec(),
+    ]);
+
+    const user1LikesUser2 = user1?.likes.includes(this.uid2);
+    const user2LikesUser1 = user2?.likes.includes(this.uid);
+
+    if (!user1LikesUser2 || !user2LikesUser1) return;
+
+    return RelationshipModel.bulkWrite([
+      {
+        updateOne: {
+          filter: { uid: this.uid },
+          update: { $addToSet: { matches: this.uid2 }, $pull: { likes: this.uid2 } },
+        },
+      },
+      {
+        updateOne: {
+          filter: { uid: this.uid2 },
+          update: { $addToSet: { matches: this.uid }, $pull: { likes: this.uid } },
+        },
+      },
+    ]);
+  }
+}

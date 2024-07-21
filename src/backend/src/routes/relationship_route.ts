@@ -1,6 +1,7 @@
 import express from "express";
 import { taskQueue } from "../database/relationships/tasks";
 import {
+  CheckForMatchTask,
   DislikeTask,
   LikeTask,
   SuggestionTask,
@@ -58,7 +59,6 @@ router.get("/:uid", async (req, res, next) => {
       {
         $match: {
           uid,
-          suggestions_info: { $ne: [] },
         },
       },
     ]).exec();
@@ -91,6 +91,7 @@ router.post("/like/:likedUid", async (req, res, next) => {
   const { likedUid } = req.params as { likedUid: string };
 
   taskQueue.queue(new LikeTask(likerUid, likedUid));
+  taskQueue.queue(new CheckForMatchTask(likerUid, likedUid));
 });
 
 router.post("/dislike/:dislikedUid", async (req, res, next) => {
