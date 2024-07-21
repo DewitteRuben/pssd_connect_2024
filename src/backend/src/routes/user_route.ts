@@ -58,6 +58,12 @@ router.put("/", async (req, res, next) => {
 
   try {
     const obj = await UserModel.findOneAndUpdate({ uid }, { ...rest }).exec();
+
+    // Update stream chat profile image
+    if (obj?.images.length) {
+      await StreamChatClient.partialUpdateUser({ id: uid, set: { image: obj?.images[0] } });
+    }
+
     return res.status(200).json(successResponse(obj?.toJSON()));
   } catch (e) {
     const err = e as Error;
@@ -97,7 +103,13 @@ router.post("/", async (req, res, next) => {
       );
     }
 
-    const streamChatUser = await StreamChatClient.upsertUser({ id: uid, role: "admin" });
+    const streamChatUser = await StreamChatClient.upsertUser({
+      id: uid,
+      role: "user",
+      name: rest.firstName,
+      image: rest.images[0],
+    });
+
     const token = StreamChatClient.createToken(uid);
 
     const newUser = await UserModel.create({ uid, chatToken: token, ...rest });
