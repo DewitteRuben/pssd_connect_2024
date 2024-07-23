@@ -1,7 +1,7 @@
 import { Task } from "./index.js";
 import { findSuggestionsForUser } from "../match.js";
 import { RelationshipModel } from "../../user/relationship.js";
-import { StreamChatClient } from "../../../getstream.io/index.js";
+import { ADMIN_ID, StreamChatClient } from "../../../getstream.io/index.js";
 
 export class SuggestionTask extends Task {
   constructor(uid: string) {
@@ -87,7 +87,7 @@ export class CheckForMatchTask extends Task {
 
     const channel = StreamChatClient.channel("messaging", {
       members: [this.uid, this.uid2],
-      created_by_id: this.uid,
+      created_by_id: ADMIN_ID,
     });
 
     return channel.create();
