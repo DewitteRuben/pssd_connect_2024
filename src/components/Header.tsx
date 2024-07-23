@@ -5,13 +5,13 @@ import { useNavigate } from "react-router-dom";
 import "./Header.css";
 
 type THeader = {
-  path: string;
   title: string;
+  path?: string;
   sticky?: boolean;
 };
 
 const Header: React.FC<THeader> = ({ path, title, sticky }) => {
-  sticky = sticky === undefined ? true : sticky
+  sticky = sticky === undefined ? true : sticky;
 
   const navigate = useNavigate();
 
@@ -19,17 +19,20 @@ const Header: React.FC<THeader> = ({ path, title, sticky }) => {
     <Box
       className={sticky ? "Header-sticky" : ""}
       display="flex"
+      minHeight="61px"
       alignItems="center"
       padding="12px"
     >
-      <IconButton
-        background="none"
-        aria-label="back"
-        cursor="pointer"
-        boxSize="36px"
-        onClick={() => navigate(path)}
-        as={ArrowBackIcon}
-      />
+      {path && (
+        <IconButton
+          background="none"
+          aria-label="back"
+          cursor="pointer"
+          boxSize="36px"
+          onClick={() => navigate(path)}
+          as={ArrowBackIcon}
+        />
+      )}
       <Heading marginLeft="24px" size="md">
         {title}
       </Heading>

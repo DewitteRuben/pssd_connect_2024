@@ -9,9 +9,25 @@ import {
   Thread,
   useCreateChatClient,
   Streami18n,
+  DefaultStreamChatGenerics,
+  ChannelPreviewUIComponentProps,
+  ChannelPreviewMessenger,
 } from "stream-chat-react";
+import { Channel as ChannelType, UserResponse } from "stream-chat";
 import "stream-chat-react/dist/css/v2/index.css";
 import { useStore } from "../../store/store";
+import Header from "../../components/Header";
+import React, { useEffect } from "react";
+import MessageHeader from "../../components/MessageHeader";
+import {
+  Drawer,
+  DrawerOverlay,
+  DrawerContent,
+  DrawerHeader,
+  DrawerBody,
+  useDisclosure,
+  Box,
+} from "@chakra-ui/react";
 
 const channelListOverrides = {
   "You have no channels currently": "You currently have no ongoing conversations",
@@ -27,6 +43,10 @@ const i18nInstance = new Streami18n({
 
 const Messages = () => {
   const { user: userStore } = useStore();
+  const [channelSelected, setChannelSelected] = React.useState(false);
+  const [selectedUser, setSelectedUser] =
+    React.useState<UserResponse<DefaultStreamChatGenerics>>();
+  const { isOpen, onOpen, onClose } = useDisclosure();
 
   if (!userStore.user?.uid) return <div>Loading...</div>;
 
@@ -43,18 +63,75 @@ const Messages = () => {
 
   if (!client) return <div>Loading...</div>;
 
+  const CustomChannelPreviewUI: React.ComponentType<
+    ChannelPreviewUIComponentProps<DefaultStreamChatGenerics>
+  > = ({ setActiveChannel: previewSetActiveChannel, ...props }) => {
+    return (
+      <ChannelPreviewMessenger
+        {...props}
+        setActiveChannel={(channel, watchers, event) => {
+          const members = channel?.state.members;
+          if (members) {
+            for (const memberId in members) {
+              if (memberId !== userId) {
+                const member = members[memberId];
+                setSelectedUser(member.user);
+              }
+            }
+          }
+
+          if (previewSetActiveChannel) {
+            previewSetActiveChannel(channel, watchers, event);
+          }
+
+          setChannelSelected(true);
+        }}
+      />
+    );
+  };
+
   return (
-    <Chat client={client} i18nInstance={i18nInstance}>
-      <ChannelList filters={filters} options={options} />
-      <Channel>
-        <Window>
-          <ChannelHeader />
-          <MessageList />
-          <MessageInput />
-        </Window>
-        <Thread />
-      </Channel>
-    </Chat>
+    <>
+      {channelSelected && selectedUser?.name && (
+        <MessageHeader
+          onBack={() => setChannelSelected(false)}
+          onSafetyClick={() => onOpen()}
+          name={selectedUser?.name}
+        />
+      )}
+      {!channelSelected && <Header title="Messages" />}
+      <Chat client={client} i18nInstance={i18nInstance}>
+        {!channelSelected && (
+          <ChannelList
+            filters={filters}
+            setActiveChannelOnMount={false}
+            options={options}
+            Preview={CustomChannelPreviewUI}
+          />
+        )}
+        {channelSelected && (
+          <Channel>
+            <Window>
+              <ChannelHeader />
+              <MessageList />
+              <MessageInput />
+            </Window>
+            <Thread />
+          </Channel>
+        )}
+      </Chat>
+      <Drawer placement="bottom" onClose={onClose} isOpen={isOpen}>
+        <DrawerOverlay />
+        <DrawerContent>
+          <DrawerHeader borderBottomWidth="1px">Basic Drawer</DrawerHeader>
+          <DrawerBody>
+            <p>Some contents...</p>
+            <p>Some contents...</p>
+            <p>Some contents...</p>
+          </DrawerBody>
+        </DrawerContent>
+      </Drawer>
+    </>
   );
 };
 

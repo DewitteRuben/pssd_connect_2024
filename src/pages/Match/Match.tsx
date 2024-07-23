@@ -109,9 +109,8 @@ const Match = () => {
         relationship.relationships?.suggestions_info.length > 0 && (
           <>
             {relationship.relationships.suggestions_info.map((si) => (
-              <>
+              <Box key={si.uid}>
                 <Swipeable
-                  key={si.uid}
                   onSwipe={(direction) => onSwipe(direction, si.uid)}
                   preventSwipe={["up", "down"]}
                 >
@@ -160,27 +159,26 @@ const Match = () => {
                     icon={<FaHeart color="green" />}
                   />
                 </Box>
-              </>
+              </Box>
             ))}
           </>
         )}
-      {!relationship.relationships?.suggestions_info ||
-        (!relationship.relationships?.suggestions_info.length && (
-          <Box
-            display="flex"
-            height="100%"
-            padding="0 30px"
-            textAlign="center"
-            justifyContent="center"
-            alignItems="center"
-            background="1px solid black"
-          >
-            <Text>
-              We've run out of potential matches for you, please check back at a later
-              time.
-            </Text>
-          </Box>
-        ))}
+      {(!relationship.relationships?.suggestions_info ||
+        !relationship.relationships?.suggestions_info.length) && (
+        <Box
+          display="flex"
+          height="100%"
+          padding="0 30px"
+          textAlign="center"
+          justifyContent="center"
+          alignItems="center"
+          background="1px solid black"
+        >
+          <Text>
+            We've run out of potential matches for you, please check back at a later time.
+          </Text>
+        </Box>
+      )}
     </Box>
   );
 };
