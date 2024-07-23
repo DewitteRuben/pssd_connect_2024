@@ -33,6 +33,7 @@ import {
 } from "@chakra-ui/react";
 import { MdFlag } from "react-icons/md";
 import { IoMdCloseCircle } from "react-icons/io";
+import UnmatchDialogButton from "../../components/UnmatchDialog";
 
 const channelListOverrides = {
   "You have no channels currently": "You currently have no ongoing conversations",
@@ -66,7 +67,19 @@ const Messages = () => {
     userData: { id: userId },
   });
 
+  // Navigates back to ChannelList screen when state is reset
+  React.useEffect(() => {
+    if (client) {
+      const hasActiveChannels = Object.keys(client?.activeChannels).length > 0;
+      if (!hasActiveChannels && channelSelected) {
+        setChannelSelected(false);
+      }
+    }
+  }, [client]);
+
   if (!client) return <div>Loading...</div>;
+
+  const onUnmatchClick = () => {};
 
   const CustomChannelPreviewUI: React.ComponentType<
     ChannelPreviewUIComponentProps<DefaultStreamChatGenerics>
@@ -89,7 +102,7 @@ const Messages = () => {
             previewSetActiveChannel(channel, watchers, event);
           }
 
-          setChannelSelected(true);
+          setChannelSelected(!!channel);
         }}
       />
     );
@@ -143,12 +156,9 @@ const Messages = () => {
               <Button leftIcon={<MdFlag size="24px" color="red" />} variant="outline">
                 Report {selectedUser?.name}
               </Button>
-              <Button
-                leftIcon={<IoMdCloseCircle size="24px" color="orange" />}
-                variant="outline"
-              >
+              <UnmatchDialogButton onConfirm={onUnmatchClick}>
                 Unmatch from {selectedUser?.name}
-              </Button>
+              </UnmatchDialogButton>
             </VStack>
           </DrawerBody>
         </DrawerContent>
