@@ -39,6 +39,7 @@ const channelListOverrides = {
   "You have no channels currently": "You currently have no ongoing conversations",
 };
 
+// TODO: figure out if this is a problem
 const apiKey = "gcdbeuybxb5j";
 const i18nInstance = new Streami18n({
   language: "en",
