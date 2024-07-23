@@ -13,11 +13,11 @@ import {
   ChannelPreviewUIComponentProps,
   ChannelPreviewMessenger,
 } from "stream-chat-react";
-import { Channel as ChannelType, UserResponse } from "stream-chat";
+import { UserResponse } from "stream-chat";
 import "stream-chat-react/dist/css/v2/index.css";
 import { useStore } from "../../store/store";
 import Header from "../../components/Header";
-import React, { useEffect } from "react";
+import React from "react";
 import MessageHeader from "../../components/MessageHeader";
 import {
   Drawer,
@@ -26,8 +26,13 @@ import {
   DrawerHeader,
   DrawerBody,
   useDisclosure,
-  Box,
+  StackDivider,
+  VStack,
+  Text,
+  Button,
 } from "@chakra-ui/react";
+import { MdFlag } from "react-icons/md";
+import { IoMdCloseCircle } from "react-icons/io";
 
 const channelListOverrides = {
   "You have no channels currently": "You currently have no ongoing conversations",
@@ -53,7 +58,7 @@ const Messages = () => {
   const userId = userStore.user?.uid;
   const filters = { members: { $in: [userId] }, type: "messaging" };
   const options = { presence: true, state: true };
-  const sort = { last_message_at: -1 };
+  // const sort = { last_message_at: -1 };
 
   const client = useCreateChatClient({
     apiKey,
@@ -123,11 +128,28 @@ const Messages = () => {
       <Drawer placement="bottom" onClose={onClose} isOpen={isOpen}>
         <DrawerOverlay />
         <DrawerContent>
-          <DrawerHeader borderBottomWidth="1px">Basic Drawer</DrawerHeader>
+          <DrawerHeader borderBottomWidth="1px">
+            <Text fontWeight="bold" fontSize="2xl">
+              Safety
+            </Text>
+          </DrawerHeader>
           <DrawerBody>
-            <p>Some contents...</p>
-            <p>Some contents...</p>
-            <p>Some contents...</p>
+            <VStack
+              divider={<StackDivider borderColor="gray.200" />}
+              spacing={4}
+              marginBottom="16px"
+              align="stretch"
+            >
+              <Button leftIcon={<MdFlag size="24px" color="red" />} variant="outline">
+                Report {selectedUser?.name}
+              </Button>
+              <Button
+                leftIcon={<IoMdCloseCircle size="24px" color="orange" />}
+                variant="outline"
+              >
+                Unmatch from {selectedUser?.name}
+              </Button>
+            </VStack>
           </DrawerBody>
         </DrawerContent>
       </Drawer>
