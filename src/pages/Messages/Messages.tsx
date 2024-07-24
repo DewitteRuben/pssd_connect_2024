@@ -49,11 +49,11 @@ const i18nInstance = new Streami18n({
 });
 
 const Messages = () => {
-  const { user: userStore } = useStore();
+  const { user: userStore, relationship } = useStore();
   const [channelSelected, setChannelSelected] = React.useState(false);
   const [selectedUser, setSelectedUser] =
     React.useState<UserResponse<DefaultStreamChatGenerics>>();
-  const { isOpen, onOpen, onClose } = useDisclosure();
+  const { isOpen, onOpen: onDrawerOpen, onClose: onDrawerClose } = useDisclosure();
 
   if (!userStore.user?.uid) return <div>Loading...</div>;
 
@@ -80,7 +80,14 @@ const Messages = () => {
 
   if (!client) return <div>Loading...</div>;
 
-  const onUnmatchClick = () => {};
+  const onUnmatchClick = async () => {
+    if (selectedUser) {
+      await relationship.unmatch(selectedUser.id);
+    }
+
+    setChannelSelected(false);
+    onDrawerClose();
+  };
 
   const CustomChannelPreviewUI: React.ComponentType<
     ChannelPreviewUIComponentProps<DefaultStreamChatGenerics>
@@ -114,7 +121,7 @@ const Messages = () => {
       {channelSelected && selectedUser?.name && (
         <MessageHeader
           onBack={() => setChannelSelected(false)}
-          onSafetyClick={() => onOpen()}
+          onSafetyClick={() => onDrawerOpen()}
           name={selectedUser?.name}
         />
       )}
@@ -139,7 +146,7 @@ const Messages = () => {
           </Channel>
         )}
       </Chat>
-      <Drawer placement="bottom" onClose={onClose} isOpen={isOpen}>
+      <Drawer placement="bottom" onClose={onDrawerClose} isOpen={isOpen}>
         <DrawerOverlay />
         <DrawerContent>
           <DrawerHeader borderBottomWidth="1px">

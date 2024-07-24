@@ -5,6 +5,7 @@ import {
   DislikeTask,
   LikeTask,
   SuggestionTask,
+  UnmatchTask,
 } from "../database/relationships/tasks/suggestions";
 import { RelationshipModel } from "../database/user/relationship";
 import { ExpressError } from "../errors";
@@ -92,6 +93,8 @@ router.post("/like/:likedUid", async (req, res, next) => {
 
   taskQueue.queue(new LikeTask(likerUid, likedUid));
   taskQueue.queue(new CheckForMatchTask(likerUid, likedUid));
+
+  return res.json(successResponse());
 });
 
 router.post("/dislike/:dislikedUid", async (req, res, next) => {
@@ -99,6 +102,17 @@ router.post("/dislike/:dislikedUid", async (req, res, next) => {
   const { dislikedUid } = req.params as { dislikedUid: string };
 
   taskQueue.queue(new DislikeTask(disliker, dislikedUid));
+
+  return res.json(successResponse());
+});
+
+router.post("/unmatch/:unmatchUid", async (req, res, next) => {
+  const { uid } = req.body as { uid: string };
+  const { unmatchUid } = req.params as { unmatchUid: string };
+
+  taskQueue.queue(new UnmatchTask(uid, unmatchUid));
+
+  return res.json(successResponse());
 });
 
 export default router;

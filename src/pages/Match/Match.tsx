@@ -103,14 +103,20 @@ const Match = () => {
   //     </Box>
   //   </Box>
   // )}
+
+  const swipableRefs = (relationship.relationships?.suggestions_info ?? []).map(() =>
+    React.createRef()
+  ) as any;
+
   return (
     <Box display="flex" flexDirection="column" overflowX="hidden" height="100%">
       {relationship.relationships?.suggestions_info &&
         relationship.relationships?.suggestions_info.length > 0 && (
           <>
-            {relationship.relationships.suggestions_info.map((si) => (
+            {relationship.relationships.suggestions_info.map((si, index) => (
               <Box key={si.uid}>
                 <Swipeable
+                  ref={swipableRefs[index]}
                   onSwipe={(direction) => onSwipe(direction, si.uid)}
                   preventSwipe={["up", "down"]}
                 >
@@ -143,9 +149,12 @@ const Match = () => {
                     variant="solid"
                     width="60px"
                     height="60px"
-                    aria-label="undo"
+                    aria-label="dislike"
                     fontSize="36px"
-                    onClick={() => relationship.dislike(si.uid)}
+                    onClick={() => {
+                      relationship.dislike(si.uid);
+                      swipableRefs[index].current.swipe("left");
+                    }}
                     icon={<MdClose color="red" />}
                   />
                   <IconButton
@@ -154,8 +163,11 @@ const Match = () => {
                     width="60px"
                     height="60px"
                     fontSize="24px"
-                    aria-label="undo"
-                    onClick={() => relationship.like(si.uid)}
+                    aria-label="like"
+                    onClick={() => {
+                      relationship.like(si.uid);
+                      swipableRefs[index].current.swipe("right");
+                    }}
                     icon={<FaHeart color="green" />}
                   />
                 </Box>

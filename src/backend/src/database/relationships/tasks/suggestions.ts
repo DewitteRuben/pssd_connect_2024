@@ -85,11 +85,45 @@ export class CheckForMatchTask extends Task {
       },
     ]);
 
-    const channel = StreamChatClient.channel("messaging", {
+    // Providing no ID here will cause an error due to the following issue: https://github.com/GetStream/stream-chat-js/issues/1098
+    // For now we just create an ID by combing the UIDs
+    const channel = StreamChatClient.channel("messaging", `${this.uid}${this.uid2}`, {
       members: [this.uid, this.uid2],
       created_by_id: ADMIN_ID,
     });
 
     return channel.create();
+  }
+}
+
+export class UnmatchTask extends Task {
+  private uid2: string;
+
+  constructor(uid: string, uid2: string) {
+    super(uid);
+    this.uid2 = uid2;
+  }
+
+  async execute(): Promise<any> {
+    const channels = await StreamChatClient.queryChannels({
+      $and: [{ members: { $in: [this.uid] } }, { members: { $in: [this.uid2] } }],
+    });
+
+    await StreamChatClient.deleteChannels(channels.map((c) => c.cid ?? ""));
+
+    return RelationshipModel.bulkWrite([
+      {
+        updateOne: {
+          filter: { uid: this.uid },
+          update: { $pull: { matches: this.uid2 } },
+        },
+      },
+      {
+        updateOne: {
+          filter: { uid: this.uid2 },
+          update: { $pull: { matches: this.uid } },
+        },
+      },
+    ]);
   }
 }

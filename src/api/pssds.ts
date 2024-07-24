@@ -119,6 +119,10 @@ class PSSDSocialApi {
     return this.post("/relationship/dislike/" + dislikedUid, { uid });
   }
 
+  unmatchUser(uid: string, unmatchedUid: string): Promise<MongoDBResult<{}>> {
+    return this.post("/relationship/unmatch/" + unmatchedUid, { uid });
+  }
+
   runSuggestion(uid: string) {
     return this.post("/relationship/suggestion/", { uid });
   }

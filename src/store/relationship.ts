@@ -71,6 +71,26 @@ export class RelationshipStore {
     }
   }
 
+  async unmatch(unmatchUserUid: string) {
+    const firebaseUID = this.root.auth.user?.uid;
+
+    if (!firebaseUID) return;
+
+    try {
+      const { success, message } = await pssdsAPI.unmatchUser(
+        firebaseUID,
+        unmatchUserUid
+      );
+      if (success) {
+        return;
+      }
+
+      throw new Error(message);
+    } catch (error) {
+      console.warn("Failed to get user", error);
+    }
+  }
+
   async fetchRelationships() {
     const firebaseUID = this.root.auth.user?.uid;
 
