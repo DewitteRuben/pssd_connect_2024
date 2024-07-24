@@ -13,7 +13,7 @@ import {
   ChannelPreviewUIComponentProps,
   ChannelPreviewMessenger,
 } from "stream-chat-react";
-import { UserResponse } from "stream-chat";
+import { Channel as ChannelType, UserResponse } from "stream-chat";
 import "stream-chat-react/dist/css/v2/index.css";
 import { useStore } from "../../store/store";
 import Header from "../../components/Header";
@@ -32,7 +32,6 @@ import {
   Button,
 } from "@chakra-ui/react";
 import { MdFlag } from "react-icons/md";
-import { IoMdCloseCircle } from "react-icons/io";
 import UnmatchDialogButton from "../../components/UnmatchDialog";
 
 const channelListOverrides = {
@@ -51,6 +50,8 @@ const i18nInstance = new Streami18n({
 const Messages = () => {
   const { user: userStore, relationship } = useStore();
   const [channelSelected, setChannelSelected] = React.useState(false);
+  const [currentChannel, setCurrentChannel] =
+    React.useState<ChannelType<DefaultStreamChatGenerics>>();
   const [selectedUser, setSelectedUser] =
     React.useState<UserResponse<DefaultStreamChatGenerics>>();
   const { isOpen, onOpen: onDrawerOpen, onClose: onDrawerClose } = useDisclosure();
@@ -77,6 +78,16 @@ const Messages = () => {
       }
     }
   }, [client]);
+
+  React.useEffect(() => {
+    const unsubscribeChannelDeleted = currentChannel?.on("channel.deleted", () => {
+      setChannelSelected(false);
+    });
+
+    return () => {
+      unsubscribeChannelDeleted?.unsubscribe();
+    };
+  }, [currentChannel]);
 
   if (!client) return <div>Loading...</div>;
 
@@ -110,6 +121,7 @@ const Messages = () => {
             previewSetActiveChannel(channel, watchers, event);
           }
 
+          setCurrentChannel(channel);
           setChannelSelected(!!channel);
         }}
       />
