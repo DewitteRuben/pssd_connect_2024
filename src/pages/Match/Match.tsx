@@ -3,6 +3,7 @@ import {
   Button,
   Card,
   CardBody,
+  Divider,
   IconButton,
   Image,
   List,
@@ -14,7 +15,12 @@ import {
 import { useStore } from "../../store/store";
 import { FaArrowDown, FaHeart, FaUndo } from "react-icons/fa";
 import { IoIosInformationCircle } from "react-icons/io";
-import { MdClose } from "react-icons/md";
+import {
+  MdClose,
+  MdOutlineLocationOn,
+  MdOutlineSchool,
+  MdOutlineWorkOutline,
+} from "react-icons/md";
 import Swipable from "react-tinder-card";
 
 import styled from "styled-components";
@@ -22,6 +28,7 @@ import React from "react";
 import { observer } from "mobx-react";
 import "./Match.css";
 import { toJS } from "mobx";
+import { differenceInYears } from "date-fns";
 
 const InfoIcon = styled(IoIosInformationCircle)`
   position: absolute;
@@ -68,10 +75,10 @@ const Match = () => {
   const onSwipe = (direction: string, uid: string, index: number) => {
     switch (direction) {
       case "left":
-        // relationship.dislike(uid);
+        relationship.dislike(uid);
         break;
       case "right":
-        // relationship.like(uid);
+        relationship.like(uid);
         break;
     }
 
@@ -111,7 +118,7 @@ const Match = () => {
     );
   }
 
-  if (!relationship.relationships)
+  if (!relationship.relationships?.suggestions_info.length)
     return (
       <Box
         display="flex"
@@ -144,13 +151,89 @@ const Match = () => {
             key={si.uid}
             className="Match-card"
           >
-            <Image
-              maxHeight="640px"
-              maxWidth="640px"
-              width="100%"
-              aspectRatio="7 / 10"
-              src={si.images[0]}
-            />
+            <Box position="relative">
+              <Image
+                maxHeight="640px"
+                maxWidth="640px"
+                width="100%"
+                aspectRatio="7 / 10"
+                src={si.images[0]}
+              />
+
+              <Box
+                onClick={() => setViewProfile((vp) => !vp)}
+                position="absolute"
+                bottom="0"
+                padding="18px"
+                width="100%"
+                backgroundImage="linear-gradient(to bottom, rgba(0,0,0,0.1), rgba(0,0,0,0.9));"
+              >
+                <Box position="relative">
+                  <Text fontWeight="bold" color="white" fontSize="24px">
+                    {si.firstName},{" "}
+                    {differenceInYears(new Date(), new Date(si.birthdate) as Date)}
+                  </Text>
+                  <Text color="white" fontSize="16px">
+                    {si.profile.jobTitle ?? si.profile.school}
+                  </Text>
+                  <InfoIcon color="white" />
+                </Box>
+              </Box>
+
+              <Box position="absolute" width="100%" bottom="0">
+                {viewProfile && (
+                  <Card position="relative">
+                    <CardBody>
+                      <Text
+                        marginBottom={2}
+                        fontWeight="bold"
+                        color="black"
+                        fontSize="24px"
+                      >
+                        {userData.firstName},{" "}
+                        {differenceInYears(
+                          new Date(),
+                          new Date(userData.birthdate) as Date
+                        )}
+                      </Text>
+                      <List>
+                        {userData.profile.jobTitle && (
+                          <ListItem>
+                            <ListIcon as={MdOutlineWorkOutline} />
+                            {userData.profile.jobTitle}
+                          </ListItem>
+                        )}
+                        {userData.profile.school && (
+                          <ListItem>
+                            <ListIcon as={MdOutlineSchool} />
+                            {userData.profile.school}
+                          </ListItem>
+                        )}
+                        <ListItem>
+                          <ListIcon as={MdOutlineLocationOn} />
+                          {userData.location.coords.longitude}
+                        </ListItem>
+                      </List>
+                      <Divider marginY={6}></Divider>
+                      <Text>{userData.profile.about}</Text>
+                    </CardBody>
+
+                    <IconButton
+                      isRound={true}
+                      onClick={() => setViewProfile((vp) => !vp)}
+                      variant="solid"
+                      right="15px"
+                      top="-15px"
+                      aria-label="undo"
+                      position="absolute"
+                      colorScheme="red"
+                      size="md"
+                      icon={<FaArrowDown color="white" />}
+                    />
+                  </Card>
+                )}
+              </Box>
+            </Box>
           </Swipable>
         ))}
       </Box>
@@ -186,52 +269,6 @@ const Match = () => {
       </Box>
     </>
   );
-
-  // {viewProfile && (
-  //   <Box position="relative">
-  //     <Image src={woman} />
-
-  //     <Box position="absolute" width="100%" bottom="0">
-  //       <Card position="relative">
-  //         <CardBody>
-  //           <Text marginBottom={2} fontWeight="bold" color="black" fontSize="24px">
-  //             {userData.firstName},{" "}
-  //             {differenceInYears(new Date(), new Date(userData.birthdate) as Date)}
-  //           </Text>
-  //           <List>
-  //             <ListItem>
-  //               <ListIcon as={MdOutlineWorkOutline} />
-  //               {userData.profile.jobTitle}
-  //             </ListItem>
-  //             <ListItem>
-  //               <ListIcon as={MdOutlineSchool} />
-  //               {userData.profile.school}
-  //             </ListItem>
-  //             <ListItem>
-  //               <ListIcon as={MdOutlineLocationOn} />
-  //               {userData.location.coords.longitude}
-  //             </ListItem>
-  //           </List>
-  //           <Divider marginY={6}></Divider>
-  //           <Text>{userData.profile.about}</Text>
-  //         </CardBody>
-
-  //         <IconButton
-  //           isRound={true}
-  //           onClick={() => setViewProfile((vp) => !vp)}
-  //           variant="solid"
-  //           right="15px"
-  //           top="-15px"
-  //           aria-label="undo"
-  //           position="absolute"
-  //           colorScheme="red"
-  //           size="md"
-  //           icon={<FaArrowDown color="white" />}
-  //         />
-  //       </Card>
-  //     </Box>
-  //   </Box>
-  // )}
 };
 
 export default observer(Match);
