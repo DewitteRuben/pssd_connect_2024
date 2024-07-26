@@ -1,5 +1,5 @@
 import _ from "lodash";
-import { makeAutoObservable, reaction, runInAction } from "mobx";
+import { makeAutoObservable, reaction, runInAction, toJS } from "mobx";
 import { RootStore } from "./store";
 import { Relationship } from "../backend/src/database/user/types.js";
 import pssdsAPI from "../api/pssds";
@@ -118,9 +118,11 @@ export class RelationshipStore {
         const { success, message, result } = data;
         if (success) {
           runInAction(() => {
+            const updateIndex = !_.isEqual(result, toJS(this.relationships));
+
             this.relationships = result;
 
-            if (this.relationships) {
+            if (this.relationships && updateIndex) {
               this.suggestionIndex = this.relationships.suggestions_info.length - 1;
             }
           });
