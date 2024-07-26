@@ -6,8 +6,9 @@ export class SuggestionManager {
 
   add(uid: string, callback?: (relationships: Relationship[]) => void) {
     if (this.activeSuggestionWorkers[uid]) {
-      console.error("An active worker has already been found");
-      return this.activeSuggestionWorkers[uid];
+      console.error("An active worker has already been found, removing...");
+
+      this.remove(uid);
     }
 
     const worker = new SuggestionWorker(callback);
