@@ -21,7 +21,6 @@ router.get("/suggestion/:uid", async (req, res, next) => {
 
   res.setHeader("Content-Type", "text/event-stream");
   res.setHeader("Cache-Control", "no-cache");
-  res.setHeader("Connection", "Keep-Alive");
 
   suggestionManager.add(uid, async (suggestions) => {
     await taskQueue.queue(new SuggestionTask(uid));
