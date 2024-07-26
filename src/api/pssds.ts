@@ -42,6 +42,10 @@ class PSSDSocialApi {
         callback(JSON.parse(ev.data));
       }
     };
+
+    window.onbeforeunload = () => {
+      this.eventSource?.close();
+    };
   }
 
   get eventsInitialized() {
