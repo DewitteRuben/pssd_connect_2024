@@ -1,6 +1,7 @@
 import { User as FirebaseUser } from "firebase/auth";
 import { LocationData } from "../backend/src/geolocation";
 import { User, Relationship } from "../backend/src/database/user/types";
+import EventSource from "eventsource";
 
 type MongoDBResult<T> = {
   success: boolean;
@@ -12,9 +13,39 @@ type MongoDBResult<T> = {
 class PSSDSocialApi {
   private baseURL: string;
   private firebaseUser: FirebaseUser | null = null;
+  private eventSource?: EventSource;
 
   constructor() {
     this.baseURL = "http://localhost:3000";
+  }
+
+  async setupSuggestionEvents(uid: string, callback?: (data: any) => void) {
+    const jwtTokenId = await this.getToken();
+
+    this.eventSource = new EventSource(
+      this.getEndpointURL(`/relationship/suggestion/${uid}`),
+      {
+        headers: { Authorization: `Bearer ${jwtTokenId}` },
+      }
+    );
+
+    this.eventSource.onopen = () => {
+      console.log("SUGGESTION STREAM CONNECTION ESTABLISHED");
+    };
+
+    this.eventSource.onerror = (ev) => {
+      console.log(ev);
+    };
+
+    this.eventSource.onmessage = (ev) => {
+      if (callback) {
+        callback(JSON.parse(ev.data));
+      }
+    };
+  }
+
+  get eventsInitialized() {
+    return this.eventSource !== undefined;
   }
 
   setFirebaseUser(user: FirebaseUser | null) {

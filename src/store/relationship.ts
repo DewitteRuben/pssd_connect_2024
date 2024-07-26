@@ -1,13 +1,13 @@
+import _ from "lodash";
 import { makeAutoObservable, reaction, runInAction } from "mobx";
 import { RootStore } from "./store";
 import { Relationship } from "../backend/src/database/user/types.js";
 import pssdsAPI from "../api/pssds";
-import _ from "lodash";
 
 export class RelationshipStore {
   private root: RootStore;
   private initialized: boolean;
-
+  private suggestionIndex: number = 0;
   public relationships: Relationship | null;
 
   constructor(root: RootStore) {
@@ -20,13 +20,9 @@ export class RelationshipStore {
     reaction(
       () => this.root.auth.user,
       () => {
-        this.fetchRelationships();
+        this.initRelationshipEvents();
       }
     );
-
-    setInterval(() => {
-      this.fetchRelationships();
-    }, 300000);
   }
 
   get isInitialized() {
@@ -35,6 +31,22 @@ export class RelationshipStore {
 
   get exists() {
     return this.initialized && this.relationships !== null;
+  }
+
+  get index() {
+    return this.suggestionIndex;
+  }
+
+  updateIndex(updatedIndex: number) {
+    this.suggestionIndex = updatedIndex;
+  }
+
+  clear() {
+    this.relationships = null;
+  }
+
+  get currentSuggestion() {
+    return this.relationships?.suggestions_info[this.suggestionIndex];
   }
 
   async like(likedUser: string) {
@@ -91,27 +103,32 @@ export class RelationshipStore {
     }
   }
 
-  async fetchRelationships() {
+  async initRelationshipEvents() {
     const firebaseUID = this.root.auth.user?.uid;
 
-    if (!firebaseUID) {
+    if (!firebaseUID || pssdsAPI.eventsInitialized) {
       runInAction(() => {
-        this.initialized = true;
         this.relationships = null;
       });
       return;
     }
 
     try {
-      const { success, message, result } = await pssdsAPI.getSuggestions(firebaseUID);
-      if (success) {
-        runInAction(() => {
-          this.relationships = result;
-        });
-        return;
-      }
+      await pssdsAPI.setupSuggestionEvents(firebaseUID, async (data) => {
+        const { success, message, result } = data;
+        if (success) {
+          runInAction(() => {
+            this.relationships = result;
 
-      throw new Error(message);
+            if (this.relationships) {
+              this.suggestionIndex = this.relationships.suggestions_info.length - 1;
+            }
+          });
+          return;
+        }
+
+        throw new Error(message);
+      });
     } catch (error) {
       console.warn("Failed to get user", error);
     } finally {

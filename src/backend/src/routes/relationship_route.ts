@@ -9,60 +9,44 @@ import {
 } from "../database/relationships/tasks/suggestions";
 import { RelationshipModel } from "../database/user/relationship";
 import { ExpressError } from "../errors";
-import { successResponse } from "./helpers";
+import { getRelationships, successResponse } from "./helpers";
 import { Relationship } from "../database/user/types";
+import { SuggestionManager } from "../database/user/suggestion_worker";
 
 const router = express.Router();
+const suggestionManager = new SuggestionManager();
+
+router.get("/suggestion/:uid", async (req, res, next) => {
+  const { uid } = req.params as { uid: string };
+
+  res.setHeader("Content-Type", "text/event-stream");
+  res.setHeader("Cache-Control", "no-cache");
+  res.setHeader("Connection", "Keep-Alive");
+
+  suggestionManager.add(uid, async (suggestions) => {
+    await taskQueue.queue(new SuggestionTask(uid));
+
+    res.write(`data: ${JSON.stringify(successResponse(suggestions[0]))}\n\n`);
+    res.flush();
+  });
+
+  await taskQueue.queue(new SuggestionTask(uid));
+  const suggestions = await getRelationships(uid);
+  res.write(`data: ${JSON.stringify(successResponse(suggestions[0]))}\n\n`);
+  res.flush();
+
+  res.on("close", () => {
+    suggestionManager.remove(uid);
+
+    res.end();
+  });
+});
 
 router.get("/:uid", async (req, res, next) => {
   const { uid } = req.params as { uid: string };
 
   try {
-    const relationships: Relationship[] = await RelationshipModel.aggregate([
-      {
-        $lookup: {
-          from: "users",
-          localField: "suggestions",
-          foreignField: "uid",
-          as: "suggestions_info",
-          pipeline: [
-            {
-              $project: {
-                uid: 1,
-                firstName: 1,
-                birthdate: 1,
-                _id: 0,
-                images: 1,
-                profile: 1,
-                pssd: 1,
-              },
-            },
-          ],
-        },
-      },
-      {
-        $addFields: {
-          suggestions_info: {
-            $filter: {
-              input: "$suggestions_info",
-              as: "suggestion",
-              cond: {
-                $and: [
-                  { $not: { $in: ["$$suggestion.uid", "$likes"] } },
-                  { $not: { $in: ["$$suggestion.uid", "$dislikes"] } },
-                  { $not: { $in: ["$$suggestion.uid", "$matches"] } },
-                ],
-              },
-            },
-          },
-        },
-      },
-      {
-        $match: {
-          uid,
-        },
-      },
-    ]).exec();
+    const relationships: Relationship[] = await getRelationships(uid);
 
     if (!relationships.length) {
       return next(

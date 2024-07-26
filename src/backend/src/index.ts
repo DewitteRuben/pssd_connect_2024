@@ -1,16 +1,21 @@
 import express from "express";
 import { PositionStackAPI } from "./geolocation.js";
 import cors from "cors";
+import compression from "compression";
 import userRoute from "./routes/user_route.js";
 import relationshipRoute from "./routes/relationship_route.js";
 import { ExpressError } from "./errors.js";
 import { MongoDB } from "./database/mongo.js";
 import { firebaseAuthMiddleware } from "./middleware/firebaseAuth.js";
+import { RelationshipModel } from "./database/user/relationship.js";
+import { taskQueue } from "./database/relationships/tasks/index.js";
+import { SuggestionTask } from "./database/relationships/tasks/suggestions.js";
 
 const app = express();
 await MongoDB.connect();
 
 app.use(cors());
+app.use(compression());
 app.use(express.json());
 
 app.post("/location/lookup", async (req, res, next) => {
