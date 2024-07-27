@@ -191,10 +191,7 @@ const Match = () => {
                         fontSize="24px"
                       >
                         {si.firstName},{" "}
-                        {differenceInYears(
-                          new Date(),
-                          new Date(si.birthdate) as Date
-                        )}
+                        {differenceInYears(new Date(), new Date(si.birthdate) as Date)}
                       </Text>
                       <List>
                         {si.profile.jobTitle && (
@@ -211,11 +208,11 @@ const Match = () => {
                         )}
                         <ListItem>
                           <ListIcon as={MdOutlineLocationOn} />
-                          {/* {si} */}
+                          {si.location.country}, {si.location.city}
                         </ListItem>
                       </List>
                       <Divider marginY={6}></Divider>
-                      <Text>{si.profile.about}</Text>
+                      {si.profile.about && <Text>{si.profile.about}</Text>}
                     </CardBody>
 
                     <IconButton
