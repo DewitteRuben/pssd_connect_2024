@@ -102,7 +102,7 @@ export const mockUser3: User = {
     company: "MarketingPro",
     city: "London",
   },
-  pssd: { duration: "less1year", symptoms: ["anxiety"], medications: ["sertraline"] },
+  pssd: { duration: "6to12months", symptoms: ["anxiety"], medications: ["sertraline"] },
   location: {
     coords: { latitude: 51.507351, longitude: -0.127758 },
     timestamp: 1700701949519,
@@ -140,7 +140,7 @@ export const mockUser4: User = {
     company: "ArtHouse",
     city: "Paris",
   },
-  pssd: { duration: "more5years", symptoms: ["insomnia"], medications: ["fluoxetine"] },
+  pssd: { duration: "6to12months", symptoms: ["insomnia"], medications: ["fluoxetine"] },
   location: {
     coords: { latitude: 48.856613, longitude: 2.352222 },
     timestamp: 1700701949520,
@@ -220,7 +220,7 @@ export const mockUser6: User = {
     company: "ConsultPro",
     city: "Barcelona",
   },
-  pssd: { duration: "2to3years", symptoms: ["headaches"], medications: ["citalopram"] },
+  pssd: { duration: "3to5years", symptoms: ["headaches"], medications: ["citalopram"] },
   location: {
     coords: { latitude: 41.385063, longitude: 2.173404 },
     timestamp: 1700701949522,
@@ -259,7 +259,7 @@ export const mockUser7: User = {
     city: "San Francisco",
   },
   pssd: {
-    duration: "more5years",
+    duration: "morethan10years",
     symptoms: ["depression"],
     medications: ["venlafaxine"],
   },
@@ -338,7 +338,7 @@ export const mockUser9: User = {
     company: "TechLab",
     city: "Tokyo",
   },
-  pssd: { duration: "less1year", symptoms: ["headaches"], medications: ["fluoxetine"] },
+  pssd: { duration: "1to2years", symptoms: ["headaches"], medications: ["fluoxetine"] },
   location: {
     coords: { latitude: 35.689487, longitude: 139.691711 },
     timestamp: 1700701949525,

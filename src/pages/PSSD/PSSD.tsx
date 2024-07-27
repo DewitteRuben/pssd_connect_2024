@@ -3,7 +3,7 @@ import { Box, Divider, Heading, IconButton, Select } from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
 import { useStore } from "../../store/store";
 import React, { ChangeEventHandler } from "react";
-import { UserPSSDInfo } from "../../backend/src/database/user/user";
+import { UserPSSDInfo } from "../../backend/src/database/user/types";
 import { useDebounce } from "use-debounce";
 import EditableList from "../../components/EditableList";
 import Header from "../../components/Header";

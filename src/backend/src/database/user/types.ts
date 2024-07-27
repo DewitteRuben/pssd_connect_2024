@@ -7,7 +7,7 @@ export type UserProfile = {
 };
 
 export type UserPSSDInfo = {
-  duration: string;
+  duration: PSSDDuration;
   symptoms: string[];
   medications: string[];
 };
@@ -74,4 +74,19 @@ export type User = {
   pssd: UserPSSDInfo;
   images: string[];
   location: UserLocation;
+};
+
+const durationToPrettyDuration = {
+  "3to6months": "3 – 6 months",
+  "6to12months": "6 – 12 months",
+  "1to2years": "1 – 2 years",
+  "3to5years": "3 – 5 years",
+  "5to10years": "5 – 10 years",
+  morethan10years: "10+ years",
+};
+
+export type PSSDDuration = keyof typeof durationToPrettyDuration;
+
+export const prettyPSSDDuration = (duration: PSSDDuration) => {
+  return durationToPrettyDuration[duration];
 };
