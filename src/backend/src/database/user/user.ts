@@ -40,6 +40,8 @@ const UserSchema = new Schema<User>({
     medications: [String],
   },
   location: {
+    country: String,
+    city: String,
     coords: {
       latitude: Number,
       longitude: Number,

@@ -2,7 +2,7 @@ import { Button } from "@chakra-ui/react";
 import { observer } from "mobx-react";
 import React from "react";
 
-function getPosition(options?: PositionOptions): Promise<GeolocationPosition> {
+export function requestGeolocation(options?: PositionOptions): Promise<GeolocationPosition> {
   return new Promise((resolve, reject) => {
     if (!navigator.geolocation) {
       return reject(new Error("geolocation not supported on this browser"));
@@ -41,7 +41,7 @@ const LocationButton: React.FC<LocationButtonProps> = ({ onChange }) => {
   const onAllowLocationSubmit = async () => {
     try {
       setGrabbingLocation(true);
-      const pos = await getPosition({ enableHighAccuracy: true });
+      const pos = await requestGeolocation({ enableHighAccuracy: true });
 
       if (onChange) {
         onChange(pos);

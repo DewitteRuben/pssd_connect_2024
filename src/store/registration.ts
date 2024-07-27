@@ -1,7 +1,7 @@
 import { makeAutoObservable, runInAction } from "mobx";
 import { autoSave } from "./localstorage";
 import pssdsAPI from "../api/pssds";
-import { User } from "../backend/src/database/user/user";
+import { User } from "../backend/src/database/user/types";
 import { RootStore } from "./store";
 import { RecursivePartial } from "../types/global";
 import _ from "lodash";

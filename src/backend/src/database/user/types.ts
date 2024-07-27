@@ -24,6 +24,8 @@ export type UserPreferences = {
 };
 
 export type UserLocation = {
+  country?: string;
+  city?: string;
   coords: {
     latitude: number;
     longitude: number;

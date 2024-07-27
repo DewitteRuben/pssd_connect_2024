@@ -190,32 +190,32 @@ const Match = () => {
                         color="black"
                         fontSize="24px"
                       >
-                        {userData.firstName},{" "}
+                        {si.firstName},{" "}
                         {differenceInYears(
                           new Date(),
-                          new Date(userData.birthdate) as Date
+                          new Date(si.birthdate) as Date
                         )}
                       </Text>
                       <List>
-                        {userData.profile.jobTitle && (
+                        {si.profile.jobTitle && (
                           <ListItem>
                             <ListIcon as={MdOutlineWorkOutline} />
-                            {userData.profile.jobTitle}
+                            {si.profile.jobTitle}
                           </ListItem>
                         )}
-                        {userData.profile.school && (
+                        {si.profile.school && (
                           <ListItem>
                             <ListIcon as={MdOutlineSchool} />
-                            {userData.profile.school}
+                            {si.profile.school}
                           </ListItem>
                         )}
                         <ListItem>
                           <ListIcon as={MdOutlineLocationOn} />
-                          {userData.location.coords.longitude}
+                          {/* {si} */}
                         </ListItem>
                       </List>
                       <Divider marginY={6}></Divider>
-                      <Text>{userData.profile.about}</Text>
+                      <Text>{si.profile.about}</Text>
                     </CardBody>
 
                     <IconButton

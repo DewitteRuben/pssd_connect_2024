@@ -18,6 +18,10 @@ import DistanceSlider from "../../components/DistanceSlider";
 import React from "react";
 import Header from "../../components/Header";
 import RemoveAccountModal from "../../components/RemoveAccountModal";
+import { requestGeolocation } from "../../components/LocationButton";
+import { UserLocation } from "../../backend/src/database/user/types";
+import { capitalize } from "lodash";
+import { observer } from "mobx-react";
 
 const Settings = () => {
   const { user: userStore } = useStore();
@@ -26,19 +30,44 @@ const Settings = () => {
   const userData = userStore.user;
 
   const [isGlobal, setIsGlobal] = React.useState(userData?.preferences.global ?? false);
+  const [grabbingLocation, setGrabbingLocation] = React.useState(false);
 
   if (!userData) {
     throw new Error("Invalid state! User not found");
   }
 
-  const prettyGenderPreference = () => {
-    const genderPreference = userData.preferences.genderPreference;
-    return genderPreference.charAt(0).toUpperCase() + genderPreference.slice(1);
-  };
-
   const handleGlobalToggle = (ev: React.ChangeEvent<HTMLInputElement>) => {
     setIsGlobal(ev.target.checked);
     userStore.updateUser({ preferences: { global: ev.target.checked } });
+  };
+
+  const updateLocation = async () => {
+    try {
+      setGrabbingLocation(true);
+      const location = await requestGeolocation();
+      await userStore.updateUser({
+        location: {
+          coords: {
+            latitude: location.coords.latitude,
+            longitude: location.coords.longitude,
+          },
+          timestamp: location.timestamp,
+        } as UserLocation,
+      });
+
+      toast({
+        title: "Location",
+        description: "We've successfully updated your location",
+        status: "success",
+        isClosable: true,
+      });
+
+      userStore.fetchUser();
+    } catch (error) {
+      console.error("Failed to update location", error);
+    } finally {
+      setGrabbingLocation(false);
+    }
   };
 
   const handleOnAgeRangeChange = async ({ min, max }: { min: number; max: number }) => {
@@ -111,6 +140,19 @@ const Settings = () => {
                   : userData.location.coords.latitude}
               </Text>
             </Box>
+            <Box marginTop={4} display="flex" justifyContent="space-between">
+              <Button
+                onClick={updateLocation}
+                isLoading={grabbingLocation}
+                colorScheme="green"
+              >
+                Update location
+              </Button>
+              <Box textAlign="right">
+                <Text fontSize="xs">{userData.location.country}</Text>
+                <Text fontSize="xs">{userData.location.city}</Text>
+              </Box>
+            </Box>
           </CardBody>
         </Card>
         <Card marginY={4}>
@@ -119,7 +161,7 @@ const Settings = () => {
               <Heading color="green" size="xs">
                 I'm interested in
               </Heading>
-              <Text>{prettyGenderPreference()}</Text>
+              <Text>{capitalize(userData.preferences.genderPreference)}</Text>
             </Box>
           </CardBody>
         </Card>
@@ -190,4 +232,4 @@ const Settings = () => {
   );
 };
 
-export default Settings;
+export default observer(Settings);

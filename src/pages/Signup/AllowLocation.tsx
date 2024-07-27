@@ -5,7 +5,7 @@ import LocationButton from "../../components/LocationButton";
 import RegistrationViewContainer from "../../components/RegistrationViewContainer";
 import { useNavigate } from "react-router-dom";
 import { useStore } from "../../store/store";
-import { UserLocation } from "../../backend/src/database/user/user";
+import { UserLocation } from "../../backend/src/database/user/types";
 
 const AllowLocation = () => {
   const navigate = useNavigate();

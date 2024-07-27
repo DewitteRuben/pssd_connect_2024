@@ -6,6 +6,7 @@ import { successResponse } from "./helpers.js";
 import { StreamChatClient } from "../getstream.io/index.js";
 import FirebaseApp from "../firebase/firebase.js";
 import { RelationshipModel } from "../database/user/relationship.js";
+import geolocationApi from "../geolocation.js";
 
 const router = express.Router();
 
@@ -57,11 +58,28 @@ router.put("/", async (req, res, next) => {
   const { uid, ...rest } = req.body as User;
 
   try {
+    if (rest.location) {
+      const { latitude, longitude } = rest.location.coords;
+      const {
+        features: [
+          {
+            properties: { country, city },
+          },
+        ],
+      } = await geolocationApi.reverseLookup(latitude, longitude);
+
+      rest.location.country = country;
+      rest.location.city = city;
+    }
+
     const obj = await UserModel.findOneAndUpdate({ uid }, { ...rest }).exec();
 
     // Update stream chat profile image
     if (obj?.images.length) {
-      await StreamChatClient.partialUpdateUser({ id: uid, set: { image: obj?.images[0] } });
+      await StreamChatClient.partialUpdateUser({
+        id: uid,
+        set: { image: obj?.images[0] },
+      });
     }
 
     return res.status(200).json(successResponse(obj?.toJSON()));
@@ -103,6 +121,7 @@ router.post("/", async (req, res, next) => {
       );
     }
 
+    // Setup Streamchat user
     const streamChatUser = await StreamChatClient.upsertUser({
       id: uid,
       role: "user",
@@ -111,6 +130,21 @@ router.post("/", async (req, res, next) => {
     });
 
     const token = StreamChatClient.createToken(uid);
+
+    // Setup safe location
+    if (rest.location) {
+      const { latitude, longitude } = rest.location.coords;
+      const {
+        features: [
+          {
+            properties: { country, city },
+          },
+        ],
+      } = await geolocationApi.reverseLookup(latitude, longitude);
+
+      rest.location.country = country;
+      rest.location.city = city;
+    }
 
     const newUser = await UserModel.create({ uid, chatToken: token, ...rest });
 

@@ -19,6 +19,8 @@ export const getRelationships = (uid: string) => {
               firstName: 1,
               birthdate: 1,
               _id: 0,
+              country: "$users.location.country",
+              city: "$users.location.city",
               images: 1,
               profile: 1,
               pssd: 1,
