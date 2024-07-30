@@ -13,7 +13,7 @@ export const getRelationships = async (uid: string) => {
     throw new Error("User not found");
   }
 
-  const userLocation = user.location.coords;
+  const { latitude, longitude } = user.location.coords;
 
   return RelationshipModel.aggregate([
     {
@@ -73,8 +73,8 @@ export const getRelationships = async (uid: string) => {
                   distance: {
                     $let: {
                       vars: {
-                        lat1: userLocation.latitude,
-                        lon1: userLocation.longitude,
+                        lat1: latitude,
+                        lon1: longitude,
                         lat2: "$$suggestion.location.coords.latitude",
                         lon2: "$$suggestion.location.coords.longitude",
                       },
