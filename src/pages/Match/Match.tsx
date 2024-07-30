@@ -85,11 +85,11 @@ const Match = () => {
 
   // Adjust infocard offset based on the image's height
   useLayoutEffect(() => {
-    setCardHeight(containerRefs[relationship.index].current.clientHeight);
+    setCardHeight(containerRefs[relationship.index]?.current.clientHeight);
   }, [
     relationship.index,
     containerRefs[relationship.index],
-    containerRefs[relationship.index].current,
+    containerRefs[relationship.index]?.current,
   ]);
 
   const onSwipe = (direction: string, uid: string, index: number) => {
@@ -241,23 +241,28 @@ const Match = () => {
                         )}
                       </Box>
 
-                      <Box marginBottom={4}>
-                        <Text>Medications:</Text>
-                        <List paddingLeft="16px" styleType="'- '">
-                          {si.pssd.medications.map((med, index) => (
-                            <ListItem key={`${med}-${index}`}>{med}</ListItem>
-                          ))}
-                        </List>
-                      </Box>
+                      {si.pssd.medications.length > 0 && (
+                        <Box marginBottom={4}>
+                          <Text>Medications:</Text>
+                          <List paddingLeft="16px" styleType="'- '">
+                            {si.pssd.medications.map((med, index) => (
+                              <ListItem key={`${med}-${index}`}>{med}</ListItem>
+                            ))}
+                          </List>
+                        </Box>
+                      )}
 
-                      <Box marginBottom={4}>
-                        <Text>Symptoms:</Text>
-                        <List paddingLeft="16px" styleType="'- '">
-                          {si.pssd.symptoms.map((symp, index) => (
-                            <ListItem key={`${symp}-${index}`}>{symp}</ListItem>
-                          ))}
-                        </List>
-                      </Box>
+                      {si.pssd.symptoms.length > 0 && (
+                        <Box marginBottom={4}>
+                          <Text>Symptoms:</Text>
+                          <List paddingLeft="16px" styleType="'- '">
+                            {si.pssd.symptoms.map((symp, index) => (
+                              <ListItem key={`${symp}-${index}`}>{symp}</ListItem>
+                            ))}
+                          </List>
+                        </Box>
+                      )}
+
                       {si.profile.about && (
                         <Box paddingRight="16px">
                           <Divider marginY={6}></Divider>
