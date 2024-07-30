@@ -1,11 +1,26 @@
 import { RelationshipModel } from "../database/user/relationship";
+import { UserModel } from "../database/user/user";
+
+export const EARTH_RADIUS_IN_KM = 6371;
 
 export const successResponse = (json?: any) => {
   return { status: 200, success: true, result: json ?? {} };
 };
 
-export const getRelationships = (uid: string) => {
+export const getRelationships = async (uid: string) => {
+  const user = await UserModel.findOne({ uid }).exec();
+  if (!user) {
+    throw new Error("User not found");
+  }
+
+  const userLocation = user.location.coords;
+
   return RelationshipModel.aggregate([
+    {
+      $match: {
+        uid,
+      },
+    },
     {
       $lookup: {
         from: "users",
@@ -19,8 +34,7 @@ export const getRelationships = (uid: string) => {
               firstName: 1,
               birthdate: 1,
               _id: 0,
-              "location.country": 1,
-              "location.city": 1,
+              "location.coords": 1,
               images: 1,
               profile: 1,
               pssd: 1,
@@ -47,8 +61,66 @@ export const getRelationships = (uid: string) => {
       },
     },
     {
-      $match: {
-        uid,
+      $addFields: {
+        suggestions_info: {
+          $map: {
+            input: "$suggestions_info",
+            as: "suggestion",
+            in: {
+              $mergeObjects: [
+                "$$suggestion",
+                {
+                  distance: {
+                    $let: {
+                      vars: {
+                        lat1: userLocation.latitude,
+                        lon1: userLocation.longitude,
+                        lat2: "$$suggestion.location.coords.latitude",
+                        lon2: "$$suggestion.location.coords.longitude",
+                      },
+                      in: {
+                        $multiply: [
+                          EARTH_RADIUS_IN_KM, // Earth's radius in kilometers
+                          {
+                            $acos: {
+                              $add: [
+                                {
+                                  $multiply: [
+                                    { $sin: { $degreesToRadians: "$$lat1" } },
+                                    { $sin: { $degreesToRadians: "$$lat2" } },
+                                  ],
+                                },
+                                {
+                                  $multiply: [
+                                    { $cos: { $degreesToRadians: "$$lat1" } },
+                                    { $cos: { $degreesToRadians: "$$lat2" } },
+                                    {
+                                      $cos: {
+                                        $subtract: [
+                                          { $degreesToRadians: "$$lon2" },
+                                          { $degreesToRadians: "$$lon1" },
+                                        ],
+                                      },
+                                    },
+                                  ],
+                                },
+                              ],
+                            },
+                          },
+                        ],
+                      },
+                    },
+                  },
+                },
+              ],
+            },
+          },
+        },
+      },
+    },
+    {
+      $project: {
+        "suggestions_info.location.coords": 0,
       },
     },
   ]).exec();

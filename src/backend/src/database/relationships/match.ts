@@ -1,3 +1,4 @@
+import { EARTH_RADIUS_IN_KM } from "../../routes/helpers.js";
 import { RelationshipModel } from "../user/relationship.js";
 import { UserModel } from "../user/user.js";
 import differenceInYears from "date-fns/differenceInYears/index.js";
@@ -60,7 +61,7 @@ export const findSuggestionsForUser = async (uid: string) => {
   const age = differenceInYears(currentDate, new Date(birthdate));
 
   const radiusInKilometers = maxDistance;
-  const radiusInRadians = radiusInKilometers / 6371; // Earth's radius in kilometers
+  const radiusInRadians = radiusInKilometers / EARTH_RADIUS_IN_KM; // Earth's radius in kilometers
 
   const relationships = await RelationshipModel.findOne({ uid }).lean().exec();
 
