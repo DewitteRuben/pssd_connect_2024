@@ -120,7 +120,7 @@ export const getRelationships = async (uid: string) => {
     },
     {
       $project: {
-        "suggestions_info.location.coords": 0,
+        "suggestions_info.location": 0,
       },
     },
   ]).exec();
