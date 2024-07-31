@@ -122,7 +122,7 @@ const Match = () => {
     );
   }
 
-  if (!relationship.relationships?.suggestions_info.length)
+  if (relationship.relationships?.suggestions_info?.length === 0)
     return (
       <Box
         display="flex"
@@ -138,6 +138,9 @@ const Match = () => {
         </Text>
       </Box>
     );
+
+  // If the relationship array is null, the relationshps haven't loaded yet
+  if (relationship.relationships == null) return null;
 
   return (
     <>

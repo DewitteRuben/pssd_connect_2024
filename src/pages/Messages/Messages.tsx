@@ -89,7 +89,7 @@ const Messages = () => {
     };
   }, [currentChannel]);
 
-  if (!client) return <div>Loading...</div>;
+  if (!client) return null;
 
   const onUnmatchClick = async () => {
     if (selectedUser) {
