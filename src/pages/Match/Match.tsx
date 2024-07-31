@@ -1,6 +1,6 @@
+import "./Match.css";
 import {
   Box,
-  Button,
   Card,
   CardBody,
   Divider,
@@ -14,23 +14,23 @@ import {
 } from "@chakra-ui/react";
 
 import { useStore } from "../../store/store";
-import { FaArrowDown, FaHeart, FaPills, FaUndo } from "react-icons/fa";
+import { FaArrowDown, FaHeart } from "react-icons/fa";
 import { IoIosInformationCircle } from "react-icons/io";
 import {
   MdClose,
+  MdOutlineHouse,
   MdOutlineLocationOn,
   MdOutlineSchool,
   MdOutlineWorkOutline,
 } from "react-icons/md";
-import Swipable from "react-tinder-card";
 
 import styled from "styled-components";
-import React, { useLayoutEffect } from "react";
+import React from "react";
 import { observer } from "mobx-react";
-import "./Match.css";
-import { toJS } from "mobx";
 import { differenceInYears } from "date-fns";
 import { prettyPSSDDuration } from "../../backend/src/database/user/types";
+import { kmToMiles } from "../../utils/math";
+import TinderCard from "react-tinder-card";
 
 const InfoIcon = styled(IoIosInformationCircle)`
   position: absolute;
@@ -48,11 +48,8 @@ const Match = () => {
 
   const [viewProfile, setViewProfile] = React.useState(false);
   const [screenWidth, setScreenWidth] = React.useState(window.screen.width);
-  const [cardHeight, setCardHeight] = React.useState(0);
+
   const [endOfStackReached, setEndOfStackReached] = React.useState(false);
-  const [fulfilledState, setFulfilledState] = React.useState<
-    "left" | "right" | "up" | "down"
-  >();
 
   if (!userData) throw new Error("User data was not found");
 
@@ -60,7 +57,7 @@ const Match = () => {
     React.createRef()
   ) as any;
 
-  const containerRefs = (relationship.relationships?.suggestions_info ?? []).map(() =>
+  const cardContainerRefs = (relationship.relationships?.suggestions_info ?? []).map(() =>
     React.createRef()
   ) as any;
 
@@ -83,22 +80,13 @@ const Match = () => {
     }
   }, [relationship.index]);
 
-  // Adjust infocard offset based on the image's height
-  useLayoutEffect(() => {
-    setCardHeight(containerRefs[relationship.index]?.current.clientHeight);
-  }, [
-    relationship.index,
-    containerRefs[relationship.index],
-    containerRefs[relationship.index]?.current,
-  ]);
-
   const onSwipe = (direction: string, uid: string, index: number) => {
     switch (direction) {
       case "left":
-        relationship.dislike(uid);
+        // relationship.dislike(uid);
         break;
       case "right":
-        relationship.like(uid);
+        // relationship.like(uid);
         break;
     }
 
@@ -156,25 +144,25 @@ const Match = () => {
       <Box display="flex" maxWidth="640px" height="640px" overflow="hidden">
         {relationship.relationships.suggestions_info.map((si, index) => (
           <Box key={si.uid}>
-            <Swipable
-              swipeRequirementType="position"
+            <TinderCard
               ref={swipableRefs[index]}
+              swipeRequirementType="position"
               onCardLeftScreen={onCardLeftScreen}
               onSwipe={(direction) => onSwipe(direction, si.uid, index)}
-              onSwipeRequirementFulfilled={setFulfilledState}
-              onSwipeRequirementUnfulfilled={() => setFulfilledState(undefined)}
               swipeThreshold={Math.floor(screenWidth / 2)}
               preventSwipe={["up", "down"]}
               className="Match-card"
             >
-              <Box ref={containerRefs[index]} position="relative">
-                <Image
-                  maxHeight="640px"
-                  maxWidth="640px"
-                  width="100%"
-                  aspectRatio="7 / 10"
-                  src={si.images[0]}
-                />
+              <Box ref={cardContainerRefs[index]} position="relative">
+                <Box position="relative">
+                  <Image
+                    maxHeight="640px"
+                    maxWidth="640px"
+                    width="100%"
+                    aspectRatio="7 / 10"
+                    src={si.images[0]}
+                  />
+                </Box>
 
                 <Box
                   onClick={() => setViewProfile((vp) => !vp)}
@@ -196,102 +184,109 @@ const Match = () => {
                   </Box>
                 </Box>
               </Box>
-            </Swipable>
-            <Box zIndex={2} position="absolute" width="100%" top={cardHeight - 340}>
-              {viewProfile && (
-                <Card position="relative">
-                  <CardBody>
-                    <Box height={300} overflow="scroll">
-                      <Text
-                        marginBottom={2}
-                        fontWeight="bold"
-                        color="black"
-                        fontSize="24px"
-                      >
-                        {si.firstName},{" "}
-                        {differenceInYears(new Date(), new Date(si.birthdate) as Date)}
-                      </Text>
-                      <List>
-                        {si.profile.jobTitle && (
-                          <ListItem>
-                            <ListIcon as={MdOutlineWorkOutline} />
-                            {si.profile.jobTitle}
-                          </ListItem>
-                        )}
-                        {si.profile.school && (
-                          <ListItem>
-                            <ListIcon as={MdOutlineSchool} />
-                            {si.profile.school}
-                          </ListItem>
-                        )}
-                        <ListItem>
-                          <ListIcon as={MdOutlineLocationOn} />
-                          {si.location.country}, {si.location.city}
-                        </ListItem>
-                      </List>
-                      <Divider marginY={6}></Divider>
-                      <Heading marginBottom={2} marginTop={4} size="s">
-                        PSSD Information
-                      </Heading>
-
-                      <Box marginBottom={4}>
-                        <Text>Duration:</Text>
-                        {si.pssd.duration && (
-                          <Text>{prettyPSSDDuration(si.pssd.duration)}</Text>
-                        )}
-                      </Box>
-
-                      {si.pssd.medications.length > 0 && (
-                        <Box marginBottom={4}>
-                          <Text>Medications:</Text>
-                          <List paddingLeft="16px" styleType="'- '">
-                            {si.pssd.medications.map((med, index) => (
-                              <ListItem key={`${med}-${index}`}>{med}</ListItem>
-                            ))}
-                          </List>
-                        </Box>
-                      )}
-
-                      {si.pssd.symptoms.length > 0 && (
-                        <Box marginBottom={4}>
-                          <Text>Symptoms:</Text>
-                          <List paddingLeft="16px" styleType="'- '">
-                            {si.pssd.symptoms.map((symp, index) => (
-                              <ListItem key={`${symp}-${index}`}>{symp}</ListItem>
-                            ))}
-                          </List>
-                        </Box>
-                      )}
-
-                      {si.profile.about && (
-                        <Box paddingRight="16px">
-                          <Divider marginY={6}></Divider>
-                          <Heading marginBottom={2} marginTop={4} size="s">
-                            About me
-                          </Heading>
-                          <Text>{si.profile.about}</Text>
-                        </Box>
-                      )}
-                    </Box>
-                  </CardBody>
-
-                  <IconButton
-                    isRound={true}
-                    onClick={() => setViewProfile((vp) => !vp)}
-                    variant="solid"
-                    right="15px"
-                    top="-15px"
-                    aria-label="undo"
-                    position="absolute"
-                    colorScheme="red"
-                    size="md"
-                    icon={<FaArrowDown color="white" />}
-                  />
-                </Card>
-              )}
-            </Box>
+            </TinderCard>
           </Box>
         ))}
+      </Box>
+      <Box>
+        {viewProfile && relationship.currentSuggestion && (
+          <Card position="relative">
+            <CardBody>
+              <Box overflow="scroll" minH={260} maxH={280}>
+                <Text marginBottom={2} fontWeight="bold" color="black" fontSize="24px">
+                  {relationship.currentSuggestion.firstName},{" "}
+                  {differenceInYears(
+                    new Date(),
+                    new Date(relationship.currentSuggestion.birthdate) as Date
+                  )}
+                </Text>
+                <List>
+                  {relationship.currentSuggestion.profile.jobTitle && (
+                    <ListItem>
+                      <ListIcon as={MdOutlineWorkOutline} />
+                      {relationship.currentSuggestion.profile.jobTitle}
+                    </ListItem>
+                  )}
+                  {relationship.currentSuggestion.profile.school && (
+                    <ListItem>
+                      <ListIcon as={MdOutlineSchool} />
+                      {relationship.currentSuggestion.profile.school}
+                    </ListItem>
+                  )}
+                  {relationship.currentSuggestion.profile.city && (
+                    <ListItem>
+                      <ListIcon as={MdOutlineHouse} />
+                      Lives in {relationship.currentSuggestion.profile.city}
+                    </ListItem>
+                  )}
+                  <ListItem>
+                    <ListIcon as={MdOutlineLocationOn} />
+                    {relationship.currentSuggestion.distance.toFixed(1)} km (
+                    {kmToMiles(relationship.currentSuggestion.distance)} mi.) away
+                  </ListItem>
+                </List>
+                <Divider marginY={6}></Divider>
+                {relationship.currentSuggestion.profile.about && (
+                  <Box paddingRight="16px">
+                    <Heading marginBottom={2} marginTop={4} size="s">
+                      About me
+                    </Heading>
+                    <Text>{relationship.currentSuggestion.profile.about}</Text>
+                  </Box>
+                )}
+                <Heading marginBottom={2} marginTop={4} size="s">
+                  PSSD Information
+                </Heading>
+
+                <Box marginBottom={4}>
+                  <Text>Duration:</Text>
+                  {relationship.currentSuggestion.pssd.duration && (
+                    <Text>
+                      {prettyPSSDDuration(relationship.currentSuggestion.pssd.duration)}
+                    </Text>
+                  )}
+                </Box>
+
+                {relationship.currentSuggestion.pssd.medications.length > 0 && (
+                  <Box marginBottom={4}>
+                    <Text>Medications:</Text>
+                    <List paddingLeft="16px" styleType="'- '">
+                      {relationship.currentSuggestion.pssd.medications.map(
+                        (med, index) => (
+                          <ListItem key={`${med}-${index}`}>{med}</ListItem>
+                        )
+                      )}
+                    </List>
+                  </Box>
+                )}
+
+                {relationship.currentSuggestion.pssd.symptoms.length > 0 && (
+                  <Box marginBottom={4}>
+                    <Text>Symptoms:</Text>
+                    <List paddingLeft="16px" styleType="'- '">
+                      {relationship.currentSuggestion.pssd.symptoms.map((symp, index) => (
+                        <ListItem key={`${symp}-${index}`}>{symp}</ListItem>
+                      ))}
+                    </List>
+                  </Box>
+                )}
+              </Box>
+            </CardBody>
+
+            <IconButton
+              isRound={true}
+              onClick={() => setViewProfile((vp) => !vp)}
+              variant="solid"
+              right="15px"
+              top="-15px"
+              aria-label="undo"
+              position="absolute"
+              colorScheme="red"
+              size="md"
+              icon={<FaArrowDown color="white" />}
+            />
+          </Card>
+        )}
       </Box>
       <Box display="flex" justifyContent="center" gap="40px">
         <IconButton
