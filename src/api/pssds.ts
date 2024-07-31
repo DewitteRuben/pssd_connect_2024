@@ -161,13 +161,6 @@ class PSSDSocialApi {
   runSuggestion(uid: string) {
     return this.post("/relationship/suggestion/", { uid });
   }
-
-  async locationReverseLookup(
-    lattitude: number,
-    longitude: number
-  ): Promise<LocationData> {
-    return this.post("/location/lookup", { lattitude, longitude });
-  }
 }
 
 const pssdsAPI = new PSSDSocialApi();
