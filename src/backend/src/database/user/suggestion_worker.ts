@@ -77,12 +77,10 @@ export class SuggestionWorker {
   async refresh() {
     this.stop();
 
-    await taskQueue.queue(new SuggestionTask(this.uid));
-
-    const relationships = await getSuggestionsByRelationship(this.uid);
+    const suggestions = await this.update();
 
     if (this.callback) {
-      this.callback(relationships);
+      this.callback(suggestions);
     }
 
     this.run();
