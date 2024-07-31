@@ -27,8 +27,7 @@ router.get("/suggestion/:uid", async (req, res, next) => {
     res.flush();
   });
 
-  const worker = new SuggestionWorker(uid);
-  const result = await worker.update();
+  const result = await new SuggestionWorker(uid).update();
 
   res.write(`data: ${JSON.stringify(successResponse(result[0]))}\n\n`);
   res.flush();
