@@ -2,11 +2,12 @@ import express from "express";
 import { UserModel } from "../database/user/user.js";
 import { User } from "../database/user/types.js";
 import { ExpressError } from "../errors.js";
-import { successResponse } from "./helpers.js";
+import { getObjectDifferences, successResponse } from "./helpers.js";
 import { StreamChatClient } from "../getstream.io/index.js";
 import FirebaseApp from "../firebase/firebase.js";
 import { RelationshipModel } from "../database/user/relationship.js";
 import geolocationApi from "../geolocation.js";
+import { suggestionManager } from "./relationship_route.js";
 
 const router = express.Router();
 
@@ -58,7 +59,10 @@ router.put("/", async (req, res, next) => {
   const { uid, ...rest } = req.body as User;
 
   try {
-    if (rest.location) {
+    const originalUser = await UserModel.findOne({ uid }).exec();
+    const userDiff = getObjectDifferences(rest, originalUser);
+
+    if (userDiff.location) {
       const { latitude, longitude } = rest.location.coords;
       const {
         features: [
@@ -72,17 +76,22 @@ router.put("/", async (req, res, next) => {
       rest.location.city = city;
     }
 
-    const obj = await UserModel.findOneAndUpdate({ uid }, { ...rest }).exec();
+    const userResult = await UserModel.findOneAndUpdate({ uid }, { ...rest }).exec();
 
     // Update stream chat profile image
-    if (obj?.images.length) {
+    if (userDiff.images && userResult?.images.length) {
       await StreamChatClient.partialUpdateUser({
         id: uid,
-        set: { image: obj?.images[0] },
+        set: { image: userResult?.images[0] },
       });
     }
 
-    return res.status(200).json(successResponse(obj?.toJSON()));
+    // Refresh suggestions if preferences have changed
+    if (userDiff.preferences) {
+      suggestionManager.refresh(uid);
+    }
+
+    return res.status(200).json(successResponse(userResult?.toJSON()));
   } catch (e) {
     const err = e as Error;
     return next(new ExpressError({ code: 500, message: err.message }));

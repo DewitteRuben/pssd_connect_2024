@@ -11,10 +11,10 @@ import { RelationshipModel } from "../database/user/relationship";
 import { ExpressError } from "../errors";
 import { getRelationships, successResponse } from "./helpers";
 import { Relationship } from "../database/user/types";
-import { SuggestionManager } from "../database/user/suggestion_worker";
+import { SuggestionManager, SuggestionWorker } from "../database/user/suggestion_worker";
 
 const router = express.Router();
-const suggestionManager = new SuggestionManager();
+export const suggestionManager = new SuggestionManager();
 
 router.get("/suggestion/:uid", async (req, res, next) => {
   const { uid } = req.params as { uid: string };
@@ -23,15 +23,14 @@ router.get("/suggestion/:uid", async (req, res, next) => {
   res.setHeader("Cache-Control", "no-cache");
 
   suggestionManager.add(uid, async (suggestions) => {
-    await taskQueue.queue(new SuggestionTask(uid));
-
     res.write(`data: ${JSON.stringify(successResponse(suggestions[0]))}\n\n`);
     res.flush();
   });
 
-  await taskQueue.queue(new SuggestionTask(uid));
-  const suggestions = await getRelationships(uid);
-  res.write(`data: ${JSON.stringify(successResponse(suggestions[0]))}\n\n`);
+  const worker = new SuggestionWorker(uid);
+  const result = await worker.update();
+
+  res.write(`data: ${JSON.stringify(successResponse(result[0]))}\n\n`);
   res.flush();
 
   res.on("close", () => {

@@ -1,4 +1,6 @@
-import { getRelationships } from "../../routes/helpers";
+import { getRelationships as getSuggestionsByRelationship } from "../../routes/helpers";
+import { taskQueue } from "../relationships/tasks";
+import { SuggestionTask } from "../relationships/tasks/suggestions";
 import { Relationship } from "./types";
 
 export class SuggestionManager {
@@ -11,13 +13,21 @@ export class SuggestionManager {
       this.remove(uid);
     }
 
-    const worker = new SuggestionWorker(callback);
+    const worker = new SuggestionWorker(uid, callback);
 
     this.activeSuggestionWorkers[uid] = worker;
 
-    worker.execute(uid);
+    worker.run();
 
     return worker;
+  }
+
+  refresh(uid: string) {
+    const worker = this.activeSuggestionWorkers[uid];
+
+    if (!worker) throw new Error("no active worker was found");
+
+    worker.refresh();
   }
 
   remove(uid: string) {
@@ -39,26 +49,43 @@ export class SuggestionManager {
 export class SuggestionWorker {
   private intervalinMS: number = 10_000;
   private workerProcess?: NodeJS.Timeout;
-  private latestRelationships: Relationship[] = [];
+  private uid: string;
   private callback?: (relationships: Relationship[]) => void;
 
-  constructor(callback?: (relationships: Relationship[]) => void) {
+  constructor(uid: string, callback?: (relationships: Relationship[]) => void) {
+    this.uid = uid;
     this.callback = callback;
   }
 
-  async execute(uid: string) {
-    this.workerProcess = setInterval(async () => {
-      const relationships = await getRelationships(uid);
-      if (this.callback) {
-        this.callback(relationships);
-      }
+  async update() {
+    await taskQueue.queue(new SuggestionTask(this.uid));
+    const relationships = await getSuggestionsByRelationship(this.uid);
 
-      this.latestRelationships = relationships;
+    return relationships;
+  }
+
+  async run() {
+    this.workerProcess = setInterval(async () => {
+      const suggestions = await this.update();
+
+      if (this.callback) {
+        this.callback(suggestions);
+      }
     }, this.intervalinMS);
   }
 
-  getResults() {
-    return this.latestRelationships;
+  async refresh() {
+    this.stop();
+
+    await taskQueue.queue(new SuggestionTask(this.uid));
+
+    const relationships = await getSuggestionsByRelationship(this.uid);
+
+    if (this.callback) {
+      this.callback(relationships);
+    }
+
+    this.run();
   }
 
   stop() {

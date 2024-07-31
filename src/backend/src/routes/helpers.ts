@@ -1,3 +1,4 @@
+import _ from "lodash";
 import { RelationshipModel } from "../database/user/relationship";
 import { UserModel } from "../database/user/user";
 
@@ -6,6 +7,29 @@ export const EARTH_RADIUS_IN_KM = 6371;
 export const successResponse = (json?: any) => {
   return { status: 200, success: true, result: json ?? {} };
 };
+
+export function getObjectDifferences<T>(obj1: T, obj2: T): any {
+  function differences<T>(obj1: any, obj2: any): any {
+    return _.transform<any, any>(
+      obj1,
+      (result: any, value, key) => {
+        if (!_.isEqual(value, obj2[key])) {
+          if (_.isObject(value) && _.isObject(obj2[key])) {
+            const diff = differences(value, obj2[key]);
+            if (!_.isEmpty(diff)) {
+              result[key] = diff;
+            }
+          } else {
+            result[key] = value;
+          }
+        }
+      },
+      {} as any
+    );
+  }
+
+  return differences(obj1, obj2);
+}
 
 export const getRelationships = async (uid: string) => {
   const user = await UserModel.findOne({ uid }).exec();
