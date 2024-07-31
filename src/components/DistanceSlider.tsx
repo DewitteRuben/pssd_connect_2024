@@ -6,15 +6,13 @@ import {
   Text,
 } from "@chakra-ui/react";
 import React from "react";
+import { kmToMiles } from "../utils/math";
 
 type DistanceSliderProps = {
   max: number;
   onChange?: (max: number) => void;
 };
 
-const kmToMiles = (km: number) => {
-  return (km * 0.621371).toFixed(2);
-};
 
 const DistanceSlider: React.FC<DistanceSliderProps> = ({ max: defaultMax, onChange }) => {
   const [max, setMax] = React.useState(defaultMax);

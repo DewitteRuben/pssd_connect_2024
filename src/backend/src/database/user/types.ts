@@ -44,10 +44,7 @@ export type Relationship = {
     firstName: string;
     birthdate: string;
     images: string[];
-    location: {
-      country: string;
-      city: string;
-    };
+    distance: number;
     profile: UserProfile;
     pssd: UserPSSDInfo;
   }[];
