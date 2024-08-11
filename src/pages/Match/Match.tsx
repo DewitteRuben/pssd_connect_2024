@@ -83,10 +83,10 @@ const Match = () => {
   const onSwipe = (direction: string, uid: string, index: number) => {
     switch (direction) {
       case "left":
-        // relationship.dislike(uid);
+        relationship.dislike(uid);
         break;
       case "right":
-        // relationship.like(uid);
+        relationship.like(uid);
         break;
     }
 
