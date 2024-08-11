@@ -1,7 +1,6 @@
 import { User as FirebaseUser } from "firebase/auth";
-import { LocationData } from "../backend/src/geolocation";
 import { User, Relationship } from "../backend/src/database/user/types";
-import EventSource from "eventsource";
+import io, { Socket } from "socket.io-client";
 
 type MongoDBResult<T> = {
   success: boolean;
@@ -13,43 +12,43 @@ type MongoDBResult<T> = {
 class PSSDSocialApi {
   private baseURL: string;
   private firebaseUser: FirebaseUser | null = null;
-  private eventSource?: EventSource;
+  private socket?: Socket;
 
   constructor() {
     this.baseURL = "http://localhost:3000";
   }
 
-  async setupSuggestionEvents(uid: string, callback?: (data: any) => void) {
+  async setupSuggestionEvents(_: string, callback?: (data: any) => void) {
     const jwtTokenId = await this.getToken();
 
-    this.eventSource = new EventSource(
-      this.getEndpointURL(`/relationship/suggestion/${uid}`),
-      {
-        headers: { Authorization: `Bearer ${jwtTokenId}` },
-      }
-    );
+    this.socket = io(this.baseURL, {
+      transportOptions: {
+        polling: {
+          extraHeaders: {
+            Authorization: `Bearer ${jwtTokenId}`,
+          },
+        },
+      },
+    });
 
-    this.eventSource.onopen = () => {
-      console.log("SUGGESTION STREAM CONNECTION ESTABLISHED");
-    };
+    this.socket.on("connect", () => {
+      console.log("connected");
+      this.socket?.emit("suggestion");
+    });
 
-    this.eventSource.onerror = (ev) => {
-      console.log(ev);
-    };
+    this.socket.on("disconnect", () => {
+      console.log("disconnected");
+    });
 
-    this.eventSource.onmessage = (ev) => {
+    this.socket.on("suggestion", (data) => {
       if (callback) {
-        callback(JSON.parse(ev.data));
+        callback(JSON.parse(data));
       }
-    };
-
-    window.onbeforeunload = () => {
-      this.eventSource?.close();
-    };
+    });
   }
 
   get eventsInitialized() {
-    return this.eventSource !== undefined;
+    return this.socket !== undefined;
   }
 
   setFirebaseUser(user: FirebaseUser | null) {

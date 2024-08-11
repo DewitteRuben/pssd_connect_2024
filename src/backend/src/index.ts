@@ -5,10 +5,25 @@ import userRoute from "./routes/user_route.js";
 import relationshipRoute from "./routes/relationship_route.js";
 import { ExpressError } from "./errors.js";
 import { MongoDB } from "./database/mongo.js";
-import { firebaseAuthMiddleware } from "./middleware/firebaseAuth.js";
-import GeolocationAPI from "./geolocation.js";
+import {
+  firebaseAuthMiddleware,
+  firebaseAuthMiddlewareSocketIO,
+} from "./middleware/firebaseAuth.js";
+import http from "http";
+import { Server } from "socket.io";
+import { SuggestionManager } from "./database/user/suggestion_worker.js";
+import { onConnection } from "./socket/handlers.js";
+
+export const suggestionManager = new SuggestionManager();
 
 const app = express();
+const server = http.createServer(app);
+const io = new Server(server, {
+  cors: {
+    origin: ["http://localhost:5173"],
+  },
+});
+
 await MongoDB.connect();
 
 app.use(cors());
@@ -31,7 +46,10 @@ app.use(
   }
 );
 
+io.use(firebaseAuthMiddlewareSocketIO);
+io.on("connection", onConnection);
+
 const port = 3000;
-app.listen(port, async () => {
+server.listen(port, async () => {
   console.log("Server listening on port", port);
 });

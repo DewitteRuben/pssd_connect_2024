@@ -1,6 +1,7 @@
 import express from "express";
 import FirebaseApp from "../firebase/firebase.js";
 import { ExpressError } from "../errors.js";
+import { Socket } from "socket.io";
 
 export const firebaseAuthMiddleware = async (
   req: express.Request,
@@ -40,6 +41,45 @@ export const firebaseAuthMiddleware = async (
         })
       );
     }
+
+    next();
+  } catch (error) {
+    next(
+      new ExpressError({
+        code: 500,
+        message: "The IdToken is invalid",
+      })
+    );
+  }
+};
+
+type MiddlewareFunction = (socket: Socket, next: (err?: any) => void) => Promise<void>;
+
+export const firebaseAuthMiddlewareSocketIO: MiddlewareFunction = async (
+  socket,
+  next
+) => {
+  if (!socket.handshake.headers.authorization)
+    return next(
+      new ExpressError({
+        code: 500,
+        message: "Authorization header is missing from the request",
+      })
+    );
+
+  const [authType, bearerToken] = socket.handshake.headers.authorization.split(" ");
+
+  if (!authType)
+    return next(
+      new ExpressError({
+        code: 500,
+        message: "Authorization type, needs to be of type 'Bearer'",
+      })
+    );
+
+  try {
+    const { uid } = await FirebaseApp.auth().verifyIdToken(bearerToken);
+    socket.data.authorizedUid = uid;
 
     next();
   } catch (error) {

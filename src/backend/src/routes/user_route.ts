@@ -7,7 +7,7 @@ import { StreamChatClient } from "../getstream.io/index.js";
 import FirebaseApp from "../firebase/firebase.js";
 import { RelationshipModel } from "../database/user/relationship.js";
 import geolocationApi from "../geolocation.js";
-import { suggestionManager } from "./relationship_route.js";
+import { suggestionManager } from "../index.js";
 
 const router = express.Router();
 

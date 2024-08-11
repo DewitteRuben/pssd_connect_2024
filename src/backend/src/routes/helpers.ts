@@ -1,6 +1,58 @@
 import _ from "lodash";
+import { EventEmitter } from "node:events";
 import { RelationshipModel } from "../database/user/relationship";
 import { UserModel } from "../database/user/user";
+
+export class SocketUserStore extends EventEmitter {
+  public socketIdUserIdMap: Record<string, string>;
+  constructor() {
+    super();
+    this.socketIdUserIdMap = {};
+  }
+
+  add(socketId: string, uid: string) {
+    this.socketIdUserIdMap[socketId] = uid;
+
+    this.emit("change", { socketId, uid, action: "add" });
+  }
+
+  remove(socketId: string) {
+    const uid = this.socketIdUserIdMap[socketId];
+
+    delete this.socketIdUserIdMap[socketId];
+
+    this.emit("change", { socketId, uid, action: "remove" });
+  }
+
+  getUserID(socketID: string) {
+    return this.socketIdUserIdMap[socketID] ?? null;
+  }
+
+  getSocketID(uid: string) {
+    for (const socketID in this.socketIdUserIdMap) {
+      const userID = this.socketIdUserIdMap[socketID];
+      if (userID === uid) {
+        return socketID;
+      }
+    }
+
+    return null;
+  }
+
+  removeByUserID(uid: string) {
+    let matchingSocketID;
+    for (const socketID in this.socketIdUserIdMap) {
+      const userID = this.socketIdUserIdMap[socketID];
+      if (userID === uid) {
+        matchingSocketID = socketID;
+      }
+    }
+
+    if (matchingSocketID) {
+      delete this.socketIdUserIdMap[matchingSocketID];
+    }
+  }
+}
 
 export const EARTH_RADIUS_IN_KM = 6371;
 
