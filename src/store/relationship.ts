@@ -42,7 +42,9 @@ export class RelationshipStore {
   }
 
   clear() {
-    this.relationships = null;
+    if (this.relationships) {
+      this.relationships.suggestions_info = [];
+    }
   }
 
   get currentSuggestion() {
