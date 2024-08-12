@@ -20,7 +20,7 @@ export class RelationshipStore {
     reaction(
       () => this.root.auth.user,
       () => {
-        this.initRelationshipEvents();
+        this.initRelationshipUpdates();
       }
     );
   }
@@ -105,7 +105,25 @@ export class RelationshipStore {
     }
   }
 
-  async initRelationshipEvents() {
+  async onSuggestion(data: any) {
+    const { success, message, result } = data;
+    if (success) {
+      runInAction(() => {
+        const updateIndex = !_.isEqual(result, toJS(this.relationships));
+
+        this.relationships = result;
+
+        if (this.relationships && updateIndex) {
+          this.suggestionIndex = this.relationships.suggestions_info.length - 1;
+        }
+      });
+      return;
+    }
+
+    throw new Error(message);
+  }
+
+  async initRelationshipUpdates() {
     const firebaseUID = this.root.auth.user?.uid;
 
     if (!firebaseUID || pssdsAPI.eventsInitialized) {
@@ -116,22 +134,8 @@ export class RelationshipStore {
     }
 
     try {
-      await pssdsAPI.setupSuggestionEvents(firebaseUID, async (data) => {
-        const { success, message, result } = data;
-        if (success) {
-          runInAction(() => {
-            const updateIndex = !_.isEqual(result, toJS(this.relationships));
-
-            this.relationships = result;
-
-            if (this.relationships && updateIndex) {
-              this.suggestionIndex = this.relationships.suggestions_info.length - 1;
-            }
-          });
-          return;
-        }
-
-        throw new Error(message);
+      await pssdsAPI.setupRelationshipSocket({
+        onSuggestion: this.onSuggestion.bind(this),
       });
     } catch (error) {
       console.warn("Failed to get user", error);

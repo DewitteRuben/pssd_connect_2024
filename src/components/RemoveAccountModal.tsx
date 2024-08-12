@@ -17,8 +17,13 @@ import React from "react";
 import { useStore } from "../store/store";
 import { DeleteIcon } from "@chakra-ui/icons";
 import { useNavigate } from "react-router-dom";
+import styled from "styled-components";
 
 type TRemoveAccountModal = {};
+
+const RemoveAccountModalButton = styled(Button)`
+  width: 100%;
+`;
 
 const RemoveAccountModal: React.FC<TRemoveAccountModal> = () => {
   const { user: userStore } = useStore();
@@ -54,9 +59,14 @@ const RemoveAccountModal: React.FC<TRemoveAccountModal> = () => {
 
   return (
     <>
-      <Button onClick={onOpen} colorScheme="green" size="md" type="submit">
+      <RemoveAccountModalButton
+        onClick={onOpen}
+        colorScheme="red"
+        size="md"
+        type="submit"
+      >
         Remove account
-      </Button>
+      </RemoveAccountModalButton>
       <Modal size="xs" isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
         <ModalContent>
@@ -72,15 +82,15 @@ const RemoveAccountModal: React.FC<TRemoveAccountModal> = () => {
             </Stack>
           </ModalBody>
           <ModalFooter>
+            <Button onClick={onClose}>Cancel</Button>
             <Button
               onClick={onDeleteAccountClick}
               leftIcon={<DeleteIcon />}
               colorScheme="red"
-              mr={3}
+              ml={3}
             >
               Delete account
             </Button>
-            <Button onClick={onClose}>Cancel</Button>
           </ModalFooter>
         </ModalContent>
       </Modal>

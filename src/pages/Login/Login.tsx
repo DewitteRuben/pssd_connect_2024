@@ -5,7 +5,7 @@ import { Navigate, useNavigate } from "react-router-dom";
 import { useStore } from "../../store/store";
 
 const Login = observer(() => {
-  const { registration, auth } = useStore();
+  const { registration, auth, user } = useStore();
   const navigate = useNavigate();
 
   if (auth.loggedIn && registration.isFinished) {
@@ -19,6 +19,7 @@ const Login = observer(() => {
   }: LoginFormPayload) => {
     try {
       await auth.signIn(email, password);
+      await user.fetchUserMetadata();
 
       navigate("/");
     } catch (error) {

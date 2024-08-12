@@ -17,6 +17,8 @@ import pssdsAPI from "../api/pssds";
 export class AuthStore {
   public user?: User | null;
   private ready: boolean;
+  private loggingIn: boolean = false;
+
   static RECAPTCHA_CONTAINER = "recaptcha-container";
   private confirmationResult: ConfirmationResult | null;
   private captchaVerifier: RecaptchaVerifier;
@@ -38,13 +40,14 @@ export class AuthStore {
 
     firebaseAuth.setPersistence(browserLocalPersistence);
     firebaseAuth.onAuthStateChanged(
-      (user) =>
+      (user) => {
+        pssdsAPI.setFirebaseUser(user);
+
         runInAction(() => {
           this.user = user;
-          pssdsAPI.setFirebaseUser(user);
-
           this.ready = true;
-        }),
+        });
+      },
       (err) => {
         console.error(err);
       }
@@ -59,12 +62,26 @@ export class AuthStore {
     return this.ready;
   }
 
+  get isLoggingIn() {
+    return this.loggingIn;
+  }
+
   logout() {
     return firebaseAuth.signOut();
   }
 
   async signIn(email: string, password: string) {
-    return signInWithEmailAndPassword(firebaseAuth, email, password);
+    runInAction(() => {
+      this.loggingIn = true;
+    });
+
+    try {
+      await signInWithEmailAndPassword(firebaseAuth, email, password);
+    } finally {
+      runInAction(() => {
+        this.loggingIn = false;
+      });
+    }
   }
 
   get hasConfirmationResult() {

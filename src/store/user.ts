@@ -4,10 +4,12 @@ import { RootStore } from "./store";
 import pssdsAPI from "../api/pssds";
 import { RecursivePartial } from "../types/global";
 import _ from "lodash";
+import { UserInfo } from "firebase/auth";
 
 export class UserStore {
   private root: RootStore;
   private initialized: boolean;
+  private loading: boolean = false;
 
   public user: User | null;
 
@@ -16,6 +18,7 @@ export class UserStore {
   constructor(root: RootStore) {
     this.root = root;
     this.initialized = false;
+    this.loading = false;
     this.user = null;
 
     makeAutoObservable(this);
@@ -23,13 +26,17 @@ export class UserStore {
     reaction(
       () => this.root.auth.user,
       () => {
-        this.fetchUser();
+        this.fetchUserMetadata();
       }
     );
   }
 
   get isInitialized() {
     return this.initialized;
+  }
+
+  get isLoading() {
+    return this.loading;
   }
 
   get exists() {
@@ -77,12 +84,17 @@ export class UserStore {
     return this.deleteRemoteUser();
   }
 
-  async fetchUser() {
+  async fetchUserMetadata() {
     const firebaseUID = this.root.auth.user?.uid;
+
+    runInAction(() => {
+      this.loading = true;
+    });
 
     if (!firebaseUID) {
       runInAction(() => {
         this.initialized = true;
+        this.loading = false;
         this.user = null;
       });
       return;
@@ -104,6 +116,7 @@ export class UserStore {
     } finally {
       runInAction(() => {
         this.initialized = true;
+        this.loading = false;
       });
     }
   }

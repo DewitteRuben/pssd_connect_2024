@@ -142,7 +142,7 @@ export class RegistrationStore {
 
     this.reset();
 
-    return this.root.user.fetchUser();
+    return this.root.user.fetchUserMetadata();
   }
 
   get isFinished() {

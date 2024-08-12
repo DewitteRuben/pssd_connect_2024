@@ -88,7 +88,7 @@ export const RegRouteHandler = observer(() => {
 const App = observer(() => {
   const { auth, user } = useStore();
 
-  if (!auth.isReady || !user.isInitialized) {
+  if (!auth.isReady || !user.isInitialized || auth.isLoggingIn) {
     return (
       <Box
         width="100vw"
@@ -108,7 +108,6 @@ const App = observer(() => {
         <Route path="/*" element={<Home />} />
       </Route>
       <Route path="/splash" element={<Entry />} />
-      <Route path="/entry" element={<Entry />} />
       <Route path="/login" element={<Login />} />
       <Route path="/signup" element={<RegRouteHandler />}>
         <Route path=":step" element={<EmailRegistration />} />

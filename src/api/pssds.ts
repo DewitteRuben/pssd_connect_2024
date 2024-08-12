@@ -18,7 +18,13 @@ class PSSDSocialApi {
     this.baseURL = "http://localhost:3000";
   }
 
-  async setupSuggestionEvents(_: string, callback?: (data: any) => void) {
+  async setupRelationshipSocket({
+    onSuggestion,
+    onMatch,
+  }: {
+    onSuggestion?: (data: any) => void;
+    onMatch?: (data: any) => void;
+  }) {
     const jwtTokenId = await this.getToken();
 
     this.socket = io(this.baseURL, {
@@ -41,8 +47,14 @@ class PSSDSocialApi {
     });
 
     this.socket.on("suggestion", (data) => {
-      if (callback) {
-        callback(JSON.parse(data));
+      if (onSuggestion) {
+        onSuggestion(JSON.parse(data));
+      }
+    });
+
+    this.socket.on("match", (data) => {
+      if (onMatch) {
+        onMatch(data);
       }
     });
   }

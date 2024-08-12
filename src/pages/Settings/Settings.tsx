@@ -7,6 +7,7 @@ import {
   Divider,
   Heading,
   IconButton,
+  Stack,
   Switch,
   Text,
   useDisclosure,
@@ -22,6 +23,7 @@ import { requestGeolocation } from "../../components/LocationButton";
 import { UserLocation } from "../../backend/src/database/user/types";
 import { capitalize } from "lodash";
 import { observer } from "mobx-react";
+import LogoutAccountDialog from "../../components/LogoutAccountDialog";
 
 const Settings = () => {
   const { user: userStore } = useStore();
@@ -62,7 +64,7 @@ const Settings = () => {
         isClosable: true,
       });
 
-      userStore.fetchUser();
+      userStore.fetchUserMetadata();
     } catch (error) {
       console.error("Failed to update location", error);
     } finally {
@@ -226,7 +228,10 @@ const Settings = () => {
         <Heading size="sm" marginY={4}>
           Account maintenance
         </Heading>
-        <RemoveAccountModal />
+        <Stack>
+          <RemoveAccountModal />
+          <LogoutAccountDialog />
+        </Stack>
       </Box>
     </Box>
   );
