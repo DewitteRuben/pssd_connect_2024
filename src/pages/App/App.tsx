@@ -18,6 +18,7 @@ import AppModeSelection from "../Signup/AppModeSelection";
 import { Box, Spinner } from "@chakra-ui/react";
 import { runInAction } from "mobx";
 import { useStore } from "../../store/store";
+import { useToastNotifications } from "../../firebase/messaging";
 
 export const ProtectedRoute = observer(() => {
   const {
@@ -90,6 +91,7 @@ export const RegRouteHandler = observer(() => {
 
 const App = observer(() => {
   const { auth, user } = useStore();
+  useToastNotifications();
 
   if (!auth.isReady || !user.isInitialized || auth.isLoggingIn) {
     return (
