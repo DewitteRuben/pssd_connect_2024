@@ -57,6 +57,7 @@ export type User = {
   uid: string;
   idToken: string;
   chatToken: string;
+  notificationToken: string;
   email: string;
   completedRegistration: boolean;
   registrationInProgress: boolean;

@@ -12,13 +12,14 @@ import {
 import { Form, FormikProps, withFormik } from "formik";
 import { observer } from "mobx-react";
 import { FormikSubmit } from "../types/formik";
+import { PSSDDuration } from "../backend/src/database/user/types";
 
 const PSSDDurationSelectionSchema = Yup.object().shape({
   duration: Yup.string(),
 });
 
 export type PSSDDurationSelectionFormValues = {
-  duration: string;
+  duration: PSSDDuration;
 };
 
 export type PSSDDurationSelectionPayload = PSSDDurationSelectionFormValues & FormikSubmit;

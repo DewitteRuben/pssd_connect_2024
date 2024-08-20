@@ -25,12 +25,8 @@ const AllowLocation = () => {
   };
 
   const onContinue = async () => {
-    try {
-      await registration.finish();
-      navigate("/");
-    } catch (error) {
-      console.error("Failed to finish registration");
-    }
+    const next = registration.nextStep();
+    navigate(next.step);
   };
 
   return (

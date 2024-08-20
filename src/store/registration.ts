@@ -17,7 +17,8 @@ export type Step =
   | "showme"
   | "pssd-duration"
   | "photos"
-  | "location";
+  | "location"
+  | "notification";
 
 export type Mode = "dating" | "friends";
 
@@ -36,6 +37,7 @@ const initRegistrationFlow = () => {
     { step: "pssd-duration", datingOnly: false, goBack: true, done: false },
     { step: "photos", datingOnly: false, goBack: true, done: false },
     { step: "location", datingOnly: false, goBack: true, done: false },
+    { step: "notification", datingOnly: false, goBack: true, done: false },
   ];
 };
 

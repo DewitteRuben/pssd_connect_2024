@@ -1,4 +1,5 @@
 import { Routes, Route, Outlet, Navigate, useParams } from "react-router-dom";
+import AllowNotifications from "../Signup/AllowNotifications";
 import Login from "../Login/Login";
 import { observer } from "mobx-react";
 import Home from "../Home/Home";
@@ -82,6 +83,8 @@ export const RegRouteHandler = observer(() => {
       return <AddPhotos />;
     case "location":
       return <AllowLocation />;
+    case "notification":
+      return <AllowNotifications />;
   }
 });
 

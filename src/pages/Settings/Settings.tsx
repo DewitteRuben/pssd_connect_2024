@@ -24,6 +24,19 @@ import { UserLocation } from "../../backend/src/database/user/types";
 import { capitalize } from "lodash";
 import { observer } from "mobx-react";
 import LogoutAccountDialog from "../../components/LogoutAccountDialog";
+import AllowNotificationButton from "../../components/AllowNotificationButton";
+
+const notificationPermissionStatusText = (notificationToken?: string) => {
+  if (Notification.permission === "denied") return "Denied (requires reset in browser)";
+
+  if (Notification.permission === "granted") {
+    if (notificationToken) return "Allowed";
+
+    return "Incomplete";
+  }
+
+  return "Unset";
+};
 
 const Settings = () => {
   const { user: userStore } = useStore();
@@ -41,6 +54,25 @@ const Settings = () => {
   const handleGlobalToggle = (ev: React.ChangeEvent<HTMLInputElement>) => {
     setIsGlobal(ev.target.checked);
     userStore.updateUser({ preferences: { global: ev.target.checked } });
+  };
+
+  const handleOnNotificationToken = async (token: string) => {
+    try {
+      await userStore.updateUser({
+        notificationToken: token,
+      });
+
+      toast({
+        title: "Notifications",
+        description: "We've successfully updated your notification preferences",
+        status: "success",
+        isClosable: true,
+      });
+
+      userStore.fetchUserMetadata();
+    } catch (error) {
+      console.error("Failed to update notification settings", error);
+    }
   };
 
   const updateLocation = async () => {
@@ -135,17 +167,16 @@ const Settings = () => {
         <Card>
           <CardBody>
             <Box display="flex" justifyContent="space-between">
-              <Text>Now looking in</Text>
-              <Text>
-                {userData.preferences.global
-                  ? "Globally"
-                  : userData.location.coords.latitude}
-              </Text>
+              <Heading color="green" size="xs">
+                Now looking
+              </Heading>
+              <Text fontSize="sm">{userData.preferences.global ? "Globally" : ""}</Text>
             </Box>
             <Box marginTop={4} display="flex" justifyContent="space-between">
               <Button
                 onClick={updateLocation}
                 isLoading={grabbingLocation}
+                size="md"
                 colorScheme="green"
               >
                 Update location
@@ -222,6 +253,21 @@ const Settings = () => {
                 start={userData.preferences.ageStart}
                 end={userData.preferences.ageEnd}
               />
+            </Box>
+          </CardBody>
+        </Card>
+        <Card marginY={4}>
+          <CardBody>
+            <Box>
+              <Heading color="green" size="xs">
+                Notification settings
+              </Heading>
+              <Box marginTop={4} display="flex" justifyContent="space-between">
+                <AllowNotificationButton onChange={handleOnNotificationToken} size="md" />
+                <Text fontSize="sm">
+                  {notificationPermissionStatusText(userData.notificationToken)}
+                </Text>
+              </Box>
             </Box>
           </CardBody>
         </Card>

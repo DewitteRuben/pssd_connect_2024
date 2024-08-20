@@ -8,6 +8,7 @@ const UserSchema = new Schema<User>({
   uid: { required: true, type: String },
   email: { required: true, type: String },
   chatToken: { required: true, type: String },
+  notificationToken: String,
   completedRegistration: { required: true, type: Boolean },
   registrationInProgress: { required: true, type: Boolean },
   countryCode: { required: true, type: String },
