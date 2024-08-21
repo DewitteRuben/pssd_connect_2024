@@ -66,7 +66,7 @@ export class CheckForMatchTask extends Task {
       RelationshipModel.find({ uid: { $in: [this.uid, this.uid2] } }).exec(),
       UserModel.find(
         { uid: { $in: [this.uid, this.uid2] } },
-        { notificationToken: 1, firstName: 1 }
+        { uid: 1, notificationToken: 1, firstName: 1 }
       ).exec(),
     ]);
 
@@ -130,6 +130,7 @@ export class UnmatchTask extends Task {
 
     await StreamChatClient.deleteChannels(channels.map((c) => c.cid ?? ""));
 
+    // TODO: Think about if we should also remove them from the likes array or not, in case you want to match again...
     return RelationshipModel.bulkWrite([
       {
         updateOne: {
