@@ -5,7 +5,7 @@ import FormikPrefGenderForm, {
 import RegistrationViewContainer from "../../components/RegistrationViewContainer";
 import { useNavigate } from "react-router-dom";
 import { useStore } from "../../store/store";
-import { UserPreferences } from "../../backend/src/database/user/user";
+import { UserPreferences } from "../../backend/src/database/user/types";
 
 const ShowMeSelection = () => {
   const navigate = useNavigate();

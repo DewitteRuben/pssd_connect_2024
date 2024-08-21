@@ -12,13 +12,14 @@ import {
 import { Form, FormikProps, withFormik } from "formik";
 import { observer } from "mobx-react";
 import { FormikSubmit } from "../types/formik";
+import { GenderPreference } from "../backend/src/database/user/types";
 
 const PrefGenderSchema = Yup.object().shape({
   genderPreference: Yup.string(),
 });
 
 export type PrefGenderFormValues = {
-  genderPreference: string;
+  genderPreference: GenderPreference;
 };
 
 export type PrefGenderPayload = PrefGenderFormValues & FormikSubmit;
@@ -73,7 +74,7 @@ const FormikPrefGenderForm = observer(
   withFormik<
     {
       onSubmit: (payload: PrefGenderPayload) => void;
-      initialValues: { genderPreference: string };
+      initialValues: { genderPreference: GenderPreference };
     },
     PrefGenderFormValues
   >({

@@ -12,7 +12,7 @@ import { Form, FormikProps, withFormik } from "formik";
 import { observer } from "mobx-react";
 import * as Yup from "yup";
 import { FormikSubmit } from "../types/formik";
-import { Gender } from "../backend/src/database/user/user";
+import { Gender } from "../backend/src/database/user/types";
 
 const GenderSelectionSchema = Yup.object().shape({
   gender: Yup.string(),
@@ -48,9 +48,6 @@ const GenderSelectionForm = (props: FormikProps<GenderSelectionFormValues>) => {
                 </Radio>
                 <Radio onChange={handleChange} value="man">
                   <Text fontSize="lg">Man</Text>
-                </Radio>
-                <Radio onChange={handleChange} value="other">
-                  <Text fontSize="lg">Other</Text>
                 </Radio>
               </Stack>
             </RadioGroup>
