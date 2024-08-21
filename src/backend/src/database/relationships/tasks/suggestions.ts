@@ -1,7 +1,9 @@
 import { Task } from "./index.js";
-import { findSuggestionsForUser } from "../match.js";
+import { createMatchMessage, findSuggestionsForUser } from "../match.js";
 import { RelationshipModel } from "../../user/relationship.js";
 import { ADMIN_ID, StreamChatClient } from "../../../getstream.io/index.js";
+import { UserModel } from "../../user/user.js";
+import { getMessaging, Message } from "firebase-admin/messaging";
 
 export class SuggestionTask extends Task {
   constructor(uid: string) {
@@ -60,13 +62,19 @@ export class CheckForMatchTask extends Task {
   }
 
   async execute(): Promise<any> {
-    const [user1, user2] = await Promise.all([
-      RelationshipModel.findOne({ uid: this.uid }).exec(),
-      RelationshipModel.findOne({ uid: this.uid2 }).exec(),
+    const [relationships, users] = await Promise.all([
+      RelationshipModel.find({ uid: { $in: [this.uid, this.uid2] } }).exec(),
+      UserModel.find(
+        { uid: { $in: [this.uid, this.uid2] } },
+        { notificationToken: 1, firstName: 1 }
+      ).exec(),
     ]);
 
-    const user1LikesUser2 = user1?.likes.includes(this.uid2);
-    const user2LikesUser1 = user2?.likes.includes(this.uid);
+    const rForUser1 = relationships.find((u) => u.uid === this.uid);
+    const rForUser2 = relationships.find((u) => u.uid === this.uid2);
+
+    const user1LikesUser2 = rForUser1?.likes.includes(this.uid2);
+    const user2LikesUser1 = rForUser2?.likes.includes(this.uid);
 
     if (!user1LikesUser2 || !user2LikesUser1) return;
 
@@ -92,7 +100,18 @@ export class CheckForMatchTask extends Task {
       created_by_id: ADMIN_ID,
     });
 
-    return channel.create();
+    await channel.create();
+
+    const user1 = users.find((u) => u.uid === this.uid);
+    const user2 = users.find((u) => u.uid === this.uid2);
+
+    if (!user1 || !user2) {
+      throw new Error(`failed to fetch users with ids: ${this.uid}, ${this.uid2}`);
+    }
+
+    const messages = [createMatchMessage(user1, user2), createMatchMessage(user2, user1)];
+
+    return getMessaging().sendEach(messages);
   }
 }
 

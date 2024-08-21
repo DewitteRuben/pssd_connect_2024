@@ -3,6 +3,8 @@ import { EARTH_RADIUS_IN_KM } from "../../routes/helpers.js";
 import { RelationshipModel } from "../user/relationship.js";
 import { UserModel } from "../user/user.js";
 import differenceInYears from "date-fns/differenceInYears/index.js";
+import { Message } from "firebase-admin/messaging";
+import { User } from "../user/types.js";
 
 export const findSuggestionsForUser = async (uid: string) => {
   const user = await UserModel.findOne({ uid }).exec();
@@ -100,4 +102,19 @@ export const findSuggestionsForUser = async (uid: string) => {
   }
 
   return UserModel.find(suggestionQuery).exec();
+};
+
+export const createMatchMessage = (
+  user1: Pick<User, "notificationToken" | "firstName">,
+  user2: Pick<User, "notificationToken" | "firstName">
+) => {
+  const message: Message = {
+    token: user1.notificationToken,
+    notification: {
+      title: "You got a new match!",
+      body: `${user2.firstName} likes you.`,
+    },
+  };
+
+  return message;
 };

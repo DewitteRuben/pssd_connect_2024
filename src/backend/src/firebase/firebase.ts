@@ -7,4 +7,4 @@ const FirebaseApp = admin.initializeApp({
   databaseURL: "https://pssd-app-default-rtdb.firebaseio.com",
 });
 
-export default FirebaseApp
+export default FirebaseApp;
