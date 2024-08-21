@@ -1,3 +1,4 @@
+import { FilterQuery } from "mongoose";
 import { EARTH_RADIUS_IN_KM } from "../../routes/helpers.js";
 import { RelationshipModel } from "../user/relationship.js";
 import { UserModel } from "../user/user.js";
@@ -28,21 +29,18 @@ export const findSuggestionsForUser = async (uid: string) => {
     case "women":
       requestedGender = "woman";
       break;
-    // case "everyone":
-    //   requestedGender = { $in: ["man", "woman"] };
-    //   break;
+    case "everyone":
+      requestedGender = { $in: ["man", "woman"] };
+      break;
   }
 
   switch (gender) {
     case "man":
-      otherGenderPreference = "men";
+      otherGenderPreference = { $in: ["men", "everyone"] };
       break;
     case "woman":
-      otherGenderPreference = "women";
+      otherGenderPreference = { $in: ["women", "everyone"] };
       break;
-    // case "other":
-    //   otherGenderPreference = "everyone";
-    //   break;
   }
 
   const currentDate = new Date();
@@ -65,37 +63,7 @@ export const findSuggestionsForUser = async (uid: string) => {
 
   const relationships = await RelationshipModel.findOne({ uid }).lean().exec();
 
-  if (global) {
-    return UserModel.find({
-      mode,
-      gender: requestedGender,
-      "preferences.genderPreference": otherGenderPreference,
-      "preferences.ageStart": { $lte: age },
-      "preferences.ageEnd": { $gte: age },
-      $expr: {
-        $and: [
-          // e.g. gte 1970 and lte 2005
-          { $gte: [{ $toDate: "$birthdate" }, maxBirthdate] },
-          { $lte: [{ $toDate: "$birthdate" }, minBirthdate] },
-          { $not: { $in: ["$uid", relationships?.likes] } },
-          { $not: { $in: ["$uid", relationships?.dislikes] } },
-          { $not: { $in: ["$uid", relationships?.matches] } },
-        ],
-      },
-      $or: [
-        { "preferences.global": true },
-        {
-          "location.coords": {
-            $geoWithin: {
-              $centerSphere: [[latitude, longitude], radiusInRadians],
-            },
-          },
-        },
-      ],
-    }).exec();
-  }
-
-  return UserModel.find({
+  const suggestionQuery: FilterQuery<any> = {
     mode,
     gender: requestedGender,
     "preferences.genderPreference": otherGenderPreference,
@@ -104,16 +72,32 @@ export const findSuggestionsForUser = async (uid: string) => {
     $expr: {
       $and: [
         { $gte: [{ $toDate: "$birthdate" }, maxBirthdate] },
-        { $lt: [{ $toDate: "$birthdate" }, minBirthdate] },
+        { $lte: [{ $toDate: "$birthdate" }, minBirthdate] },
         { $not: { $in: ["$uid", relationships?.likes] } },
         { $not: { $in: ["$uid", relationships?.dislikes] } },
         { $not: { $in: ["$uid", relationships?.matches] } },
       ],
     },
-    "location.coords": {
+  };
+
+  if (global) {
+    suggestionQuery.$or = [
+      { "preferences.global": true },
+      {
+        "location.coords": {
+          $geoWithin: {
+            $centerSphere: [[latitude, longitude], radiusInRadians],
+          },
+        },
+      },
+    ];
+  } else {
+    suggestionQuery["location.coords"] = {
       $geoWithin: {
         $centerSphere: [[latitude, longitude], radiusInRadians],
       },
-    },
-  }).exec();
+    };
+  }
+
+  return UserModel.find(suggestionQuery).exec();
 };
