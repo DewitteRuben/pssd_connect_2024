@@ -5,7 +5,7 @@ import FormikGenderSelectionForm, {
 } from "../../components/GenderSelectionForm";
 import RegistrationViewContainer from "../../components/RegistrationViewContainer";
 import { useStore } from "../../store/store";
-import { Gender } from "../../backend/src/database/user/user";
+import { Gender } from "../../backend/src/database/user/types";
 
 const GenderSelection = () => {
   const navigate = useNavigate();
