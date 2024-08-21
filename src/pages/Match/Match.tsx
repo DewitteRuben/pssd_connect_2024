@@ -1,4 +1,3 @@
-import "./Match.css";
 import {
   Box,
   Card,
@@ -39,6 +38,13 @@ const InfoIcon = styled(IoIosInformationCircle)`
   width: 28px;
   height: 28px;
 `;
+
+const SwipeableCard = styled(TinderCard)`
+  position: absolute;
+  width: 100%;
+`;
+
+const SwipeableCardContainer = styled(Box)``;
 
 const Match = () => {
   const {
@@ -146,15 +152,14 @@ const Match = () => {
     <>
       <Box display="flex" maxWidth="640px" height="640px" overflow="hidden">
         {relationship.relationships.suggestions_info.map((si, index) => (
-          <Box key={si.uid}>
-            <TinderCard
+          <SwipeableCardContainer key={si.uid}>
+            <SwipeableCard
               ref={swipableRefs[index]}
               swipeRequirementType="position"
               onCardLeftScreen={onCardLeftScreen}
               onSwipe={(direction) => onSwipe(direction, si.uid, index)}
               swipeThreshold={Math.floor(screenWidth / 2)}
               preventSwipe={["up", "down"]}
-              className="Match-card"
             >
               <Box ref={cardContainerRefs[index]} position="relative">
                 <Box position="relative">
@@ -187,8 +192,8 @@ const Match = () => {
                   </Box>
                 </Box>
               </Box>
-            </TinderCard>
-          </Box>
+            </SwipeableCard>
+          </SwipeableCardContainer>
         ))}
       </Box>
       <Box>
