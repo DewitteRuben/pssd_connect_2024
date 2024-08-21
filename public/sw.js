@@ -25,13 +25,11 @@ const firebaseApp = initializeApp({
 
 const messaging = getMessaging(firebaseApp);
 
-onBackgroundMessage(messaging, (payload) => {
-    console.log('Received background message ', payload)
-
-    const notificationTitle = 'Background Message Title';
+onBackgroundMessage(messaging, ({ notification }) => {
+    const notificationTitle = notification.title;
     const notificationOptions = {
-        body: 'Background Message body.',
-        icon: '/firebase-logo.png'
+        body: notification.body,
+        icon: notification.icon
     };
 
     self.registration.showNotification(notificationTitle, notificationOptions)
