@@ -2,9 +2,9 @@ import { FilterQuery } from "mongoose";
 import { calculateDistance, EARTH_RADIUS_IN_KM } from "../../routes/helpers.js";
 import { RelationshipModel } from "../user/relationship.js";
 import { UserModel } from "../user/user.js";
-import differenceInYears from "date-fns/differenceInYears/index.js";
 import { Message } from "firebase-admin/messaging";
 import { User } from "../user/types.js";
+import { differenceInYears } from "date-fns";
 
 export const findSuggestionsForUser = async (uid: string) => {
   const user = await UserModel.findOne({ uid }).exec();

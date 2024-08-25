@@ -1,12 +1,18 @@
 import mongoose from "mongoose";
 
+const { DATABASE_URL, MONGO_ROOT_USERNAME, MONGO_ROOT_PASSWORD } = process.env;
+
 export class MongoDB {
   private static mongoose: typeof mongoose;
 
   static async connect() {
-    this.mongoose = await mongoose.connect("mongodb://127.0.0.1:27017", {
-      user: "test",
-      pass: "example",
+    if (!DATABASE_URL) {
+      throw Error("DATABASE_CONNECTION_URL environment is missing");
+    }
+
+    this.mongoose = await mongoose.connect(DATABASE_URL, {
+      user: MONGO_ROOT_USERNAME,
+      pass: MONGO_ROOT_PASSWORD,
     });
   }
 

@@ -1,13 +1,23 @@
-# Use root/example as user/password credentials
-version: "3.1"
-
 services:
-  mongo:
+  express:
+    build: src/backend
+    ports:
+      - 3000:3000
+    environment:
+      - DATABASE_URL
+      - MONGO_INITDB_ROOT_USERNAME
+      - MONGO_INITDB_ROOT_PASSWORD
+  database:
     image: mongo
     restart: always
     ports:
       - 27017:27017
     environment:
-      MONGO_INITDB_ROOT_USERNAME: test
-      MONGO_INITDB_ROOT_PASSWORD: example
-      MONGO_INITDB_DATABASE: test
+      - MONGO_INITDB_ROOT_USERNAME
+      - MONGO_INITDB_ROOT_PASSWORD
+      - MONGO_DATABASE
+networks:
+  default:
+    ipam:
+      config:
+        - subnet: 10.108.0.0/14
