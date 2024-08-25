@@ -79,13 +79,11 @@ const Settings = () => {
     try {
       setGrabbingLocation(true);
       const location = await requestGeolocation();
+
       await userStore.updateUser({
         location: {
-          coords: {
-            latitude: location.coords.latitude,
-            longitude: location.coords.longitude,
-          },
-          timestamp: location.timestamp,
+          type: "Point",
+          coordinates: [location.coords.longitude, location.coords.latitude],
         } as UserLocation,
       });
 
@@ -182,8 +180,8 @@ const Settings = () => {
                 Update location
               </Button>
               <Box textAlign="right">
-                <Text fontSize="xs">{userData.location.country}</Text>
-                <Text fontSize="xs">{userData.location.city}</Text>
+                <Text fontSize="xs">{userData.country}</Text>
+                <Text fontSize="xs">{userData.city}</Text>
               </Box>
             </Box>
           </CardBody>

@@ -4,7 +4,6 @@ import {
   CheckForMatchTask,
   DislikeTask,
   LikeTask,
-  SuggestionTask,
   UnmatchTask,
 } from "../database/relationships/tasks/suggestions";
 import { ExpressError } from "../errors";

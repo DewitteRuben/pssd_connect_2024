@@ -54,6 +54,26 @@ export class SocketUserStore extends EventEmitter {
   }
 }
 
+export const calculateDistance = (
+  lon1: number,
+  lat1: number,
+  lon2: number,
+  lat2: number
+) => {
+  const toRadians = (deg: number) => (deg * Math.PI) / 180;
+
+  const dLat = toRadians(lat2 - lat1);
+  const dLon = toRadians(lon2 - lon1);
+
+  const a =
+    Math.sin(dLat / 2) ** 2 +
+    Math.cos(toRadians(lat1)) * Math.cos(toRadians(lat2)) * Math.sin(dLon / 2) ** 2;
+
+  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+
+  return EARTH_RADIUS_IN_KM * c;
+};
+
 export const EARTH_RADIUS_IN_KM = 6371;
 
 export const successResponse = (json?: any) => {
@@ -89,7 +109,7 @@ export const getRelationships = async (uid: string) => {
     throw new Error("User not found");
   }
 
-  const { latitude, longitude } = user.location.coords;
+  const [longitude, latitude] = user.location.coordinates;
 
   return RelationshipModel.aggregate([
     {
@@ -110,7 +130,7 @@ export const getRelationships = async (uid: string) => {
               firstName: 1,
               birthdate: 1,
               _id: 0,
-              "location.coords": 1,
+              "location.coordinates": 1,
               images: 1,
               profile: 1,
               pssd: 1,
@@ -151,8 +171,8 @@ export const getRelationships = async (uid: string) => {
                       vars: {
                         lat1: latitude,
                         lon1: longitude,
-                        lat2: "$$suggestion.location.coords.latitude",
-                        lon2: "$$suggestion.location.coords.longitude",
+                        lat2: { $arrayElemAt: ["$$suggestion.location.coordinates", 1] },
+                        lon2: { $arrayElemAt: ["$$suggestion.location.coordinates", 0] },
                       },
                       in: {
                         $multiply: [

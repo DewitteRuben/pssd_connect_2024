@@ -1,5 +1,5 @@
 import { FilterQuery } from "mongoose";
-import { EARTH_RADIUS_IN_KM } from "../../routes/helpers.js";
+import { calculateDistance, EARTH_RADIUS_IN_KM } from "../../routes/helpers.js";
 import { RelationshipModel } from "../user/relationship.js";
 import { UserModel } from "../user/user.js";
 import differenceInYears from "date-fns/differenceInYears/index.js";
@@ -16,7 +16,7 @@ export const findSuggestionsForUser = async (uid: string) => {
     gender,
     birthdate,
     location: {
-      coords: { latitude, longitude },
+      coordinates: [longitude, latitude],
     },
     preferences: { genderPreference, ageEnd, ageStart, maxDistance, global },
   } = user;
@@ -65,7 +65,7 @@ export const findSuggestionsForUser = async (uid: string) => {
 
   const relationships = await RelationshipModel.findOne({ uid }).lean().exec();
 
-  const suggestionQuery: FilterQuery<any> = {
+  const suggestionQuery: FilterQuery<User> = {
     mode,
     gender: requestedGender,
     "preferences.genderPreference": otherGenderPreference,
@@ -82,26 +82,29 @@ export const findSuggestionsForUser = async (uid: string) => {
     },
   };
 
-  if (global) {
-    suggestionQuery.$or = [
-      { "preferences.global": true },
-      {
-        "location.coords": {
-          $geoWithin: {
-            $centerSphere: [[latitude, longitude], radiusInRadians],
-          },
-        },
-      },
-    ];
-  } else {
-    suggestionQuery["location.coords"] = {
+  if (!global) {
+    suggestionQuery.location = {
       $geoWithin: {
-        $centerSphere: [[latitude, longitude], radiusInRadians],
+        $centerSphere: [[longitude, latitude], radiusInRadians],
       },
     };
   }
 
-  return UserModel.find(suggestionQuery).exec();
+  const suggestions = await UserModel.find(suggestionQuery).exec();
+
+  // My distance away from the other person, should be lower or equal to their max distance (if they're not global)
+  return suggestions.filter((suggestion) => {
+    if (suggestion.preferences.global) return true;
+
+    const distance = calculateDistance(
+      longitude,
+      latitude,
+      suggestion.location.coordinates[0],
+      suggestion.location.coordinates[1]
+    );
+
+    return distance <= suggestion.preferences.maxDistance;
+  });
 };
 
 export const createMatchMessage = (

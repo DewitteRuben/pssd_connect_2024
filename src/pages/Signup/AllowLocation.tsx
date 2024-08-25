@@ -5,7 +5,6 @@ import LocationButton from "../../components/LocationButton";
 import RegistrationViewContainer from "../../components/RegistrationViewContainer";
 import { useNavigate } from "react-router-dom";
 import { useStore } from "../../store/store";
-import { UserLocation } from "../../backend/src/database/user/types";
 
 const AllowLocation = () => {
   const navigate = useNavigate();
@@ -18,9 +17,9 @@ const AllowLocation = () => {
     setPos(pos);
     registration.updateRegistrationData({
       location: {
-        coords: { latitude: pos.coords.latitude, longitude: pos.coords.longitude },
-        timestamp: pos.timestamp,
-      } as UserLocation,
+        type: "Point",
+        coordinates: [pos.coords.longitude, pos.coords.latitude],
+      },
     });
   };
 
@@ -46,7 +45,7 @@ const AllowLocation = () => {
         <>
           <Text align="center">We've successfully read your location</Text>
           <Button onClick={onContinue} colorScheme="green" size="lg">
-            FINISH REGISTRATION
+            CONTINUE
           </Button>
         </>
       )}

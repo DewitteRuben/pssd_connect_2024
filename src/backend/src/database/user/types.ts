@@ -24,13 +24,8 @@ export type UserPreferences = {
 };
 
 export type UserLocation = {
-  country?: string;
-  city?: string;
-  coords: {
-    latitude: number;
-    longitude: number;
-  };
-  timestamp: number;
+  type: "Point";
+  coordinates: number[];
 };
 
 export type Gender = "man" | "woman" | "other";
@@ -57,6 +52,8 @@ export type User = {
   uid: string;
   idToken: string;
   chatToken: string;
+  country?: string;
+  city?: string;
   notificationToken: string;
   email: string;
   completedRegistration: boolean;

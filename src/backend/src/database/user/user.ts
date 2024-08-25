@@ -16,13 +16,15 @@ const UserSchema = new Schema<User>({
   firstName: { required: true, type: String },
   birthdate: { required: true, type: String },
   gender: { required: true, type: String },
+  country: { type: String },
+  city: { type: String },
   mode: { required: true, type: String },
   images: { required: true, type: [String] },
   preferences: {
     genderPreference: { required: true, type: String },
     showAge: { type: Boolean, default: true },
-    ageStart: Number, // calculated based on entered age
-    ageEnd: Number, // calculated based on entered age
+    ageStart: { type: Number }, // calculated based on entered age
+    ageEnd: { type: Number }, // calculated based on entered age
     maxDistance: { type: Number, default: 100 },
     global: { type: Boolean, default: true },
     showDistance: { type: Boolean, default: true },
@@ -41,13 +43,15 @@ const UserSchema = new Schema<User>({
     medications: [String],
   },
   location: {
-    country: String,
-    city: String,
-    coords: {
-      latitude: Number,
-      longitude: Number,
+    type: {
+      type: String, // Don't do `{ location: { type: String } }`
+      enum: ["Point"], // 'location.type' must be 'Point'
+      required: true,
     },
-    timestamp: Number,
+    coordinates: {
+      type: [Number],
+      required: true,
+    },
   },
 });
 

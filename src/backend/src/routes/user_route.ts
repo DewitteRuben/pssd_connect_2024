@@ -63,7 +63,7 @@ router.put("/", async (req, res, next) => {
     const userDiff = getObjectDifferences(rest, originalUser);
 
     if (userDiff.location) {
-      const { latitude, longitude } = rest.location.coords;
+      const [longitude, latitude] = rest.location.coordinates;
       const {
         features: [
           {
@@ -72,8 +72,8 @@ router.put("/", async (req, res, next) => {
         ],
       } = await geolocationApi.reverseLookup(latitude, longitude);
 
-      rest.location.country = country;
-      rest.location.city = city;
+      rest.country = country;
+      rest.city = city;
     }
 
     const userResult = await UserModel.findOneAndUpdate({ uid }, { ...rest }).exec();
@@ -142,7 +142,7 @@ router.post("/", async (req, res, next) => {
 
     // Setup safe location
     if (rest.location) {
-      const { latitude, longitude } = rest.location.coords;
+      const [longitude, latitude] = rest.location.coordinates;
       const {
         features: [
           {
@@ -151,8 +151,8 @@ router.post("/", async (req, res, next) => {
         ],
       } = await geolocationApi.reverseLookup(latitude, longitude);
 
-      rest.location.country = country;
-      rest.location.city = city;
+      rest.country = country;
+      rest.city = city;
     }
 
     const newUser = await UserModel.create({ uid, chatToken: token, ...rest });

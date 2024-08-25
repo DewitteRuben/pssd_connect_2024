@@ -30,8 +30,8 @@ export const mockUser1: User = {
   profile: { school: "", jobTitle: "", about: "", company: "", city: "" },
   pssd: { duration: "3to5years", symptoms: [], medications: [] },
   location: {
-    coords: { latitude: 50.1083114, longitude: 8.7500944 },
-    timestamp: 1700701949517,
+    coordinates: [8.7500944, 50.1083114],
+    type: "Point",
   },
 };
 
@@ -65,11 +65,8 @@ export const mockUser2: User = {
   profile: { school: "", jobTitle: "", about: "", company: "", city: "" },
   pssd: { duration: "3to5years", symptoms: [], medications: [] },
   location: {
-    coords: {
-      latitude: 50.54740168377306,
-      longitude: 8.7500944,
-    },
-    timestamp: 1700701949517,
+    coordinates: [8.7500944, 50.54740168377306],
+    type: "Point",
   },
 };
 
@@ -107,8 +104,8 @@ export const mockUser3: User = {
   },
   pssd: { duration: "6to12months", symptoms: ["anxiety"], medications: ["sertraline"] },
   location: {
-    coords: { latitude: 51.507351, longitude: -0.127758 },
-    timestamp: 1700701949519,
+    coordinates: [2.352222, 48.856613],
+    type: "Point",
   },
 };
 
@@ -146,8 +143,8 @@ export const mockUser4: User = {
   },
   pssd: { duration: "6to12months", symptoms: ["insomnia"], medications: ["fluoxetine"] },
   location: {
-    coords: { latitude: 48.856613, longitude: 2.352222 },
-    timestamp: 1700701949520,
+    coordinates: [2.352222, 48.856613],
+    type: "Point",
   },
 };
 
@@ -189,8 +186,8 @@ export const mockUser5: User = {
     medications: ["escitalopram"],
   },
   location: {
-    coords: { latitude: -33.86882, longitude: 151.209296 },
-    timestamp: 1700701949521,
+    coordinates: [151.209296, -33.86882],
+    type: "Point",
   },
 };
 
@@ -228,8 +225,8 @@ export const mockUser6: User = {
   },
   pssd: { duration: "3to5years", symptoms: ["headaches"], medications: ["citalopram"] },
   location: {
-    coords: { latitude: 41.385063, longitude: 2.173404 },
-    timestamp: 1700701949522,
+    coordinates: [2.173404, 41.385063],
+    type: "Point",
   },
 };
 
@@ -271,8 +268,8 @@ export const mockUser7: User = {
     medications: ["venlafaxine"],
   },
   location: {
-    coords: { latitude: 37.774929, longitude: -122.419418 },
-    timestamp: 1700701949523,
+    coordinates: [-122.419418, 37.774929],
+    type: "Point",
   },
 };
 
@@ -310,8 +307,8 @@ export const mockUser8: User = {
   },
   pssd: { duration: "1to2years", symptoms: ["dizziness"], medications: ["paroxetine"] },
   location: {
-    coords: { latitude: 43.65107, longitude: -79.347015 },
-    timestamp: 1700701949524,
+    coordinates: [-79.347015, 43.65107],
+    type: "Point",
   },
 };
 
@@ -349,8 +346,8 @@ export const mockUser9: User = {
   },
   pssd: { duration: "1to2years", symptoms: ["headaches"], medications: ["fluoxetine"] },
   location: {
-    coords: { latitude: 35.689487, longitude: 139.691711 },
-    timestamp: 1700701949525,
+    coordinates: [139.691711, 35.689487],
+    type: "Point",
   },
 };
 
@@ -373,8 +370,8 @@ export const mockUser10: User = {
     ageStart: 18,
     ageEnd: 50,
     showAge: true,
-    maxDistance: 70,
-    global: true,
+    maxDistance: 1000,
+    global: false,
     showDistance: true,
     showMe: true,
   },
@@ -392,8 +389,8 @@ export const mockUser10: User = {
     medications: ["escitalopram"],
   },
   location: {
-    coords: { latitude: 53.480759, longitude: -2.242631 },
-    timestamp: 1700701949526,
+    coordinates: [-2.242631, 53.480759],
+    type: "Point",
   },
 };
 

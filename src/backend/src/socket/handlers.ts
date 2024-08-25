@@ -17,14 +17,18 @@ export const onSuggestionRequest = (socket: Socket) => async () => {
 
   if (!uid) throw new Error("uid not found in socket user store");
 
-  const result = await new SuggestionWorker(uid).update();
-  const resultJSON = JSON.stringify(successResponse(result[0]));
-  socket.emit("suggestion", resultJSON);
+  try {
+    const result = await new SuggestionWorker(uid).update();
+    const resultJSON = JSON.stringify(successResponse(result[0]));
+    socket.emit("suggestion", resultJSON);
 
-  suggestionManager.add(uid, async (suggestions) => {
-    const suggestionsJSON = JSON.stringify(successResponse(suggestions[0]));
-    socket.emit("suggestion", suggestionsJSON);
-  });
+    suggestionManager.add(uid, async (suggestions) => {
+      const suggestionsJSON = JSON.stringify(successResponse(suggestions[0]));
+      socket.emit("suggestion", suggestionsJSON);
+    });
+  } catch (error) {
+    console.error("Failed to setup suggestions", error)
+  }
 };
 
 export const onDisconnect = (socket: Socket) => () => {
