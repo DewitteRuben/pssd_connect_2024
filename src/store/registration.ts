@@ -112,7 +112,8 @@ export class RegistrationStore {
 
   async finish() {
     // calculate max and min age difference using the half-your-age-plus-7 rule
-    const age = differenceInYears(new Date(), this.registrationData.birthdate! as Date);
+    const birthdate = this.registrationData.birthdate!
+    const age = differenceInYears(new Date(), new Date(birthdate as string));
     const ageStart = Math.floor(age / 2) + 7;
     const ageEnd = (age - 7) * 2;
 
