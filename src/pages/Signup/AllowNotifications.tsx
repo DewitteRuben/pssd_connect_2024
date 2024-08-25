@@ -23,7 +23,7 @@ const AllowNotifications = () => {
       await registration.finish();
       navigate("/");
     } catch (error) {
-      console.error("Failed to finish registration");
+      console.error("Failed to finish registration", error);
     }
   };
 
@@ -37,8 +37,6 @@ const AllowNotifications = () => {
           <AllowNotificationButton onChange={handleOnAllowNotifications} size="md" />
         </>
       )}
-
-      {/* // TODO: display actual location here */}
 
       {notificationToken && (
         <>
