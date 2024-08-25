@@ -9,9 +9,14 @@ import AllowNotificationButton from "../../components/AllowNotificationButton";
 const AllowNotifications = () => {
   const navigate = useNavigate();
 
-  const { registration } = useStore();
+  const {
+    registration,
+    user: { user: userData },
+  } = useStore();
 
-  const [notificationToken, setNotificationToken] = React.useState<string>();
+  const [notificationToken, setNotificationToken] = React.useState<string>(
+    userData?.notificationToken ?? ""
+  );
 
   const handleOnAllowNotifications = (notificationToken: string) => {
     setNotificationToken(notificationToken);
