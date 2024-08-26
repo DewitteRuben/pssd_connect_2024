@@ -2,6 +2,7 @@ import mongoose from "mongoose";
 
 const { DATABASE_URL, MONGO_USERNAME, MONGO_PASSWORD, MONGO_INITDB_DATABASE } =
   process.env;
+
 export class MongoDB {
   private static mongoose: typeof mongoose;
 
@@ -11,7 +12,7 @@ export class MongoDB {
     }
     this.mongoose = await mongoose.connect(DATABASE_URL, {
       user: MONGO_USERNAME,
-      dbName: MONGO_INITDB_DATABASE,
+      authSource: MONGO_INITDB_DATABASE,
       pass: MONGO_PASSWORD,
     });
   }
