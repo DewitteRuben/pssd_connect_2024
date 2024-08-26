@@ -2,6 +2,7 @@ import { Button, ThemingProps } from "@chakra-ui/react";
 import { observer } from "mobx-react";
 import React from "react";
 import { getMessagingToken } from "../firebase/messaging";
+import { useStore } from "../store/store";
 
 type TAllowNotificationButtonProps = {
   onChange?: (token: string) => void;
@@ -12,8 +13,15 @@ const AllowNotificationButton: React.FC<TAllowNotificationButtonProps> = ({
   onChange,
   size,
 }) => {
+
+  const {
+    user: { user: userData },
+  } = useStore();
+
   const [approvingNotification, setApprovingNotifications] = React.useState(false);
-  const [notificationToken, setNotificationToken] = React.useState<string>();
+  const [notificationToken, setNotificationToken] = React.useState<string>(
+    userData?.notificationToken ?? ""
+  );
 
   const onAllowNotificationSubmit = async () => {
     try {
