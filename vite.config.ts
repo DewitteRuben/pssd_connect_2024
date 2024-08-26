@@ -3,7 +3,6 @@ import { nodePolyfills } from "vite-plugin-node-polyfills";
 import { VitePWA } from "vite-plugin-pwa";
 import react from "@vitejs/plugin-react";
 
-// https://vitejs.dev/config/
 export default defineConfig({
   plugins: [
     nodePolyfills(),
@@ -19,30 +18,22 @@ export default defineConfig({
       manifest: {
         name: "PSSD Connect",
         short_name: "PSSD Connect",
-        theme_color: "#06091c",
+        theme_color: "#ffffff",
         display: "standalone",
-        background_color: "#06091c",
+        background_color: "#ffffff",
+        orientation: "portrait",
         icons: [
           {
-            src: "logo-48-48.png",
-            sizes: "48x48",
-            type: "image/png",
-          },
-          {
-            src: "logo-96-96.png",
-            sizes: "96x96",
-            type: "image/png",
-          },
-          {
-            src: "logo-512-512.png",
+            purpose: "maskable",
             sizes: "512x512",
+            src: "icon512_maskable.png",
             type: "image/png",
           },
           {
-            src: "logo-512-512.png",
+            purpose: "any",
             sizes: "512x512",
+            src: "icon512_rounded.png",
             type: "image/png",
-            purpose: "any maskable",
           },
         ],
       },

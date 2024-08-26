@@ -27,7 +27,7 @@ const Entry = () => {
           fontWeight="bold"
           textAlign="center"
         >
-          PSSD Dating
+          PSSD Connect
         </Text>
         <Button
           rounded="full"
