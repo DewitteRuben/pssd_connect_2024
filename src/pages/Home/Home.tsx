@@ -27,9 +27,13 @@ const TabIcon = styled(Icon)`
   height: 24px;
 `;
 
-const FullTabelPanel = styled(TabPanel)`
-  padding: 0;
-  height: 100%;
+const StyledTabPanel = styled(TabPanels)`
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+
+  &::-webkit-scrollbar {
+    overflow: hidden;
+  }
 `;
 
 const indexPathMap: Record<string, number> = {
@@ -75,7 +79,7 @@ const Home = () => {
       flexDirection="column"
       height="100%"
     >
-      <TabPanels display="flex" overflow="scroll" flexDirection="column" flexGrow="1">
+      <StyledTabPanel display="flex" overflow="scroll" flexDirection="column" flexGrow="1">
         <Routes>
           <Route path="profile" element={<Profile />} />
           <Route path="profile/settings" element={<Settings />} />
@@ -86,7 +90,7 @@ const Home = () => {
 
           <Route path="/" element={<Match />} />
         </Routes>
-      </TabPanels>
+      </StyledTabPanel>
       <TabList>
         <Tab>
           <TabIcon as={AiOutlineUser} />

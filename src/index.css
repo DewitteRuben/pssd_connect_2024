@@ -13,4 +13,10 @@ html {
 body > #root > div {
   height: 100vh;
   overflow: hidden;
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+body > #root > div::-webkit-scrollbar {
+  overflow: hidden;
 }
