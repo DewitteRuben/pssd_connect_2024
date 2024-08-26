@@ -1,7 +1,7 @@
 services:
   frontend:
     build: nginx
-    ports: 
+    ports:
       - 80:80
   backend:
     build: src/backend
@@ -9,8 +9,8 @@ services:
       - 3000:3000
     environment:
       - DATABASE_URL=${DATABASE_URL}
-      - MONGO_INITDB_ROOT_USERNAME=${MONGO_INITDB_ROOT_USERNAME}
-      - MONGO_INITDB_ROOT_PASSWORD=${MONGO_INITDB_ROOT_PASSWORD}
+      - MONGO_USERNAME=${MONGO_USERNAME}
+      - MONGO_PASSWORD=${MONGO_PASSWORD}
       - MONGO_INITDB_DATABASE=${MONGO_INITDB_DATABASE}
   database:
     image: mongo

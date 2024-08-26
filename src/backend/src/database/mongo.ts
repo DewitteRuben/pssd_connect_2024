@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 
-const { DATABASE_URL, MONGO_INITDB_ROOT_USERNAME, MONGO_INITDB_ROOT_PASSWORD, MONGO_INITDB_DATABASE } =
+const { DATABASE_URL, MONGO_USERNAME, MONGO_PASSWORD, MONGO_INITDB_DATABASE } =
   process.env;
 export class MongoDB {
   private static mongoose: typeof mongoose;
@@ -10,9 +10,9 @@ export class MongoDB {
       throw Error("DATABASE_CONNECTION_URL environment is missing");
     }
     this.mongoose = await mongoose.connect(DATABASE_URL, {
-      user: MONGO_INITDB_ROOT_USERNAME,
+      user: MONGO_USERNAME,
       dbName: MONGO_INITDB_DATABASE,
-      pass: MONGO_INITDB_ROOT_PASSWORD,
+      pass: MONGO_PASSWORD,
     });
   }
 
