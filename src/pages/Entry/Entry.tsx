@@ -1,4 +1,4 @@
-import { Box, Button, Text, VStack } from "@chakra-ui/react";
+import { Box, Button, Image, Text, VStack } from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
 import { useStore } from "../../store/store";
 import React from "react";
@@ -18,21 +18,20 @@ const Entry = () => {
   }, []);
 
   return (
-    <Box backgroundColor="#14dbc3" height="100%">
+    <Box height="100%" paddingX={8}>
       <VStack height="100%" justifyContent="center" spacing={8}>
-        <Text
-          fontSize="4xl"
-          verticalAlign="center"
-          color="white"
-          fontWeight="bold"
-          textAlign="center"
-        >
-          PSSD Connect
-        </Text>
+        <Box display="flex" alignItems="center" marginBottom={16}>
+          <Image width="96px" src="/pssdconnect_logo.svg" marginRight={4} />
+          <Text fontSize="3xl" fontWeight="bold" textAlign="left">
+            PSSD
+            <br />
+            Connect
+          </Text>
+        </Box>
         <Button
+          width="100%"
           rounded="full"
           onClick={() => navigate("/login")}
-          colorScheme="green"
           size="lg"
           variant="solid"
         >
@@ -40,8 +39,8 @@ const Entry = () => {
         </Button>
         <Button
           rounded="full"
+          width="100%"
           onClick={() => navigate("/signup")}
-          colorScheme="green"
           size="lg"
           variant="solid"
         >
