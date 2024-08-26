@@ -25,14 +25,18 @@ export class SuggestionManager {
   refresh(uid: string) {
     const worker = this.activeSuggestionWorkers[uid];
 
-    if (!worker) throw new Error("no active worker was found");
+    if (!worker) {
+      console.error("no active worker was found");
+      return;
+    }
 
     worker.refresh();
   }
 
   remove(uid: string) {
     if (!this.activeSuggestionWorkers[uid]) {
-      throw new Error("no active worker was found");
+      console.error("no active worker was found");
+      return;
     }
 
     const worker = this.activeSuggestionWorkers[uid];
