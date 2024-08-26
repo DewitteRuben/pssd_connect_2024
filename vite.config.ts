@@ -4,6 +4,9 @@ import { VitePWA } from "vite-plugin-pwa";
 import react from "@vitejs/plugin-react";
 
 export default defineConfig({
+  build: {
+    outDir: "nginx/dist",
+  },
   plugins: [
     nodePolyfills(),
     react(),

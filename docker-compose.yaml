@@ -1,5 +1,9 @@
 services:
-  express:
+  frontend:
+    build: nginx
+    ports: 
+      - 80:80
+  backend:
     build: src/backend
     ports:
       - 3000:3000
