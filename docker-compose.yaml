@@ -21,8 +21,12 @@ services:
       - MONGO_INITDB_ROOT_USERNAME=${MONGO_INITDB_ROOT_USERNAME}
       - MONGO_INITDB_ROOT_PASSWORD=${MONGO_INITDB_ROOT_PASSWORD}
       - MONGO_INITDB_DATABASE=${MONGO_INITDB_DATABASE}
+    volumes:
+      - mongodata:/data/db
 networks:
   default:
     ipam:
       config:
         - subnet: 10.108.0.0/14
+volumes:
+  mongodata:

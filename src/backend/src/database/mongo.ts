@@ -12,6 +12,7 @@ export class MongoDB {
     }
     this.mongoose = await mongoose.connect(DATABASE_URL, {
       user: MONGO_USERNAME,
+      dbName: MONGO_INITDB_DATABASE,
       authSource: MONGO_INITDB_DATABASE,
       pass: MONGO_PASSWORD,
     });

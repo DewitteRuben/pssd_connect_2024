@@ -7,6 +7,7 @@ export default defineConfig({
   build: {
     outDir: "nginx/dist",
   },
+  base: "https://pssdconnect.org",
   plugins: [
     nodePolyfills(),
     react(),
