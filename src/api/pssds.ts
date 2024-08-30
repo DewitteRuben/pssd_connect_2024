@@ -10,12 +10,14 @@ type MongoDBResult<T> = {
 };
 
 class PSSDSocialApi {
-  private baseURL: string;
+  private apiURL: string;
+  private socketURL: string;
   private firebaseUser: FirebaseUser | null = null;
   private socket?: Socket;
 
   constructor() {
-    this.baseURL = import.meta.env.VITE_API_URL;
+    this.apiURL = import.meta.env.VITE_API_URL;
+    this.socketURL = import.meta.env.VITE_SOCKET_URL;
   }
 
   async setupRelationshipSocket({
@@ -27,7 +29,7 @@ class PSSDSocialApi {
   }) {
     const jwtTokenId = await this.getToken();
 
-    this.socket = io(this.baseURL, {
+    this.socket = io(this.socketURL, {
       transportOptions: {
         polling: {
           extraHeaders: {
@@ -45,6 +47,9 @@ class PSSDSocialApi {
     this.socket.on("disconnect", () => {
       console.log("disconnected");
     });
+
+    this.socket.on("connect_error", (err) => console.error(err));
+    this.socket.on("connect_failed", (err) => console.error(err));
 
     this.socket.on("suggestion", (data) => {
       if (onSuggestion) {
@@ -68,7 +73,7 @@ class PSSDSocialApi {
   }
 
   private getEndpointURL(endpoint: string) {
-    return `${this.baseURL}${endpoint}`;
+    return `${this.apiURL}${endpoint}`;
   }
 
   private getToken() {
