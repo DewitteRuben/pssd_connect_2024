@@ -1,12 +1,13 @@
 import { Box, IconButton, Heading } from "@chakra-ui/react";
 import React from "react";
-import "./Header.css";
 import { FaShieldAlt } from "react-icons/fa";
 import { ArrowBackIcon } from "@chakra-ui/icons";
+import { StickyHeader } from "./Header";
 
 type TMessageHeader = {
   name: string;
   sticky?: boolean;
+  hr?: boolean;
   onSafetyClick?: () => void;
   onBack?: () => void;
 };
@@ -16,12 +17,15 @@ const MessageHeader: React.FC<TMessageHeader> = ({
   sticky,
   onSafetyClick,
   onBack,
+  hr,
 }) => {
   sticky = sticky === undefined ? true : sticky;
+  hr = hr === undefined ? true : hr;
 
   return (
-    <Box
-      className={sticky ? "Header-sticky" : ""}
+    <StickyHeader
+      $sticky={sticky}
+      $hr={hr}
       display="flex"
       alignItems="center"
       justifyContent="space-between"
@@ -46,7 +50,7 @@ const MessageHeader: React.FC<TMessageHeader> = ({
           icon={<FaShieldAlt />}
         />
       </Box>
-    </Box>
+    </StickyHeader>
   );
 };
 

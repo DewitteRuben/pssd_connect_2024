@@ -3,6 +3,7 @@ import FormikLoginForm, { LoginFormPayload } from "../../components/LoginForm";
 import { observer } from "mobx-react";
 import { Navigate, useNavigate } from "react-router-dom";
 import { useStore } from "../../store/store";
+import Header from "../../components/Header";
 
 const Login = observer(() => {
   const { registration, auth, user } = useStore();
@@ -30,14 +31,17 @@ const Login = observer(() => {
   };
 
   return (
-    <Box height="100%" paddingX={8}>
-      <VStack height="100%" justifyContent="center" spacing={8}>
-        <Text fontSize="x-large" fontWeight="bold">
-          Log into PSSD Social
-        </Text>
-        <FormikLoginForm onSubmit={onLoginFormSubmit}></FormikLoginForm>
-      </VStack>
-    </Box>
+    <>
+      <Header title="" path="/splash" hr={false} />
+      <Box height="100%" paddingX={8}>
+        <VStack height="100%" justifyContent="center" spacing={8}>
+          <Text fontSize="x-large" fontWeight="bold">
+            Log in to PSSD Connect
+          </Text>
+          <FormikLoginForm onSubmit={onLoginFormSubmit} />
+        </VStack>
+      </Box>
+    </>
   );
 });
 
