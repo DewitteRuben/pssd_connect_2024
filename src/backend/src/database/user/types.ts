@@ -28,8 +28,10 @@ export type UserLocation = {
   coordinates: number[];
 };
 
+export const genderPreferences = ["men", "women", "everyone"] as const;
+
 export type Gender = "man" | "woman" | "other";
-export type GenderPreference = "men" | "women" | "everyone";
+export type GenderPreference = typeof genderPreferences[number];
 
 export type Relationship = {
   uid: string;

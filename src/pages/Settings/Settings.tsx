@@ -7,6 +7,7 @@ import {
   Divider,
   Heading,
   IconButton,
+  Select,
   Stack,
   Switch,
   Text,
@@ -20,7 +21,11 @@ import React from "react";
 import Header from "../../components/Header";
 import RemoveAccountModal from "../../components/RemoveAccountModal";
 import { requestGeolocation } from "../../components/LocationButton";
-import { UserLocation } from "../../backend/src/database/user/types";
+import {
+  GenderPreference,
+  genderPreferences,
+  UserLocation,
+} from "../../backend/src/database/user/types";
 import { capitalize } from "lodash";
 import { observer } from "mobx-react";
 import LogoutAccountDialog from "../../components/LogoutAccountDialog";
@@ -43,6 +48,10 @@ const Settings = () => {
   const toast = useToast();
 
   const userData = userStore.user;
+
+  const [selectedGenderPref, setSelectedGenderPref] = React.useState(
+    userData?.preferences.genderPreference ?? ""
+  );
 
   const [isGlobal, setIsGlobal] = React.useState(userData?.preferences.global ?? false);
   const [grabbingLocation, setGrabbingLocation] = React.useState(false);
@@ -102,6 +111,26 @@ const Settings = () => {
     }
   };
 
+  const updateGenderPreference = async (event: React.ChangeEvent<HTMLSelectElement>) => {
+    try {
+      setSelectedGenderPref(event.target.value);
+      await userStore.updateUser({
+        preferences: { genderPreference: event.target.value as GenderPreference },
+      });
+
+      toast({
+        title: "Gender preference",
+        description: "We've successfully updated your gender preference",
+        status: "success",
+        isClosable: true,
+      });
+
+      userStore.fetchUserMetadata();
+    } catch (error) {
+      console.error("Failed to gender preference", error);
+    }
+  };
+
   const handleOnAgeRangeChange = async ({ min, max }: { min: number; max: number }) => {
     try {
       await userStore.updateUser({ preferences: { ageStart: min, ageEnd: max } });
@@ -151,8 +180,13 @@ const Settings = () => {
         </Heading>
         <Card>
           <CardBody>
-            <Box display="flex" justifyContent="space-between">
-              <Text>Phone number</Text>
+            <Box>
+              <Heading color="green" size="xs">
+                Phone number
+              </Heading>
+              <Text color="grey" marginBottom={2} fontSize="xs">
+                Your phone number is not visible to others.
+              </Text>
               <Text>
                 {userData.countryCode} {userData.phoneNumber}
               </Text>
@@ -165,9 +199,14 @@ const Settings = () => {
         <Card>
           <CardBody>
             <Box display="flex" justifyContent="space-between">
-              <Heading color="green" size="xs">
-                Now looking
-              </Heading>
+              <Box>
+                <Heading color="green" size="xs">
+                  Now looking
+                </Heading>
+                <Text color="grey" marginBottom={2} fontSize="xs">
+                  Your current location is not visible to others.
+                </Text>
+              </Box>
               <Text fontSize="sm">{userData.preferences.global ? "Globally" : ""}</Text>
             </Box>
             <Box marginTop={4} display="flex" justifyContent="space-between">
@@ -192,7 +231,17 @@ const Settings = () => {
               <Heading color="green" size="xs">
                 I'm interested in
               </Heading>
-              <Text>{capitalize(userData.preferences.genderPreference)}</Text>
+              <Select
+                value={selectedGenderPref}
+                onChange={updateGenderPreference}
+                marginTop={2}
+              >
+                {genderPreferences.map((gp) => (
+                  <option value={gp} key={gp}>
+                    {capitalize(gp)}
+                  </option>
+                ))}
+              </Select>
             </Box>
           </CardBody>
         </Card>
