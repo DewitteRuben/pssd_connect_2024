@@ -28,7 +28,7 @@ import React from "react";
 import { observer } from "mobx-react";
 import { differenceInYears } from "date-fns";
 import { prettyPSSDDuration } from "../../backend/src/database/user/types";
-import { kmToMiles } from "../../utils/math";
+import { kmToMiles, useUnitDistance } from "../../utils/math";
 import TinderCard from "react-tinder-card";
 
 const InfoIcon = styled(IoIosInformationCircle)`
@@ -56,6 +56,7 @@ const Match = () => {
   const [screenWidth, setScreenWidth] = React.useState(window.screen.width);
 
   const [endOfStackReached, setEndOfStackReached] = React.useState(false);
+  const unitDistance = useUnitDistance(relationship?.currentSuggestion?.distance ?? 0);
 
   if (!userData) throw new Error("User data was not found");
 
@@ -229,8 +230,7 @@ const Match = () => {
                   )}
                   <ListItem>
                     <ListIcon as={MdOutlineLocationOn} />
-                    {relationship.currentSuggestion.distance.toFixed(1)} km (
-                    {kmToMiles(relationship.currentSuggestion.distance)} mi.) away
+                    {unitDistance} away
                   </ListItem>
                 </List>
                 <Divider marginY={6}></Divider>

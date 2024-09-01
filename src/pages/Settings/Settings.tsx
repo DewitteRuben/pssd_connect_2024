@@ -22,6 +22,7 @@ import Header from "../../components/Header";
 import RemoveAccountModal from "../../components/RemoveAccountModal";
 import { requestGeolocation } from "../../components/LocationButton";
 import {
+  DistanceUnit,
   GenderPreference,
   genderPreferences,
   UserLocation,
@@ -51,6 +52,10 @@ const Settings = () => {
 
   const [selectedGenderPref, setSelectedGenderPref] = React.useState(
     userData?.preferences.genderPreference ?? ""
+  );
+
+  const [distanceUnit, setDistanceUnit] = React.useState<DistanceUnit>(
+    userData?.distanceUnit ?? "km"
   );
 
   const [isGlobal, setIsGlobal] = React.useState(userData?.preferences.global ?? false);
@@ -131,6 +136,29 @@ const Settings = () => {
     }
   };
 
+  const updateDistanceUnit = async (event: React.ChangeEvent<HTMLSelectElement>) => {
+    try {
+      const distanceUnit = event.target.value;
+
+      setDistanceUnit(distanceUnit);
+
+      await userStore.updateUser({
+        distanceUnit,
+      });
+
+      toast({
+        title: "Distance unit",
+        description: "We've successfully updated your preferred distance unit",
+        status: "success",
+        isClosable: true,
+      });
+
+      userStore.fetchUserMetadata();
+    } catch (error) {
+      console.error("Failed to gender preference", error);
+    }
+  };
+
   const handleOnAgeRangeChange = async ({ min, max }: { min: number; max: number }) => {
     try {
       await userStore.updateUser({ preferences: { ageStart: min, ageEnd: max } });
@@ -190,6 +218,19 @@ const Settings = () => {
               <Text>
                 {userData.countryCode} {userData.phoneNumber}
               </Text>
+            </Box>
+          </CardBody>
+        </Card>
+        <Card marginY={4}>
+          <CardBody>
+            <Box>
+              <Heading color="green" size="xs">
+                Distance unit
+              </Heading>
+              <Select onChange={updateDistanceUnit} value={distanceUnit} marginTop={2}>
+                <option value="km">Kilometers</option>
+                <option value="mi">Miles</option>
+              </Select>
             </Box>
           </CardBody>
         </Card>

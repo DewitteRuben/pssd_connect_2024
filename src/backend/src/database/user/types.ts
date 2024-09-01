@@ -29,9 +29,11 @@ export type UserLocation = {
 };
 
 export const genderPreferences = ["men", "women", "everyone"] as const;
+export const distanceUnits = ["km", "mi"];
 
 export type Gender = "man" | "woman" | "other";
-export type GenderPreference = typeof genderPreferences[number];
+export type GenderPreference = (typeof genderPreferences)[number];
+export type DistanceUnit = (typeof distanceUnits)[number];
 
 export type Relationship = {
   uid: string;
@@ -65,6 +67,7 @@ export type User = {
   firstName: string;
   birthdate: string | Date;
   gender: Gender;
+  distanceUnit: DistanceUnit;
   mode: string;
   profile: UserProfile;
   preferences: UserPreferences;
