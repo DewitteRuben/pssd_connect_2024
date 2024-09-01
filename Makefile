@@ -9,6 +9,9 @@ build-frontend:
 
 build-all: build-frontend build
 
+restart-backend:
+	docker compose down backend && docker compose up backend -d
+
 stop:
 	docker compose down
 
