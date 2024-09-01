@@ -66,6 +66,7 @@ export const findSuggestionsForUser = async (uid: string) => {
   const relationships = await RelationshipModel.findOne({ uid }).lean().exec();
 
   const suggestionQuery: FilterQuery<User> = {
+    uid: { $ne: uid },
     mode,
     gender: requestedGender,
     "preferences.genderPreference": otherGenderPreference,
