@@ -12,6 +12,11 @@ build-all: build-frontend build
 restart-backend:
 	docker compose down backend && docker compose up backend -d
 
+build-backend:
+	docker compose build backend
+
+update-backend: build-backend restart-backend
+
 stop:
 	docker compose down
 
