@@ -242,12 +242,12 @@ const Settings = () => {
               <Box marginBottom={2} display="flex" justifyContent="space-between">
                 <Box>
                   <Heading color="green" size="xs">
-                    Now looking
+                    {userData.preferences.global ? "Now looking" : "Now looking within"}
                   </Heading>
                 </Box>
               </Box>
               <Text>
-                {userData.preferences.global ? "Globally" : `Within ${rangeDistanceUnit}`}{" "}
+                {userData.preferences.global ? "Globally" : `${rangeDistanceUnit}`}{" "}
               </Text>
             </Box>
           </CardBody>
@@ -279,26 +279,6 @@ const Settings = () => {
         <Card marginY={4}>
           <CardBody>
             <Box>
-              <Heading color="green" size="xs">
-                I'm interested in
-              </Heading>
-              <Select
-                value={selectedGenderPref}
-                onChange={updateGenderPreference}
-                marginTop={2}
-              >
-                {genderPreferences.map((gp) => (
-                  <option value={gp} key={gp}>
-                    {capitalize(gp)}
-                  </option>
-                ))}
-              </Select>
-            </Box>
-          </CardBody>
-        </Card>
-        <Card marginY={4}>
-          <CardBody>
-            <Box>
               <Box
                 display="flex"
                 alignContent="center"
@@ -324,12 +304,47 @@ const Settings = () => {
         <Card marginY={4}>
           <CardBody>
             <Box>
+              <Heading marginBottom={2} color="green" size="xs">
+                Discovery mode
+              </Heading>
+              <Select>
+                <option value="dating">Dating</option>
+                <option value="friends">Friends</option>
+                <option value="all">All</option>
+              </Select>
+            </Box>
+          </CardBody>
+        </Card>
+        <Card marginY={4}>
+          <CardBody>
+            <Box>
+              <Heading color="green" size="xs">
+                I'm interested in
+              </Heading>
+              <Select
+                value={selectedGenderPref}
+                onChange={updateGenderPreference}
+                marginTop={2}
+              >
+                {genderPreferences.map((gp) => (
+                  <option value={gp} key={gp}>
+                    {capitalize(gp)}
+                  </option>
+                ))}
+              </Select>
+            </Box>
+          </CardBody>
+        </Card>
+
+        <Card marginY={4}>
+          <CardBody>
+            <Box>
               <Heading color="green" size="xs">
                 Max. distance
               </Heading>
               {userData.preferences.global && (
                 <Text color="darkred" marginBottom={2} fontSize="xs">
-                  Global mode is enabled, the max. distance is ignored.
+                  Global mode is enabled, the max. distance will be ignored.
                 </Text>
               )}
 
