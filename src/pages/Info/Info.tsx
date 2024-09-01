@@ -7,6 +7,7 @@ import {
   Input,
   Select,
   Textarea,
+  useToast,
 } from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
 import { useStore } from "../../store/store";
@@ -19,7 +20,7 @@ import { Gender, UserProfile } from "../../backend/src/database/user/types";
 
 const Info = () => {
   const { user: userStore } = useStore();
-  const navigate = useNavigate();
+  const toast = useToast();
   const userData = userStore.user;
 
   const [profile, setProfile] = React.useState<Partial<UserProfile>>(
@@ -42,10 +43,24 @@ const Info = () => {
   const onGenderChange: ChangeEventHandler<HTMLSelectElement> = (event) => {
     setGender(event.target.value);
     userStore.updateUser({ gender: event.target.value as Gender });
+
+    toast({
+      title: "Gender",
+      description: "We've successfully updated how you identify",
+      status: "success",
+      isClosable: true,
+    });
   };
 
   const handleOnImageUpdate = (images: string[] | ImagePickerEntry[]) => {
     userStore.updateUser({ images: images as string[] });
+
+    toast({
+      title: "Images",
+      description: "We've successfully updated your images",
+      status: "success",
+      isClosable: true,
+    });
   };
 
   return (
@@ -107,7 +122,6 @@ const Info = () => {
         <Select value={gender} onChange={onGenderChange} marginY={4}>
           <option value="man">Man</option>
           <option value="woman">Woman</option>
-          <option value="other">Other</option>
         </Select>
       </Box>
     </Box>
