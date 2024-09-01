@@ -79,10 +79,10 @@ router.put("/", async (req, res, next) => {
     const userResult = await UserModel.findOneAndUpdate({ uid }, { ...rest }).exec();
 
     // Update stream chat profile image
-    if (userDiff.images && userResult?.images.length) {
+    if (userDiff.images && rest?.images.length) {
       await StreamChatClient.partialUpdateUser({
         id: uid,
-        set: { image: userResult?.images[0] },
+        set: { image: rest.images[0] },
       });
     }
 
