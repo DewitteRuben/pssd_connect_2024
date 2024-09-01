@@ -1,17 +1,13 @@
-import { ArrowBackIcon } from "@chakra-ui/icons";
 import {
   Box,
   Button,
   Card,
   CardBody,
-  Divider,
   Heading,
-  IconButton,
   Select,
   Stack,
   Switch,
   Text,
-  useDisclosure,
   useToast,
 } from "@chakra-ui/react";
 import { useStore } from "../../store/store";
@@ -29,6 +25,7 @@ import {
 } from "../../backend/src/database/user/types";
 import { capitalize } from "lodash";
 import { observer } from "mobx-react";
+import { useUnitDistance } from "../../utils/math";
 import LogoutAccountDialog from "../../components/LogoutAccountDialog";
 import AllowNotificationButton from "../../components/AllowNotificationButton";
 
@@ -60,6 +57,8 @@ const Settings = () => {
 
   const [isGlobal, setIsGlobal] = React.useState(userData?.preferences.global ?? false);
   const [grabbingLocation, setGrabbingLocation] = React.useState(false);
+
+  const rangeDistanceUnit = useUnitDistance(userData?.preferences.maxDistance!);
 
   if (!userData) {
     throw new Error("Invalid state! User not found");
@@ -239,30 +238,41 @@ const Settings = () => {
         </Heading>
         <Card>
           <CardBody>
-            <Box display="flex" justifyContent="space-between">
-              <Box>
-                <Heading color="green" size="xs">
-                  Now looking
-                </Heading>
-                <Text color="grey" marginBottom={2} fontSize="xs">
-                  Your current location is not visible to others.
-                </Text>
+            <Box>
+              <Box marginBottom={2} display="flex" justifyContent="space-between">
+                <Box>
+                  <Heading color="green" size="xs">
+                    Now looking
+                  </Heading>
+                </Box>
               </Box>
-              <Text fontSize="sm">{userData.preferences.global ? "Globally" : ""}</Text>
+              <Text>
+                {userData.preferences.global ? "Globally" : `Within ${rangeDistanceUnit}`}{" "}
+              </Text>
             </Box>
+          </CardBody>
+        </Card>
+        <Card marginBlock={4}>
+          <CardBody>
+            <Heading marginBottom={2} color="green" size="xs">
+              Current location
+            </Heading>
+            <Text>
+              {userData.country}, {userData.city}
+            </Text>
+            <Text color="grey" fontSize="xs">
+              Your current location is not visible to others.
+            </Text>
             <Box marginTop={4} display="flex" justifyContent="space-between">
               <Button
                 onClick={updateLocation}
                 isLoading={grabbingLocation}
                 size="md"
+                width="100%"
                 colorScheme="green"
               >
                 Update location
               </Button>
-              <Box textAlign="right">
-                <Text fontSize="xs">{userData.country}</Text>
-                <Text fontSize="xs">{userData.city}</Text>
-              </Box>
             </Box>
           </CardBody>
         </Card>

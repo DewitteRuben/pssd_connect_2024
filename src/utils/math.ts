@@ -14,11 +14,11 @@ export const useUnitDistance = (distanceInKm: number) => {
   React.useEffect(() => {
     switch (userData?.distanceUnit) {
       case "km": {
-        setDistanceString(`${distanceInKm.toFixed(1)} km`);
+        setDistanceString(`${distanceInKm.toFixed(0)} km`);
         break;
       }
       case "mi": {
-        setDistanceString(`${kmToMiles(distanceInKm).toFixed(1)} mi`);
+        setDistanceString(`${kmToMiles(distanceInKm).toFixed(0)} mi`);
         break;
       }
     }
