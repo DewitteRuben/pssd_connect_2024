@@ -24,23 +24,32 @@ type ProfileImageManagerProps = {
   cells?: number;
   upload?: boolean;
   buttonText: string;
-  defaultImages?: string[];
+  defaultImages: string[];
   onSubmit?: (images: string[] | ImagePickerEntry[]) => void;
 };
 
 const ProfileImageManager: React.FC<ProfileImageManagerProps> = ({
-  cells,
   upload = true,
   onSubmit,
   defaultImages,
   buttonText,
 }) => {
-  const [images, setImages] = React.useState<ImagePickerEntry[]>([]);
+  const imageGrid = React.useMemo(
+    () =>
+      [{ id: 0 }, { id: 1 }, { id: 2 }, { id: 3 }, { id: 4 }, { id: 5 }].map(
+        ({ id }) => ({ id, src: defaultImages[id] })
+      ),
+    [defaultImages]
+  );
+
+  const [images, setImages] = React.useState<ImagePickerEntry[]>(imageGrid);
+  const hasDirtyImages = images.some((img) => img.dirty);
+
   const [uploadProgress, setUploadProgress] = React.useState({});
   const [isUploading, setIsUploading] = React.useState(false);
   const { auth } = useStore();
 
-  const hasNoImage = images.filter((img) => img.base64 || img.defaultImage).length === 0;
+  const hasNoImage = images.filter((img) => img.base64 || img.src).length === 0;
 
   const handleOnContinueClick = async () => {
     if (!auth.user) throw new Error("no existing user was found, invalid state!");
@@ -68,12 +77,10 @@ const ProfileImageManager: React.FC<ProfileImageManagerProps> = ({
         );
 
         imageUploadTasks.push(imageUploadTask);
-      } else if (image.defaultImage) {
-        const defaultImageURL: Promise<string> = new Promise((res) =>
-          res(image.defaultImage!)
-        );
+      } else if (image.src) {
+        const srcURL: Promise<string> = new Promise((res) => res(image.src!));
 
-        imageUploadTasks.push(defaultImageURL);
+        imageUploadTasks.push(srcURL);
       }
     }
 
@@ -84,6 +91,23 @@ const ProfileImageManager: React.FC<ProfileImageManagerProps> = ({
       if (onSubmit) {
         onSubmit(imageURLs);
       }
+
+      setImages((images) => {
+        for (let i = 0; i < images.length; i++) {
+          const image = images[i];
+          const imageURL = imageURLs[i];
+
+          if (image.dirty) {
+            image.dirty = false;
+          }
+
+          if (imageURL) {
+            image.src = imageURL;
+          }
+        }
+
+        return images;
+      });
     } catch (error) {
       console.error("Failed to upload images", error);
     } finally {
@@ -93,7 +117,7 @@ const ProfileImageManager: React.FC<ProfileImageManagerProps> = ({
 
   return (
     <>
-      <ImagePicker defaultImages={defaultImages} size={cells ?? 4} onChange={setImages} />
+      <ImagePicker images={images} onChange={setImages} />
       {isUploading && (
         <>
           <Text fontSize="sm">We are uploading your images...</Text>
@@ -106,7 +130,7 @@ const ProfileImageManager: React.FC<ProfileImageManagerProps> = ({
         size="lg"
         onClick={handleOnContinueClick}
         isLoading={isUploading}
-        isDisabled={hasNoImage}
+        isDisabled={hasNoImage || !hasDirtyImages}
       >
         {buttonText}
       </Button>

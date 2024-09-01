@@ -5,32 +5,24 @@ import { Grid } from "@chakra-ui/react";
 export type ImagePickerEntry = {
   id: number;
   base64?: string;
-  defaultImage?: string;
+  dirty?: boolean;
+  src?: string;
   file?: File;
   existing?: boolean;
 };
 
 type ImagePickerProps = {
-  defaultImages?: string[];
-  size?: number;
+  images: ImagePickerEntry[];
   onChange?: (images: ImagePickerEntry[]) => void;
 };
 
-const ImagePicker: React.FC<ImagePickerProps> = ({ size, onChange, defaultImages }) => {
-  const [images, setImages] = React.useState<ImagePickerEntry[]>(
-    [...Array(size ?? 6).keys()].map((id, index) => ({
-      id,
-      ...(defaultImages?.[index]
-        ? { defaultImage: defaultImages?.[index], existing: true }
-        : {}),
-    }))
-  );
-
+const ImagePicker: React.FC<ImagePickerProps> = ({ onChange, images }) => {
   const handleOnImageSelect = (id: number) => (result: ImagePickerResult | null) => {
     const currentImgIndex = images.findIndex((img) => img.id === id);
     const updatedImageItem = {
       ...images[currentImgIndex],
-      defaultImage: result ? images[currentImgIndex].defaultImage : undefined,
+      dirty: result ? true : images[currentImgIndex].src ? true : false,
+      src: result ? images[currentImgIndex].src : undefined,
       base64: result ? result.base64 : undefined,
       file: result ? result.file : undefined,
     };
@@ -44,15 +36,7 @@ const ImagePicker: React.FC<ImagePickerProps> = ({ size, onChange, defaultImages
     if (onChange) {
       onChange(newImages);
     }
-
-    setImages(newImages);
   };
-
-  React.useEffect(() => {
-    if (onChange) {
-      onChange(images);
-    }
-  }, [images, defaultImages]);
 
   return (
     <Grid
@@ -65,7 +49,7 @@ const ImagePicker: React.FC<ImagePickerProps> = ({ size, onChange, defaultImages
     >
       {images.map((img) => (
         <ImagePickerItem
-          defaultImage={img.defaultImage}
+          defaultImage={img.src}
           key={img.id}
           onSelect={handleOnImageSelect(img.id)}
         />
