@@ -13,7 +13,6 @@ const AllowNotificationButton: React.FC<TAllowNotificationButtonProps> = ({
   onChange,
   size,
 }) => {
-
   const {
     user: { user: userData },
   } = useStore();
@@ -46,7 +45,7 @@ const AllowNotificationButton: React.FC<TAllowNotificationButtonProps> = ({
     <Button
       onClick={onAllowNotificationSubmit}
       colorScheme="green"
-      isDisabled={!!notificationToken}
+      isDisabled={notificationToken.length > 0 && Notification.permission === "granted"}
       isLoading={approvingNotification}
       size={size ?? "lg"}
       type="submit"
