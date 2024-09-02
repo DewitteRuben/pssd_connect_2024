@@ -4,18 +4,24 @@ up:
 build:
 	docker compose build
 
-build-frontend:
+build-bundle:
 	npm run build
-
-build-all: build-frontend build
 
 restart-backend:
 	docker compose down backend && docker compose up backend -d
 
+restart-frontend:
+	docker compose down frontend && docker compose up frontend -d
+
 build-backend:
 	docker compose build backend
 
+build-frontend:
+	docker compose build frontend
+
 update-backend: build-backend restart-backend
+
+update-frontend: build-bundle build-frontend restart-frontend
 
 stop:
 	docker compose down
