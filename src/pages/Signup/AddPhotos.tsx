@@ -19,7 +19,7 @@ const AddPhotos = () => {
   return (
     <RegistrationViewContainer title="Add your first photo">
       <Text fontSize="sm">Choose at least one image to continue</Text>
-      <ProfileImageManager buttonText="CONTINUE" onSubmit={handleUploadFinished} />
+      <ProfileImageManager cells={4} buttonText="CONTINUE" onSubmit={handleUploadFinished} />
     </RegistrationViewContainer>
   );
 };

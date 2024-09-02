@@ -24,7 +24,7 @@ type ProfileImageManagerProps = {
   cells?: number;
   upload?: boolean;
   buttonText: string;
-  defaultImages: string[];
+  defaultImages?: string[];
   onSubmit?: (images: string[] | ImagePickerEntry[]) => void;
 };
 
@@ -33,13 +33,15 @@ const ProfileImageManager: React.FC<ProfileImageManagerProps> = ({
   onSubmit,
   defaultImages,
   buttonText,
+  cells,
 }) => {
   const imageGrid = React.useMemo(
     () =>
-      [{ id: 0 }, { id: 1 }, { id: 2 }, { id: 3 }, { id: 4 }, { id: 5 }].map(
-        ({ id }) => ({ id, src: defaultImages[id] })
-      ),
-    [defaultImages]
+      Array.from({ length: cells ?? 6 }, (_, id) => ({
+        id,
+        src: defaultImages?.[id],
+      })),
+    [defaultImages, cells]
   );
 
   const [images, setImages] = React.useState<ImagePickerEntry[]>(imageGrid);
