@@ -18,7 +18,7 @@ export class RelationshipStore {
     makeAutoObservable(this);
 
     reaction(
-      () => this.root.auth.user,
+      () => this.root.user.user,
       () => {
         this.initRelationshipUpdates();
       }
@@ -124,9 +124,7 @@ export class RelationshipStore {
   }
 
   async initRelationshipUpdates() {
-    const firebaseUID = this.root.auth.user?.uid;
-
-    if (!firebaseUID) {
+    if (!this.root.user.user) {
       runInAction(() => {
         this.relationships = null;
       });
