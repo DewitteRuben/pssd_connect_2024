@@ -8,10 +8,11 @@ type THeader = {
   title?: string;
   path?: string;
   hr?: boolean;
+  goBack?: boolean;
   sticky?: boolean;
 };
 
-export const StickyHeader = styled(Box)<{ $sticky: boolean; $hr: boolean; }>`
+export const StickyHeader = styled(Box)<{ $sticky: boolean; $hr: boolean }>`
   position: ${(props) => (props.$sticky ? "fixed" : "static")};
   top: 0;
   width: 100%;
@@ -25,11 +26,19 @@ export const StickyHeader = styled(Box)<{ $sticky: boolean; $hr: boolean; }>`
   }
 `;
 
-const Header: React.FC<THeader> = ({ path, title, sticky, hr }) => {
+const Header: React.FC<THeader> = ({ path, title, sticky, hr, goBack }) => {
   sticky = sticky === undefined ? true : sticky;
   hr = hr === undefined ? true : hr;
 
   const navigate = useNavigate();
+
+  const onHandleClick = () => {
+    if (goBack) {
+      navigate(-1);
+    } else if (path) {
+      navigate(path);
+    }
+  };
 
   return (
     <StickyHeader
@@ -40,16 +49,16 @@ const Header: React.FC<THeader> = ({ path, title, sticky, hr }) => {
       alignItems="center"
       padding="12px"
     >
-      {path && (
+      {path || goBack ? (
         <IconButton
           background="none"
           aria-label="back"
           cursor="pointer"
           boxSize="36px"
-          onClick={() => navigate(path)}
+          onClick={onHandleClick}
           as={ArrowBackIcon}
         />
-      )}
+      ) : null}
       <Heading marginLeft="24px" size="md">
         {title}
       </Heading>

@@ -27,6 +27,12 @@ class PSSDSocialApi {
     onSuggestion?: (data: any) => void;
     onMatch?: (data: any) => void;
   }) {
+
+    if (this.eventsInitialized) {
+      this.socket?.emit("suggestion")
+      return
+    }
+
     const jwtTokenId = await this.getToken();
 
     this.socket = io(this.socketURL, {

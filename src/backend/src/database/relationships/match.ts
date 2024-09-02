@@ -68,8 +68,6 @@ export const findSuggestionsForUser = async (uid: string) => {
   const suggestionQuery: FilterQuery<User> = {
     uid: { $ne: uid },
     mode,
-    gender: requestedGender,
-    "preferences.genderPreference": otherGenderPreference,
     "preferences.ageStart": { $lte: age },
     "preferences.ageEnd": { $gte: age },
     $expr: {
@@ -82,6 +80,12 @@ export const findSuggestionsForUser = async (uid: string) => {
       ],
     },
   };
+
+  // Only do gender matching whenever the mode is dating
+  if (mode === "dating") {
+    suggestionQuery["preferences.genderPreference"] = otherGenderPreference;
+    suggestionQuery.gender = requestedGender;
+  }
 
   if (!global) {
     suggestionQuery.location = {

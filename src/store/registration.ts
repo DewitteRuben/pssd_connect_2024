@@ -90,12 +90,7 @@ export class RegistrationStore {
   }
 
   getFirstUnfinishedStep() {
-    return this.registrationFlow
-      .filter((rf) => {
-        if (this.mode !== "dating" && rf.datingOnly) return false;
-        return true;
-      })
-      .find((rf) => !rf.done);
+    return this.registrationFlow.find((rf) => !rf.done);
   }
 
   getStep(step: Step) {
@@ -112,7 +107,7 @@ export class RegistrationStore {
 
   async finish() {
     // calculate max and min age difference using the half-your-age-plus-7 rule
-    const birthdate = this.registrationData.birthdate!
+    const birthdate = this.registrationData.birthdate!;
     const age = differenceInYears(new Date(), new Date(birthdate as string));
     const ageStart = Math.floor(age / 2) + 7;
     const ageEnd = (age - 7) * 2;

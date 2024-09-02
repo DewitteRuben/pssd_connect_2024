@@ -35,15 +35,15 @@ const AppModeSelectionForm = (props: FormikProps<AppModeSelectionFormValues>) =>
             <RadioGroup name="mode" value={values.mode}>
               <Stack>
                 <Radio onChange={handleChange} value="dating">
-                  {/* TODO: Add extra info about modes, and add cards */}
-                  <Text fontSize="lg">Dating mode</Text>
+                  <Text fontSize="lg">Looking to date</Text>
                 </Radio>
                 <Radio onChange={handleChange} value="friends">
-                  <Text fontSize="lg">Friends mode</Text>
+                  <Text fontSize="lg">Looking to make friends</Text>
                 </Radio>
               </Stack>
             </RadioGroup>
           </FormControl>
+          <Text fontSize="sm">This can be changed at a later point</Text>
           <Button
             colorScheme="green"
             size="lg"

@@ -28,9 +28,11 @@ export type UserLocation = {
   coordinates: number[];
 };
 
+export const relationshipMode = ["dating", "friends"] as const;
 export const genderPreferences = ["men", "women", "everyone"] as const;
 export const distanceUnits = ["km", "mi"];
 
+export type RelationshipMode = (typeof relationshipMode)[number];
 export type Gender = "man" | "woman" | "other";
 export type GenderPreference = (typeof genderPreferences)[number];
 export type DistanceUnit = (typeof distanceUnits)[number];
@@ -68,7 +70,7 @@ export type User = {
   birthdate: string | Date;
   gender: Gender;
   distanceUnit: DistanceUnit;
-  mode: string;
+  mode: RelationshipMode;
   profile: UserProfile;
   preferences: UserPreferences;
   pssd: UserPSSDInfo;

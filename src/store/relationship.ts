@@ -126,7 +126,7 @@ export class RelationshipStore {
   async initRelationshipUpdates() {
     const firebaseUID = this.root.auth.user?.uid;
 
-    if (!firebaseUID || pssdsAPI.eventsInitialized) {
+    if (!firebaseUID) {
       runInAction(() => {
         this.relationships = null;
       });

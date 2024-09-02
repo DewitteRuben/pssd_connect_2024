@@ -19,6 +19,7 @@ import { Box, Spinner } from "@chakra-ui/react";
 import { runInAction } from "mobx";
 import { useStore } from "../../store/store";
 import { useToastNotifications } from "../../firebase/messaging";
+import Header from "../../components/Header";
 
 export const ProtectedRoute = observer(() => {
   const {
@@ -63,30 +64,51 @@ export const RegRouteHandler = observer(() => {
     registration.step = step;
   });
 
+  let StepComponent;
   switch (step) {
     case "email":
-      return <EmailRegistration />;
+      StepComponent = EmailRegistration;
+      break;
     case "phone":
-      return <PhoneNumber />;
+      StepComponent = PhoneNumber;
+      break;
     case "name":
-      return <Name />;
+      StepComponent = Name;
+      break;
     case "birthdate":
-      return <Birthdate />;
+      StepComponent = Birthdate;
+      break;
     case "gender":
-      return <GenderSelection />;
+      StepComponent = GenderSelection;
+      break;
     case "mode":
-      return <AppModeSelection />;
+      StepComponent = AppModeSelection;
+      break;
     case "showme":
-      return <ShowMeSelection />;
+      StepComponent = ShowMeSelection;
+      break;
     case "pssd-duration":
-      return <PSSDDurationSelection />;
+      StepComponent = PSSDDurationSelection;
+      break;
     case "photos":
-      return <AddPhotos />;
+      StepComponent = AddPhotos;
+      break;
     case "location":
-      return <AllowLocation />;
+      StepComponent = AllowLocation;
+      break;
     case "notification":
-      return <AllowNotifications />;
+      StepComponent = AllowNotifications;
+      break;
   }
+
+  return (
+    <>
+      <Header goBack hr={false} />
+      <Box>
+        <StepComponent />
+      </Box>
+    </>
+  );
 });
 
 const App = observer(() => {

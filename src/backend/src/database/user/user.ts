@@ -18,7 +18,12 @@ const UserSchema = new Schema<User>({
   gender: { required: true, type: String },
   country: { type: String },
   city: { type: String },
-  mode: { required: true, type: String },
+  mode: {
+    required: true,
+    enum: ["dating", "friends"],
+    default: "dating",
+    type: String,
+  },
   images: { required: true, type: [String] },
   distanceUnit: { type: String, enum: ["km", "mi"], default: "km" },
   preferences: {

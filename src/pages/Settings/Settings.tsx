@@ -21,6 +21,7 @@ import {
   DistanceUnit,
   GenderPreference,
   genderPreferences,
+  RelationshipMode,
   UserLocation,
 } from "../../backend/src/database/user/types";
 import { capitalize } from "lodash";
@@ -50,6 +51,8 @@ const Settings = () => {
   const [selectedGenderPref, setSelectedGenderPref] = React.useState(
     userData?.preferences.genderPreference ?? ""
   );
+
+  const [selectedDisoveryMode, setDiscoveryMode] = React.useState(userData?.mode ?? "");
 
   const [distanceUnit, setDistanceUnit] = React.useState<DistanceUnit>(
     userData?.distanceUnit ?? "km"
@@ -132,6 +135,27 @@ const Settings = () => {
       userStore.fetchUserMetadata();
     } catch (error) {
       console.error("Failed to gender preference", error);
+    }
+  };
+
+  const updateDiscoveryMode = async (event: React.ChangeEvent<HTMLSelectElement>) => {
+    try {
+      setDiscoveryMode(event.target.value);
+
+      await userStore.updateUser({
+        mode: event.target.value as RelationshipMode,
+      });
+
+      toast({
+        title: "Discovery mode",
+        description: "We've successfully updated your discovery mode",
+        status: "success",
+        isClosable: true,
+      });
+
+      userStore.fetchUserMetadata();
+    } catch (error) {
+      console.error("Failed to update discovery mode", error);
     }
   };
 
@@ -307,10 +331,9 @@ const Settings = () => {
               <Heading marginBottom={2} color="green" size="xs">
                 Discovery mode
               </Heading>
-              <Select>
-                <option value="dating">Dating</option>
-                <option value="friends">Friends</option>
-                <option value="all">All</option>
+              <Select value={selectedDisoveryMode} onChange={updateDiscoveryMode}>
+                <option value="dating">Looking to date</option>
+                <option value="friends">Looking to make friends</option>
               </Select>
             </Box>
           </CardBody>
