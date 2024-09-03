@@ -80,6 +80,7 @@ const PhoneNumberForm = (props: FormikProps<PhoneNumberFormValues>) => {
         status: "error",
         duration: 9000,
         isClosable: true,
+        position: "top",
       });
     }
 
@@ -108,6 +109,7 @@ const PhoneNumberForm = (props: FormikProps<PhoneNumberFormValues>) => {
         status: "error",
         duration: 9000,
         isClosable: true,
+        position: "top",
       });
     }
 

@@ -25,6 +25,7 @@ const Info = () => {
       description: "We've successfully updated your profile",
       status: "success",
       isClosable: true,
+      position: "top",
     });
   }, 800);
 
@@ -47,6 +48,7 @@ const Info = () => {
       description: "We've successfully updated how you identify",
       status: "success",
       isClosable: true,
+      position: "top",
     });
   };
 
@@ -58,6 +60,7 @@ const Info = () => {
       description: "We've successfully updated your images",
       status: "success",
       isClosable: true,
+      position: "top",
     });
   };
 
