@@ -46,6 +46,11 @@ router.delete("/:uid", async (req, res, next) => {
       UserModel.findOneAndDelete({ uid }).exec(),
       RelationshipModel.findOneAndDelete({ uid }).exec(),
       StreamChatClient.deleteUser(uid),
+      StreamChatClient.queryChannels({
+        members: { $in: [uid] },
+      }).then((channels) => {
+        StreamChatClient.deleteChannels(channels.map((c) => c.cid));
+      }),
     ]);
 
     return res.status(200).json(successResponse());
