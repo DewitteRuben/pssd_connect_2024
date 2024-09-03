@@ -1,20 +1,9 @@
-import { ArrowBackIcon } from "@chakra-ui/icons";
-import {
-  Box,
-  Divider,
-  Heading,
-  IconButton,
-  Input,
-  Select,
-  Textarea,
-  useToast,
-} from "@chakra-ui/react";
-import { useNavigate } from "react-router-dom";
+import { Box, Heading, Input, Select, Textarea, useToast } from "@chakra-ui/react";
 import { useStore } from "../../store/store";
 import ProfileImageManager from "../../components/ProfileImageManager";
 import { ImagePickerEntry } from "../../components/ImagePicker";
 import React, { ChangeEventHandler } from "react";
-import { useDebounce } from "use-debounce";
+import { useDebounce, useDebouncedCallback } from "use-debounce";
 import Header from "../../components/Header";
 import { Gender, UserProfile } from "../../backend/src/database/user/types";
 
@@ -28,16 +17,25 @@ const Info = () => {
   );
 
   const [gender, setGender] = React.useState<string>(userData?.gender ?? "");
-  const [debouncedProfile] = useDebounce(profile, 500);
 
-  React.useEffect(() => {
-    userStore.updateUser({ profile: { ...debouncedProfile } });
-  }, [debouncedProfile]);
+  const updateProfileDebounced = useDebouncedCallback((updatedProfile) => {
+    userStore.updateUser({ profile: { ...updatedProfile } });
+    toast({
+      title: "Profile",
+      description: "We've successfully updated your profile",
+      status: "success",
+      isClosable: true,
+    });
+  }, 800);
 
   const updateProfile =
     (type: keyof UserProfile): ChangeEventHandler<any> =>
     (event) => {
-      setProfile((p) => ({ ...p, [type]: event.target.value }));
+      setProfile((p) => {
+        const updatedState = { ...p, [type]: event.target.value };
+        updateProfileDebounced(updatedState);
+        return updatedState;
+      });
     };
 
   const onGenderChange: ChangeEventHandler<HTMLSelectElement> = (event) => {
