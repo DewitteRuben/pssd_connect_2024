@@ -45,7 +45,6 @@ const AllowNotificationButton: React.FC<TAllowNotificationButtonProps> = ({
     <Button
       onClick={onAllowNotificationSubmit}
       colorScheme="green"
-      isDisabled={notificationToken.length > 0 && Notification.permission === "granted"}
       isLoading={approvingNotification}
       size={size ?? "lg"}
       type="submit"
