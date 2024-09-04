@@ -1,20 +1,20 @@
 import {
   FormControl,
-  Input,
   FormErrorMessage,
   Button,
   VStack,
   Box,
-  FormHelperText,
   Text,
 } from "@chakra-ui/react";
 import { Form, FormikProps, withFormik } from "formik";
 import { observer } from "mobx-react";
 import * as Yup from "yup";
 import { FormikSubmit } from "../types/formik";
-import { SingleDatepicker } from "chakra-dayzed-datepicker";
 import differenceInYears from "date-fns/differenceInYears";
 import React from "react";
+
+// Due to the npm package being outdated, we manually import the source code as recommended by the Github repo of this project
+import { SingleDatepicker } from "./chakra-dayzed-datepicker";
 
 const BirthdateSchema = Yup.object().shape({
   birthdate: Yup.date()
@@ -63,8 +63,9 @@ const BirthdateForm = (props: FormikProps<BirthdateFormValues>) => {
           <Text fontSize="sm">
             We only show your age to potential matches, not your birthday.
           </Text>
-          <FormControl isInvalid={Boolean(errors.birthdate)}>
+          <FormControl width="initial" isInvalid={Boolean(errors.birthdate)}>
             <SingleDatepicker
+              triggerVariant="input"
               name="birthdate"
               date={values.birthdate}
               onDateChange={onDateChange}

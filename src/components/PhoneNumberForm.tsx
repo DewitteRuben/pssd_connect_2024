@@ -172,7 +172,9 @@ const PhoneNumberForm = (props: FormikProps<PhoneNumberFormValues>) => {
               >
                 <FormLabel>Enter verification code</FormLabel>
                 <Input
-                  type="text"
+                  type="number"
+                  pattern="[0-9]*"
+                  inputMode="numeric"
                   name="verification_code"
                   onChange={handleChange}
                   onBlur={handleBlur}

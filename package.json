@@ -15,7 +15,6 @@
     "@emotion/react": "^11.11.1",
     "@emotion/styled": "^11.11.0",
     "@react-spring/web": "^9.5.5",
-    "chakra-dayzed-datepicker": "^0.2.10",
     "cropperjs": "^1.6.2",
     "date-fns": "^2.30.0",
     "dayzed": "^3.2.3",
