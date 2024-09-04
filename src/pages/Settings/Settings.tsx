@@ -29,6 +29,7 @@ import { observer } from "mobx-react";
 import { useUnitDistance } from "../../utils/math";
 import LogoutAccountDialog from "../../components/LogoutAccountDialog";
 import AllowNotificationButton from "../../components/AllowNotificationButton";
+import ContentContainer from "../../components/ContentContainer";
 
 const notificationPermissionStatusText = (notificationToken?: string) => {
   if (Notification.permission === "denied") return "Denied (requires reset in browser)";
@@ -61,7 +62,7 @@ const Settings = () => {
   const [isGlobal, setIsGlobal] = React.useState(userData?.preferences.global ?? false);
   const [grabbingLocation, setGrabbingLocation] = React.useState(false);
 
-  const rangeDistanceUnit = useUnitDistance(userData?.preferences.maxDistance!);
+  const rangeDistanceUnit = useUnitDistance(userData?.preferences.maxDistance ?? 0);
 
   if (!userData) {
     throw new Error("Invalid state! User not found");
@@ -232,9 +233,9 @@ const Settings = () => {
   };
 
   return (
-    <Box>
+    <>
       <Header path="/profile" title="Settings" />
-      <Box paddingX="16px" paddingBottom="16px">
+      <ContentContainer>
         <Heading size="sm" marginY={4}>
           Account settings
         </Heading>
@@ -419,12 +420,12 @@ const Settings = () => {
         <Heading size="sm" marginY={4}>
           Account maintenance
         </Heading>
-        <Stack>
+        <Stack marginBottom={4}>
           <RemoveAccountModal />
           <LogoutAccountDialog />
         </Stack>
-      </Box>
-    </Box>
+      </ContentContainer>
+    </>
   );
 };
 

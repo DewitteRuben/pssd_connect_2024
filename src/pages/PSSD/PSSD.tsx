@@ -7,6 +7,7 @@ import { UserPSSDInfo } from "../../backend/src/database/user/types";
 import { useDebounce } from "use-debounce";
 import EditableList from "../../components/EditableList";
 import Header from "../../components/Header";
+import ContentContainer from "../../components/ContentContainer";
 
 const presetSymptoms = [
   "Erectile dysfunction",
@@ -70,7 +71,6 @@ medications.sort();
 
 const PSSD = () => {
   const { user: userStore } = useStore();
-  const navigate = useNavigate();
   const userData = userStore.user;
 
   const [profile, setProfile] = React.useState<Partial<UserPSSDInfo>>(
@@ -81,7 +81,7 @@ const PSSD = () => {
 
   React.useEffect(() => {
     userStore.updateUser({ pssd: { ...debouncedProfile } });
-  }, [debouncedProfile]);
+  }, [debouncedProfile, userStore]);
 
   const updateProfile =
     (type: keyof UserPSSDInfo): ChangeEventHandler<any> =>
@@ -98,9 +98,9 @@ const PSSD = () => {
   };
 
   return (
-    <Box>
+    <>
       <Header path="/profile" title="Edit PSSD Info" />
-      <Box paddingX="16px">
+      <ContentContainer>
         <Heading size="sm" marginY={4}>
           I've had PSSD for
         </Heading>
@@ -128,8 +128,8 @@ const PSSD = () => {
           presetItems={medications}
           onChange={updateMedications}
         />
-      </Box>
-    </Box>
+      </ContentContainer>
+    </>
   );
 };
 

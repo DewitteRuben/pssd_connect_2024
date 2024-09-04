@@ -6,6 +6,7 @@ import React, { ChangeEventHandler } from "react";
 import { useDebounce, useDebouncedCallback } from "use-debounce";
 import Header from "../../components/Header";
 import { Gender, UserProfile } from "../../backend/src/database/user/types";
+import ContentContainer from "../../components/ContentContainer";
 
 const Info = () => {
   const { user: userStore } = useStore();
@@ -65,9 +66,9 @@ const Info = () => {
   };
 
   return (
-    <Box>
+    <>
       <Header path="/profile" title="Edit profile" />
-      <Box paddingX="16px">
+      <ContentContainer>
         <Box marginY={4}>
           <ProfileImageManager
             onSubmit={handleOnImageUpdate}
@@ -124,8 +125,8 @@ const Info = () => {
           <option value="man">Man</option>
           <option value="woman">Woman</option>
         </Select>
-      </Box>
-    </Box>
+      </ContentContainer>
+    </>
   );
 };
 

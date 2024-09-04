@@ -22,7 +22,7 @@ export const StickyHeader = styled(Box)<{ $sticky: boolean; $hr: boolean }>`
     props.$hr ? "1px solid var(--chakra-colors-chakra-border-color)" : "0px"};
 
   & + div {
-    padding-top: 60px;
+    margin-top: 60px;
   }
 `;
 
