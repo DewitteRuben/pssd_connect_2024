@@ -20,7 +20,6 @@ export class RootStore {
 
 const rootStore = new RootStore();
 
-// @ts-ignore
 window.RootStore = rootStore;
 
 export const StoreContext = createContext(rootStore);
