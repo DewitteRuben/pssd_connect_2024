@@ -35,7 +35,7 @@ onBackgroundMessage(messaging, (payload) => {
     const notificationTitle = title;
     const notificationOptions = {
         body,
-        icon: '/favicon-32x32.png'
+        icon: '/android-icon-192x192.png'
     };
 
     self.registration.showNotification(notificationTitle, notificationOptions)
