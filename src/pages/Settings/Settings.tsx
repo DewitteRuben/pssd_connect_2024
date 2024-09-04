@@ -258,6 +258,21 @@ const Settings = () => {
           <CardBody>
             <Box>
               <Heading color="green" size="xs">
+                Email address
+              </Heading>
+              <Text color="grey" marginBottom={2} fontSize="xs">
+                Your email address is not visible to others.
+              </Text>
+              <Text>
+                {userData.email}
+              </Text>
+            </Box>
+          </CardBody>
+        </Card>
+        <Card marginY={4}>
+          <CardBody>
+            <Box>
+              <Heading color="green" size="xs">
                 Distance unit
               </Heading>
               <Select onChange={updateDistanceUnit} value={distanceUnit} marginTop={2}>
