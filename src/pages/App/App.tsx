@@ -20,6 +20,7 @@ import { runInAction } from "mobx";
 import { useStore } from "../../store/store";
 import { useToastNotifications } from "../../firebase/messaging";
 import Header from "../../components/Header";
+import React from "react";
 
 export const ProtectedRoute = observer(() => {
   const {
@@ -52,7 +53,7 @@ export const RegRouteHandler = observer(() => {
 
   const requestedStep = registration.getStep(step);
   if (requestedStep?.done && !requestedStep?.goBack) {
-    return <Navigate replace to={`/signup/${registration.step}`}></Navigate>;
+    return <Navigate replace to={`/signup/${registration.step}`} />;
   }
 
   if (!registration.canStep(requestedStep?.step as Step)) {
@@ -60,9 +61,14 @@ export const RegRouteHandler = observer(() => {
     return <Navigate replace to={`/signup/${firstUnfinishedStep?.step}`} />;
   }
 
-  runInAction(() => {
-    registration.step = step;
-  });
+  React.useEffect(() => {
+    runInAction(() => {
+      registration.step = step;
+    });
+  }, [step, registration]);
+
+  const previousStep = registration.getPreviousStep(step);
+  const currentStep = registration.getStep(step);
 
   let StepComponent;
   switch (step) {
@@ -102,12 +108,15 @@ export const RegRouteHandler = observer(() => {
   }
 
   return (
-    <>
-      <Header goBack hr={false} />
+    <Box>
+      <Header
+        path={currentStep?.goBack ? previousStep?.step ?? "/" : undefined}
+        hr={false}
+      />
       <Box>
         <StepComponent />
       </Box>
-    </>
+    </Box>
   );
 });
 

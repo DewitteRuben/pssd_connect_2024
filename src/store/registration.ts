@@ -27,9 +27,9 @@ type OptionalUserWithoutUID = RecursivePartial<UserWithoutUID>;
 
 const initRegistrationFlow = () => {
   return [
-    { step: "email", datingOnly: false, goBack: false, done: false },
+    { step: "email", datingOnly: false, goBack: true, done: false },
     { step: "phone", datingOnly: false, goBack: false, done: false },
-    { step: "name", datingOnly: false, goBack: true, done: false },
+    { step: "name", datingOnly: false, goBack: false, done: false },
     { step: "birthdate", datingOnly: false, goBack: true, done: false },
     { step: "gender", datingOnly: false, goBack: true, done: false },
     { step: "mode", datingOnly: false, goBack: true, done: false },
@@ -95,6 +95,16 @@ export class RegistrationStore {
 
   getStep(step: Step) {
     return this.registrationFlow.find((rf) => rf.step === step);
+  }
+
+  getPreviousStep(step: Step) {
+    const indexOfCurStep = this.registrationFlow.findIndex((rf) => rf.step === step);
+
+    if (indexOfCurStep - 1 < 0) {
+      return null;
+    }
+
+    return this.registrationFlow[indexOfCurStep - 1];
   }
 
   canStep(step: Step) {
