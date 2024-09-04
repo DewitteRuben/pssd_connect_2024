@@ -108,5 +108,5 @@ export const useToastNotifications = () => {
         onNotificationReceived
       );
     };
-  }, [toast]);
+  }, [onNotificationReceived, toast]);
 };
