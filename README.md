@@ -24,7 +24,25 @@ Firebase manages user authentication, generating a unique JWT token for each aut
 
 ## Development
 
-To set up and run the development environment, follow these steps:
+### Configuration
+
+Before running the project, set up the following `.env` file:
+
+```
+MONGO_USERNAME=
+MONGO_PASSWORD=
+ENVIRONMENT
+GEOAPIFY_API_KEY=
+STREAM_API_KEY=
+STREAM_API_SECRET=
+ADMIN_ID=
+MONGO_INITDB_ROOT_USERNAME=
+MONGO_INITDB_ROOT_PASSWORD=
+MONGO_INITDB_DATABASE=
+DATABASE_URL=
+VITE_GETSTREAM_CLIENT_KEY=
+VITE_PUBLIC_VAPID_KEY=
+```
 
 ### Start the Backend and Database
 
