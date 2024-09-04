@@ -173,9 +173,9 @@ const Messages = () => {
               marginBottom="16px"
               align="stretch"
             >
-              <Button leftIcon={<MdFlag size="24px" color="red" />} variant="outline">
+              {/* <Button leftIcon={<MdFlag size="24px" color="red" />} variant="outline">
                 Report {selectedUser?.name}
-              </Button>
+              </Button> */}
               <UnmatchDialogButton onConfirm={onUnmatchClick}>
                 Unmatch from {selectedUser?.name}
               </UnmatchDialogButton>
