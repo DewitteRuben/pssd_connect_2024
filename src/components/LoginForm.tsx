@@ -10,9 +10,6 @@ import {
 import { Form, FormikProps, withFormik } from "formik";
 import { observer } from "mobx-react";
 import * as Yup from "yup";
-import { AuthStore, AuthStoreContext } from "../store/auth";
-import React from "react";
-import { NavigateFunction } from "react-router-dom";
 import { FormikSubmit } from "../types/formik";
 
 const LoginSchema = Yup.object().shape({

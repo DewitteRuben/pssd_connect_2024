@@ -37,6 +37,16 @@ export const ProtectedRoute = observer(() => {
   return auth.loggedIn && userData ? <Outlet /> : <Navigate to="/splash" replace />;
 });
 
+export const LoginRouteHandler = observer(() => {
+  const { auth, user } = useStore();
+
+  if (user.exists && auth.loggedIn) {
+    return <Navigate replace to="/" />;
+  }
+
+  return <Login />;
+});
+
 export const RegRouteHandler = observer(() => {
   const { registration, auth, user } = useStore();
   const { step } = useParams<{ step: Step }>();
@@ -145,7 +155,7 @@ const App = observer(() => {
         <Route path="/*" element={<Home />} />
       </Route>
       <Route path="/splash" element={<Entry />} />
-      <Route path="/login" element={<Login />} />
+      <Route path="/login" element={<LoginRouteHandler />} />
       <Route path="/signup" element={<RegRouteHandler />}>
         <Route path=":step" element={<EmailRegistration />} />
       </Route>
