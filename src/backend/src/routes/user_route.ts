@@ -49,7 +49,10 @@ router.delete("/:uid", async (req, res, next) => {
       StreamChatClient.queryChannels({
         members: { $in: [uid] },
       }).then((channels) => {
-        StreamChatClient.deleteChannels(channels.map((c) => c.cid));
+        const channelsWithCID = channels.filter((c) => c.cid).map((c) => c.cid);
+        if (channelsWithCID.length > 0) {
+          StreamChatClient.deleteChannels(channelsWithCID);
+        }
       }),
     ]);
 
