@@ -15,7 +15,7 @@ export const getMessagingToken = async () => {
 
   if (hasPermission) {
     return getToken(messaging, {
-      vapidKey: import.meta.env.PUBLIC_VAPID_KEY,
+      vapidKey: import.meta.env.VITE_PUBLIC_VAPID_KEY,
       serviceWorkerRegistration,
     });
   }

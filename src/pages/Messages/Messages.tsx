@@ -37,7 +37,7 @@ const channelListOverrides = {
 };
 
 // TODO: figure out if this is a problem
-const apiKey = import.meta.env.GETSTREAM_CLIENT_KEY;
+const apiKey = import.meta.env.VITE_GETSTREAM_CLIENT_KEY;
 const i18nInstance = new Streami18n({
   language: "en",
   translationsForLanguage: {
