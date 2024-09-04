@@ -85,7 +85,7 @@ const Match = () => {
         setEndOfStackReached(false);
       }
     }
-  }, [relationship.index]);
+  }, [endOfStackReached, relationship.index]);
 
   const onSwipe = (direction: string, uid: string, index: number) => {
     switch (direction) {
