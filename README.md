@@ -44,6 +44,8 @@ VITE_GETSTREAM_CLIENT_KEY=
 VITE_PUBLIC_VAPID_KEY=
 ```
 
+Additionally, you need to add the Firebase service account key file to the project. Place the `serviceAccountKey.json` file in the `src/backend/src` folder.
+
 ### Start the Backend and Database
 
 Run the following command to start the Node.js backend and the MongoDB database in Docker containers:
@@ -73,3 +75,7 @@ make update-backend
 ```
 
 This command copies the updated files into the backend container and restarts the Bun runtime to apply the changes.
+
+## Deployment and updating
+
+The scripts found in the `scripts` folder can help with remote management of the application
