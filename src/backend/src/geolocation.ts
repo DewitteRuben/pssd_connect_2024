@@ -71,7 +71,7 @@ export interface Query {
   plus_code: string;
 }
 
-const GEOAPIFY_API_KEY = "3e43595d312349f7a276186b08d4dda5";
+const { GEOAPIFY_API_KEY } = getEnvironmentVariables("GEOAPIFY_API_KEY");
 
 type PositionStackEndpoint = "/reverse";
 

@@ -4,7 +4,6 @@ import {
   NotificationPayload,
   onMessage,
 } from "firebase/messaging";
-import { VAPID_KEY } from "./firebase";
 import { serviceWorkerRegistration } from "../main";
 import { useToast } from "@chakra-ui/react";
 import React from "react";
@@ -16,7 +15,7 @@ export const getMessagingToken = async () => {
 
   if (hasPermission) {
     return getToken(messaging, {
-      vapidKey: VAPID_KEY,
+      vapidKey: import.meta.env.PUBLIC_VAPID_KEY,
       serviceWorkerRegistration,
     });
   }

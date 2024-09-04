@@ -2,10 +2,7 @@ import { initializeApp } from "firebase/app";
 
 import { getAuth } from "firebase/auth";
 
-export const VAPID_KEY =
-  "BBWJ8FtlP6Ai1oXuMe3Hg7zyyqdBsH9CUAatuEQd18lecdTsXpCE5Sc0gBoqFI3SMEFI6cD3cf73zj1eBjZBFsE";
-
-const firebaseConfig = {
+export const firebaseConfig = {
   apiKey: "AIzaSyA3-pw6utfIFyi1yDC7qHIlyj33g-TAJDQ",
   authDomain: "pssd-app.firebaseapp.com",
   databaseURL: "https://pssd-app-default-rtdb.firebaseio.com",

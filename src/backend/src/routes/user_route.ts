@@ -125,7 +125,6 @@ router.post("/", async (req, res, next) => {
         firebaseUserExists = false;
       });
 
-    // TODO: ensure this doesn't cause issues with people guessing Firebase UIDs
     if (!firebaseUserExists) {
       return next(
         new ExpressError({

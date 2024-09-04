@@ -1,9 +1,11 @@
 import { Task } from "./index.js";
 import { createMatchMessage, findSuggestionsForUser } from "../match.js";
 import { RelationshipModel } from "../../user/relationship.js";
-import { ADMIN_ID, StreamChatClient } from "../../../getstream.io/index.js";
+import { StreamChatClient } from "../../../getstream.io/index.js";
 import { UserModel } from "../../user/user.js";
-import { getMessaging, Message } from "firebase-admin/messaging";
+import { getMessaging } from "firebase-admin/messaging";
+
+const { ADMIN_ID } = getEnvironmentVariables("ADMIN_ID");
 
 export class SuggestionTask extends Task {
   constructor(uid: string) {
