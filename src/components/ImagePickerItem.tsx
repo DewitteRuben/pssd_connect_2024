@@ -1,7 +1,8 @@
-import React from "react";
+import React, { useRef } from "react";
 import styled from "styled-components";
 import { MdClose } from "react-icons/md";
-import { Box, Icon } from "@chakra-ui/react";
+import { Box, Icon, Spinner, useDisclosure } from "@chakra-ui/react";
+import ImageCropperDialog from "./ImageCropperDialog";
 
 const Input = styled.input`
   display: none;
@@ -33,9 +34,15 @@ const CloseIcon = styled(Icon)`
   height: 20px;
 `;
 
+const ImageLoadingSpinner = styled(Spinner)`
+  position: absolute;
+  top: 40%;
+  left: 40%;
+`;
+
 const readFile = (file: File): Promise<{ base64: string; file: File }> => {
   return new Promise((res, rej) => {
-    var reader = new FileReader();
+    const reader = new FileReader();
     reader.addEventListener("load", () => {
       res({ base64: reader.result as string, file });
     });
@@ -55,16 +62,31 @@ type ImagePickerItemProps = {
 };
 
 const ImagePickerItem: React.FC<ImagePickerItemProps> = ({ onSelect, defaultImage }) => {
-  const [base64, setBase64] = React.useState<string>(defaultImage ?? "");
+  const fileResultRef = useRef<{
+    base64: string;
+    file: File;
+  } | null>();
+
+  const [isLoadingImage, setLoadingImage] = React.useState<boolean>(false);
+  const [loadedImage, setLoadedImage] = React.useState<string>();
+  const [actualImage, setActualImage] = React.useState<string>(defaultImage ?? "");
+  const { isOpen, onOpen, onClose } = useDisclosure();
 
   const handleOnChange = async (e: any) => {
     const [file] = e.target.files;
-    const result = await readFile(file);
-    if (onSelect) {
-      onSelect(result);
-    }
 
-    setBase64(result.base64);
+    setLoadingImage(true);
+
+    try {
+      const result = await readFile(file);
+      fileResultRef.current = result;
+
+      setLoadedImage(fileResultRef.current.base64);
+    } finally {
+      setLoadingImage(false);
+
+      onOpen();
+    }
   };
 
   const onClearImageClick = () => {
@@ -72,16 +94,42 @@ const ImagePickerItem: React.FC<ImagePickerItemProps> = ({ onSelect, defaultImag
       onSelect(null);
     }
 
-    setBase64("");
+    fileResultRef.current = null;
+
+    setLoadedImage("");
+    setActualImage("");
+  };
+
+  const handleOnCrop = ({ blob, dataURL }: { blob: Blob; dataURL: string }) => {
+    if (!fileResultRef.current?.file) throw new Error("file not found");
+
+    if (onSelect) {
+      onSelect({
+        base64: dataURL,
+        file: new File([blob], fileResultRef.current?.file.name),
+      });
+    }
+
+    setActualImage(dataURL);
   };
 
   return (
-    <Box position="relative">
-      <Label style={{ backgroundImage: `url(${base64})` }}>
-        <Input accept="image/*" onChange={handleOnChange} type="file" />
-      </Label>
-      {base64 && <CloseIcon onClick={onClearImageClick} as={MdClose} />}
-    </Box>
+    <>
+      <Box position="relative">
+        <Label style={{ backgroundImage: `url(${actualImage})` }}>
+          <Input accept="image/*" onChange={handleOnChange} type="file" />
+        </Label>
+        {actualImage && <CloseIcon onClick={onClearImageClick} as={MdClose} />}
+        {isLoadingImage && <ImageLoadingSpinner />}
+      </Box>
+      <ImageCropperDialog
+        onCrop={handleOnCrop}
+        src={loadedImage}
+        isOpen={isOpen}
+        onClose={onClose}
+        onOpen={onOpen}
+      />
+    </>
   );
 };
 
