@@ -26,32 +26,34 @@ export class TaskQueue {
   }
 
   dequeue() {
-    return new Promise(async (res, rej) => {
+    return new Promise((res, rej) => {
       if (this.taskInProgress) return;
 
       const task = this.tasks.shift();
 
       if (!task) return;
 
-      try {
-        this.taskInProgress = true;
+      this.taskInProgress = true;
 
-        const result = await task.execute();
+      task
+        .execute()
+        .then((result) => {
+          console.log(
+            `Executed ${
+              task.constructor.name
+            } for user ${task.getUserId()} with result: ${JSON.stringify(result)}`
+          );
 
-        console.log(
-          `Executed ${
-            task.constructor.name
-          } for user ${task.getUserId()} with result: ${JSON.stringify(result)}`
-        );
-
-        res(result);
-      } catch (error) {
-        console.error("Failed to execute task", error);
-        rej(error);
-      } finally {
-        this.taskInProgress = false;
-        this.dequeue();
-      }
+          res(result);
+        })
+        .catch((error) => {
+          console.error("Failed to execute task", error);
+          rej(error);
+        })
+        .finally(() => {
+          this.taskInProgress = false;
+          this.dequeue();
+        });
     });
   }
 }
