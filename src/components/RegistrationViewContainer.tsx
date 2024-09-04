@@ -9,7 +9,7 @@ const RegistrationModeContainer: React.FC<
   React.PropsWithChildren<RegistrationModeContainerProps>
 > = ({ title, children }) => {
   return (
-    <Box height="100%" padding={12}>
+    <Box height="100%" paddingX={12}>
       <VStack width="100%" height="100%" spacing={8}>
         <Text fontSize="xx-large" fontWeight="bold">
           {title}

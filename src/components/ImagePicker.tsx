@@ -42,7 +42,6 @@ const ImagePicker: React.FC<ImagePickerProps> = ({ onChange, images }) => {
     <Grid
       width="100%"
       justifyItems="center"
-      templateRows="repeat(2, 1fr)"
       templateColumns="repeat(auto-fit, minmax(100px, 1fr))"
       columnGap={2}
       rowGap={6}
