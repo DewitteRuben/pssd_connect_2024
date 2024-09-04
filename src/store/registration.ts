@@ -107,6 +107,16 @@ export class RegistrationStore {
     return this.registrationFlow[indexOfCurStep - 1];
   }
 
+  getNextStep(step: Step) {
+    const indexOfCurStep = this.registrationFlow.findIndex((rf) => rf.step === step);
+
+    if (indexOfCurStep + 1 > this.registrationFlow.length) {
+      return null;
+    }
+
+    return this.registrationFlow[indexOfCurStep + 1];
+  }
+
   canStep(step: Step) {
     const indexOfStep = this.registrationFlow.findIndex((rf) => rf.step === step);
     const prevStep = this.registrationFlow[indexOfStep - 1];

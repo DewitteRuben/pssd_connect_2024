@@ -68,18 +68,18 @@ export const RegRouteHandler = observer(() => {
     return <Navigate replace to={`/signup/${curStep}`} />;
   }
 
-  const requestedStep = registration.getStep(step);
-  if (requestedStep?.done && !requestedStep?.goBack) {
+  const previousStep = registration.getPreviousStep(step);
+  const currentStep = registration.getStep(step);
+  const nextStep = registration.getNextStep(step);
+
+  if (currentStep?.done && !nextStep?.goBack) {
     return <Navigate replace to={`/signup/${registration.step}`} />;
   }
 
-  if (!registration.canStep(requestedStep?.step as Step)) {
+  if (!registration.canStep(currentStep?.step as Step)) {
     const firstUnfinishedStep = registration.getFirstUnfinishedStep();
     return <Navigate replace to={`/signup/${firstUnfinishedStep?.step}`} />;
   }
-
-  const previousStep = registration.getPreviousStep(step);
-  const currentStep = registration.getStep(step);
 
   let StepComponent;
   switch (step) {
