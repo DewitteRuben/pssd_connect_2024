@@ -1,4 +1,4 @@
-import { Box, Text } from "@chakra-ui/react";
+import { Box, IconButton, Text } from "@chakra-ui/react";
 import CircularImage from "../../components/CircularImage";
 import { useStore } from "../../store/store";
 import { observer } from "mobx-react";
@@ -7,7 +7,7 @@ import { AiOutlineEdit } from "react-icons/ai";
 import { FiSettings } from "react-icons/fi";
 import { differenceInYears } from "date-fns";
 import { useNavigate } from "react-router-dom";
-import { FaRegHeart } from "react-icons/fa";
+import { FaEye, FaRegHeart } from "react-icons/fa";
 
 const Profile = () => {
   const {
@@ -31,7 +31,20 @@ const Profile = () => {
         alignItems="center"
         justifyContent="center"
       >
-        <CircularImage src={firstImage} />
+        <Box position="relative">
+          <CircularImage src={firstImage} />
+          <IconButton
+            position="absolute"
+            top="0"
+            variant="solid"
+            right="0"
+            onClick={() => navigate("/profile/preview")}
+            colorScheme="blue"
+            isRound
+            aria-label="Preview profile"
+            icon={<FaEye />}
+          />
+        </Box>
         <Text fontSize="2xl" marginTop="8px" fontWeight="bold">
           {userData?.firstName}, {age}
         </Text>

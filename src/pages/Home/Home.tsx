@@ -21,6 +21,7 @@ import _ from "lodash";
 import Info from "../Info/Info";
 import PSSD from "../PSSD/PSSD";
 import Messages from "../Messages/Messages";
+import { PreviewProfile } from "../PreviewProfile/PreviewProfile";
 
 const TabIcon = styled(Icon)`
   width: 24px;
@@ -79,9 +80,15 @@ const Home = () => {
       flexDirection="column"
       height="100%"
     >
-      <StyledTabPanel display="flex" overflow="scroll" flexDirection="column" flexGrow="1">
+      <StyledTabPanel
+        display="flex"
+        overflow="scroll"
+        flexDirection="column"
+        flexGrow="1"
+      >
         <Routes>
           <Route path="profile" element={<Profile />} />
+          <Route path="profile/preview" element={<PreviewProfile />} />
           <Route path="profile/settings" element={<Settings />} />
           <Route path="profile/info" element={<Info />} />
           <Route path="profile/pssd" element={<PSSD />} />

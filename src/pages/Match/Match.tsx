@@ -31,7 +31,7 @@ import { prettyPSSDDuration } from "../../backend/src/database/user/types";
 import { kmToMiles, useUnitDistance } from "../../utils/math";
 import TinderCard from "react-tinder-card";
 
-const InfoIcon = styled(IoIosInformationCircle)`
+export const InfoIcon = styled(IoIosInformationCircle)`
   position: absolute;
   top: 0;
   right: 0;
@@ -39,7 +39,7 @@ const InfoIcon = styled(IoIosInformationCircle)`
   height: 28px;
 `;
 
-const SwipeableCard = styled(TinderCard)`
+export const SwipeableCard = styled(TinderCard)`
   position: absolute;
   width: 100%;
 `;
