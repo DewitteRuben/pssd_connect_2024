@@ -118,7 +118,7 @@ export const createMatchMessage = (
 ) => {
   const message: Message = {
     token: user1.notificationToken,
-    notification: {
+    data: {
       title: "You got a new match!",
       body: `${user2.firstName} likes you.`,
     },

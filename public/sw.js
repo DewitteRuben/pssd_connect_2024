@@ -25,11 +25,17 @@ const firebaseApp = initializeApp({
 
 const messaging = getMessaging(firebaseApp);
 
-onBackgroundMessage(messaging, ({ notification }) => {
-    const notificationTitle = notification.title;
+onBackgroundMessage(messaging, (payload) => {
+    if (!payload.data) {
+        console.warn('[sw.js] Unknown notification on message ', payload);
+        return
+    }
+
+    const { title, body } = payload.data
+    const notificationTitle = title;
     const notificationOptions = {
-        body: notification.body,
-        icon: notification.icon
+        body,
+        icon: '/favicon-32x32.png'
     };
 
     self.registration.showNotification(notificationTitle, notificationOptions)
