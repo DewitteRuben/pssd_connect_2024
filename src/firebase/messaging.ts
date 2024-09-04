@@ -69,10 +69,10 @@ class NotificationQueue extends EventTarget {
     super();
     const messaging = getMessaging();
 
-    onMessage(messaging, ({ notification }) => {
-      if (notification) {
+    onMessage(messaging, ({ data }) => {
+      if (data) {
         this.dispatchEvent(
-          new CustomEvent("notification-received", { detail: notification })
+          new CustomEvent("notification-received", { detail: data })
         );
       }
     });
@@ -86,11 +86,11 @@ export const useToastNotifications = () => {
 
   const onNotificationReceived = React.useCallback(
     (e: CustomEvent<NotificationPayload>) => {
-      const notification = e.detail;
+      const data = e.detail;
 
       toast({
-        title: notification.title,
-        description: notification.body,
+        title: data.title,
+        description: data.body,
         status: "info",
         position: "top",
         isClosable: true,
