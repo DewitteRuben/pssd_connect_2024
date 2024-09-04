@@ -4,7 +4,7 @@ export type URLSafeStringOptions = {
   regexRemovePattern: RegExp;
   joinString: string;
   trimWhitespace: boolean;
-};
+} & Record<string, any>;
 
 export class UrlSafeString {
   private _opts: URLSafeStringOptions = {
@@ -19,7 +19,6 @@ export class UrlSafeString {
     if (options) {
       for (const prop in options) {
         if (Object.prototype.hasOwnProperty.call(options, prop)) {
-          // @ts-ignore
           this._opts[prop] = options[prop];
         }
       }

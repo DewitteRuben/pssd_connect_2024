@@ -55,6 +55,7 @@ export class UserStore {
       this.remoteUpdateTask = pssdsAPI.updateUser(this.user);
       await this.remoteUpdateTask;
     } catch (error) {
+      console.error("Failed to update remote user", error)
     } finally {
       this.remoteUpdateTask = undefined;
     }

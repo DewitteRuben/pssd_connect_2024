@@ -44,10 +44,8 @@ describe("insert", () => {
   });
 
   it("should find suggestions", async () => {
-    let suggestions;
 
-    // generic match
-    suggestions = await findSuggestionsForUser(mockUser1.uid);
+    const suggestions = await findSuggestionsForUser(mockUser1.uid);
     expect(suggestions.find((s) => s.uid === "2")).toBeDefined();
   });
 

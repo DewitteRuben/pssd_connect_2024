@@ -13,7 +13,7 @@ import {
   ChannelPreviewUIComponentProps,
   ChannelPreviewMessenger,
 } from "stream-chat-react";
-import { Channel as ChannelType, UserResponse } from "stream-chat";
+import { ChannelFilters, Channel as ChannelType, UserResponse } from "stream-chat";
 import "stream-chat-react/dist/css/v2/index.css";
 import { useStore } from "../../store/store";
 import Header from "../../components/Header";
@@ -29,9 +29,7 @@ import {
   StackDivider,
   VStack,
   Text,
-  Button,
 } from "@chakra-ui/react";
-import { MdFlag } from "react-icons/md";
 import UnmatchDialogButton from "../../components/UnmatchDialog";
 
 const channelListOverrides = {
@@ -47,6 +45,8 @@ const i18nInstance = new Streami18n({
   },
 });
 
+const channelListOptions = { presence: true, state: true };
+
 const Messages = () => {
   const { user: userStore, relationship } = useStore();
   const [channelSelected, setChannelSelected] = React.useState(false);
@@ -56,16 +56,15 @@ const Messages = () => {
     React.useState<UserResponse<DefaultStreamChatGenerics>>();
   const { isOpen, onOpen: onDrawerOpen, onClose: onDrawerClose } = useDisclosure();
 
-  if (!userStore.user?.uid) return <div>Loading...</div>;
-
-  const userId = userStore.user?.uid;
-  const filters = { members: { $in: [userId] }, type: "messaging" };
-  const options = { presence: true, state: true };
-  // const sort = { last_message_at: -1 };
+  const userId = userStore.user?.uid ?? "";
+  const filters: ChannelFilters<DefaultStreamChatGenerics> = {
+    members: { $in: [userId] },
+    type: "messaging",
+  };
 
   const client = useCreateChatClient({
     apiKey,
-    tokenOrProvider: userStore.user.chatToken,
+    tokenOrProvider: userStore.user?.chatToken,
     userData: { id: userId },
   });
 
@@ -77,7 +76,7 @@ const Messages = () => {
         setChannelSelected(false);
       }
     }
-  }, [client]);
+  }, [channelSelected, client]);
 
   React.useEffect(() => {
     const unsubscribeChannelDeleted = currentChannel?.on("channel.deleted", () => {
@@ -143,7 +142,7 @@ const Messages = () => {
           <ChannelList
             filters={filters}
             setActiveChannelOnMount={false}
-            options={options}
+            options={channelListOptions}
             Preview={CustomChannelPreviewUI}
           />
         )}
