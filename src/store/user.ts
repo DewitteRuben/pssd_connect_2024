@@ -4,11 +4,13 @@ import { RootStore } from "./store";
 import pssdsAPI from "../api/pssds";
 import { RecursivePartial } from "../types/global";
 import _ from "lodash";
+import { getMessagingToken } from "../firebase/messaging";
 
 export class UserStore {
   private root: RootStore;
   private initialized: boolean;
   private loading: boolean = false;
+  private tokenUpdated: boolean = false;
 
   public user: User | null;
 
@@ -18,6 +20,7 @@ export class UserStore {
     this.root = root;
     this.initialized = false;
     this.loading = false;
+    this.tokenUpdated = false;
     this.user = null;
 
     makeAutoObservable(this);
@@ -84,6 +87,23 @@ export class UserStore {
     return this.deleteRemoteUser();
   }
 
+  async updateNotificationToken() {
+    if (!this.user) return;
+
+    try {
+      const notificationToken = await getMessagingToken();
+
+      this.updateUser({ notificationToken });
+
+    } catch (error) {
+      console.error("Failed to update notification token", error);
+    } finally {
+      runInAction(() => {
+        this.tokenUpdated = true;
+      });
+    }
+  }
+
   async fetchUserMetadata() {
     const firebaseUID = this.root.auth.user?.uid;
 
@@ -105,6 +125,11 @@ export class UserStore {
       if (success) {
         runInAction(() => {
           this.user = result;
+
+          // Update the FCM token on initial load of the application
+          if (!this.tokenUpdated) {
+            this.updateNotificationToken();
+          }
         });
 
         return;
