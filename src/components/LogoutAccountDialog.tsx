@@ -21,17 +21,13 @@ import {
 import React from "react";
 
 import { useStore } from "../store/store";
-import { DeleteIcon } from "@chakra-ui/icons";
-import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
-
-type TLogoutAccountDialog = {};
 
 const LogoutAccountDialogButton = styled(Button)`
   width: 100%;
 `;
 
-const LogoutAccountDialog: React.FC<TLogoutAccountDialog> = () => {
+const LogoutAccountDialog = () => {
   const { auth } = useStore();
   const { isOpen, onOpen, onClose } = useDisclosure();
   const cancelRef = React.useRef<any>();

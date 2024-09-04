@@ -168,15 +168,15 @@ class PSSDSocialApi {
     return this.get("/relationship/" + uid);
   }
 
-  likeUser(uid: string, likedUid: string): Promise<MongoDBResult<{}>> {
+  likeUser(uid: string, likedUid: string): Promise<MongoDBResult<unknown>> {
     return this.post("/relationship/like/" + likedUid, { uid });
   }
 
-  dislikeUser(uid: string, dislikedUid: string): Promise<MongoDBResult<{}>> {
+  dislikeUser(uid: string, dislikedUid: string): Promise<MongoDBResult<unknown>> {
     return this.post("/relationship/dislike/" + dislikedUid, { uid });
   }
 
-  unmatchUser(uid: string, unmatchedUid: string): Promise<MongoDBResult<{}>> {
+  unmatchUser(uid: string, unmatchedUid: string): Promise<MongoDBResult<unknown>> {
     return this.post("/relationship/unmatch/" + unmatchedUid, { uid });
   }
 

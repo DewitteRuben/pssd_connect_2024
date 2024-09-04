@@ -19,13 +19,11 @@ import { DeleteIcon } from "@chakra-ui/icons";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 
-type TRemoveAccountModal = {};
-
 const RemoveAccountModalButton = styled(Button)`
   width: 100%;
 `;
 
-const RemoveAccountModal: React.FC<TRemoveAccountModal> = () => {
+const RemoveAccountModal = () => {
   const { user: userStore } = useStore();
   const { isOpen, onOpen, onClose } = useDisclosure();
   const navigate = useNavigate();
