@@ -1,3 +1,5 @@
+import { getEnvironmentVariables } from "./utils";
+
 export interface LocationData {
   type: string;
   features: Feature[];

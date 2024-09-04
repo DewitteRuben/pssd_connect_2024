@@ -1,4 +1,4 @@
-const getEnvironmentVariables = (names: string | string[]) => {
+export const getEnvironmentVariables = (names: string | string[]) => {
   if (typeof names === "string") {
     if (!process.env[names]) {
       throw new Error(`${names} is not set`);

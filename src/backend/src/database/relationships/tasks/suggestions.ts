@@ -4,6 +4,7 @@ import { RelationshipModel } from "../../user/relationship.js";
 import { StreamChatClient } from "../../../getstream.io/index.js";
 import { UserModel } from "../../user/user.js";
 import { getMessaging } from "firebase-admin/messaging";
+import { getEnvironmentVariables } from "../../../utils.js";
 
 const { ADMIN_ID } = getEnvironmentVariables("ADMIN_ID");
 

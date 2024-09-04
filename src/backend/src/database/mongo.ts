@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import { getEnvironmentVariables } from "../utils";
 
 const {
   DATABASE_URL,
