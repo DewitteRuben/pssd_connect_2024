@@ -4,7 +4,6 @@ import { RootStore } from "./store";
 import pssdsAPI from "../api/pssds";
 import { RecursivePartial } from "../types/global";
 import _ from "lodash";
-import { UserInfo } from "firebase/auth";
 
 export class UserStore {
   private root: RootStore;
@@ -55,7 +54,7 @@ export class UserStore {
       this.remoteUpdateTask = pssdsAPI.updateUser(this.user);
       await this.remoteUpdateTask;
     } catch (error) {
-      console.error("Failed to update remote user", error)
+      console.error("Failed to update remote user", error);
     } finally {
       this.remoteUpdateTask = undefined;
     }

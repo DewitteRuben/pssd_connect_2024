@@ -77,6 +77,7 @@ export class AuthStore {
 
     try {
       await signInWithEmailAndPassword(firebaseAuth, email, password);
+      await this.root.user.fetchUserMetadata();
 
       return { success: true };
     } catch (e) {

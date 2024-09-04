@@ -1,19 +1,12 @@
 import { Box, Text, useToast, VStack } from "@chakra-ui/react";
 import FormikLoginForm, { LoginFormPayload } from "../../components/LoginForm";
 import { observer } from "mobx-react";
-import { Navigate, useNavigate } from "react-router-dom";
 import { useStore } from "../../store/store";
 import Header from "../../components/Header";
 
 const Login = observer(() => {
-  const { registration, auth, user } = useStore();
+  const { auth } = useStore();
   const toast = useToast();
-
-  const navigate = useNavigate();
-
-  if (auth.loggedIn && registration.isFinished) {
-    return <Navigate replace to="/" />;
-  }
 
   const onLoginFormSubmit = async ({
     email,
@@ -21,6 +14,8 @@ const Login = observer(() => {
     setSubmitting,
   }: LoginFormPayload) => {
     try {
+      setSubmitting(true);
+
       const { success, message } = await auth.signIn(email, password);
       if (!success) {
         toast({
@@ -33,10 +28,6 @@ const Login = observer(() => {
 
         return;
       }
-
-      await user.fetchUserMetadata();
-
-      navigate("/");
     } finally {
       setSubmitting(false);
     }
