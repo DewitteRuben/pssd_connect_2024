@@ -77,6 +77,20 @@ export class AuthStore {
 
     try {
       await signInWithEmailAndPassword(firebaseAuth, email, password);
+
+      return { success: true };
+    } catch (e) {
+      const err = e as AuthError;
+
+      let message;
+      switch (err.code) {
+        case AuthErrorCodes.INVALID_PASSWORD: {
+          message = "The password you have entered is invalid";
+          break;
+        }
+      }
+
+      return { success: false, message };
     } finally {
       runInAction(() => {
         this.loggingIn = false;
@@ -106,7 +120,7 @@ export class AuthStore {
       let message;
       switch (err.code) {
         case AuthErrorCodes.NEED_CONFIRMATION: {
-          message = "phoneNumberAlreadyLinkedToAnotherAccount";
+          message = "This phone number is already linked to another account";
           break;
         }
       }
@@ -143,7 +157,7 @@ export class AuthStore {
       let message;
       switch (err.code) {
         case AuthErrorCodes.INVALID_PHONE_NUMBER: {
-          message = "invalidPhoneNumber";
+          message = "The phone number is invalid";
           break;
         }
       }
