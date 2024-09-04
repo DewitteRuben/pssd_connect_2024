@@ -34,7 +34,7 @@ const Login = observer(() => {
     <>
       <Header title="" path="/splash" hr={false} />
       <Box height="100%" paddingX={8}>
-        <VStack height="100%" justifyContent="center" spacing={8}>
+        <VStack height="100%" spacing={8}>
           <Text fontSize="x-large" fontWeight="bold">
             Log in to PSSD Connect
           </Text>
