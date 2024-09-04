@@ -39,8 +39,15 @@ export const ProtectedRoute = observer(() => {
 
 export const RegRouteHandler = observer(() => {
   const { registration, auth, user } = useStore();
-
   const { step } = useParams<{ step: Step }>();
+
+  React.useEffect(() => {
+    runInAction(() => {
+      if (step) {
+        registration.step = step;
+      }
+    });
+  }, [step, registration]);
 
   if (user.exists && auth.loggedIn) {
     return <Navigate replace to="/" />;
@@ -60,12 +67,6 @@ export const RegRouteHandler = observer(() => {
     const firstUnfinishedStep = registration.getFirstUnfinishedStep();
     return <Navigate replace to={`/signup/${firstUnfinishedStep?.step}`} />;
   }
-
-  React.useEffect(() => {
-    runInAction(() => {
-      registration.step = step;
-    });
-  }, [step, registration]);
 
   const previousStep = registration.getPreviousStep(step);
   const currentStep = registration.getStep(step);
