@@ -8,6 +8,7 @@ import { FiSettings } from "react-icons/fi";
 import { differenceInYears } from "date-fns";
 import { useNavigate } from "react-router-dom";
 import { FaEye, FaRegHeart } from "react-icons/fa";
+import { IoIosInformation } from "react-icons/io";
 
 const Profile = () => {
   const {
@@ -66,6 +67,17 @@ const Profile = () => {
           icon={<AiOutlineEdit />}
         />
       </Box>
+      <IconButton
+        position="absolute"
+        top="18px"
+        right="18px"
+        variant="solid"
+        fontSize={38}
+        onClick={() => navigate("/about")}
+        isRound
+        aria-label="Preview profile"
+        icon={<IoIosInformation />}
+      />
     </Box>
   );
 };

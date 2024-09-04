@@ -22,6 +22,7 @@ import Info from "../Info/Info";
 import PSSD from "../PSSD/PSSD";
 import Messages from "../Messages/Messages";
 import { PreviewProfile } from "../PreviewProfile/PreviewProfile";
+import About from "../About/About";
 
 const TabIcon = styled(Icon)`
   width: 24px;
@@ -93,6 +94,7 @@ const Home = () => {
           <Route path="profile/info" element={<Info />} />
           <Route path="profile/pssd" element={<PSSD />} />
 
+          <Route path="about" element={<About />} />
           <Route path="messages" element={<Messages />} />
 
           <Route path="/" element={<Match />} />
