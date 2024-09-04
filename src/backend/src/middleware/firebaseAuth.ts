@@ -44,6 +44,7 @@ export const firebaseAuthMiddleware = async (
 
     next();
   } catch (error) {
+    console.log("Issue validating id token", { error });
     next(
       new ExpressError({
         code: 500,
