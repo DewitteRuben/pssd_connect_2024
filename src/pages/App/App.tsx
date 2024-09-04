@@ -72,7 +72,7 @@ export const RegRouteHandler = observer(() => {
   const currentStep = registration.getStep(step);
   const nextStep = registration.getNextStep(step);
 
-  if (currentStep?.done && !nextStep?.goBack) {
+  if (currentStep?.done && nextStep && !nextStep?.goBack) {
     return <Navigate replace to={`/signup/${registration.step}`} />;
   }
 

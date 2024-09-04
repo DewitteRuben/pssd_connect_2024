@@ -110,7 +110,7 @@ export class RegistrationStore {
   getNextStep(step: Step) {
     const indexOfCurStep = this.registrationFlow.findIndex((rf) => rf.step === step);
 
-    if (indexOfCurStep + 1 > this.registrationFlow.length) {
+    if (indexOfCurStep + 1 >= this.registrationFlow.length) {
       return null;
     }
 
