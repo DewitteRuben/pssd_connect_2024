@@ -1,6 +1,7 @@
 import { initializeApp } from "firebase/app";
 
 import { getAuth } from "firebase/auth";
+import { isSupported } from "firebase/messaging";
 
 export const firebaseConfig = {
   apiKey: "AIzaSyA3-pw6utfIFyi1yDC7qHIlyj33g-TAJDQ",
@@ -16,3 +17,4 @@ export const firebaseConfig = {
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 export const firebaseAuth = getAuth(app);
+export const isMessagingSupported = isSupported;

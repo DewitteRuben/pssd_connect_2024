@@ -3,22 +3,22 @@ import {
   getToken,
   NotificationPayload,
   onMessage,
-  isSupported,
 } from "firebase/messaging";
 import { serviceWorkerRegistration } from "../main";
 import { useToast } from "@chakra-ui/react";
+import { isMessagingSupported } from "./firebase";
 import React from "react";
 
 export const useMessagingSupported = () => {
   const [supported, setSupported] = React.useState(false);
 
   React.useEffect(() => {
-    const messagingSupported = async () => {
-      const isMessagingSupported = await isSupported();
-      setSupported(isMessagingSupported);
+    const checkIfMessagingSupported = async () => {
+      const isSupported = await isMessagingSupported();
+      setSupported(isSupported);
     };
 
-    messagingSupported();
+    checkIfMessagingSupported();
   }, []);
 
   return supported;
