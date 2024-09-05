@@ -3,10 +3,26 @@ import {
   getToken,
   NotificationPayload,
   onMessage,
+  isSupported,
 } from "firebase/messaging";
 import { serviceWorkerRegistration } from "../main";
 import { useToast } from "@chakra-ui/react";
 import React from "react";
+
+export const useMessagingSupported = () => {
+  const [supported, setSupported] = React.useState(false);
+
+  React.useEffect(() => {
+    const messagingSupported = async () => {
+      const isMessagingSupported = await isSupported();
+      setSupported(isMessagingSupported);
+    };
+
+    messagingSupported();
+  }, []);
+
+  return supported;
+};
 
 export const getMessagingToken = async () => {
   const hasPermission = await hasNotificationPermission();
@@ -71,9 +87,7 @@ class NotificationQueue extends EventTarget {
 
     onMessage(messaging, ({ data }) => {
       if (data) {
-        this.dispatchEvent(
-          new CustomEvent("notification-received", { detail: data })
-        );
+        this.dispatchEvent(new CustomEvent("notification-received", { detail: data }));
       }
     });
   }

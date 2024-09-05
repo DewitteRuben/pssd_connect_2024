@@ -1,8 +1,7 @@
-import { Button, ThemingProps } from "@chakra-ui/react";
+import { Button, ThemingProps, useToast } from "@chakra-ui/react";
 import { observer } from "mobx-react";
 import React from "react";
 import { getMessagingToken } from "../firebase/messaging";
-import { useStore } from "../store/store";
 
 type TAllowNotificationButtonProps = {
   onChange?: (token: string) => void;
@@ -13,14 +12,8 @@ const AllowNotificationButton: React.FC<TAllowNotificationButtonProps> = ({
   onChange,
   size,
 }) => {
-  const {
-    user: { user: userData },
-  } = useStore();
-
+  const toast = useToast();
   const [approvingNotification, setApprovingNotifications] = React.useState(false);
-  const [notificationToken, setNotificationToken] = React.useState<string>(
-    userData?.notificationToken ?? ""
-  );
 
   const onAllowNotificationSubmit = async () => {
     try {
@@ -31,10 +24,15 @@ const AllowNotificationButton: React.FC<TAllowNotificationButtonProps> = ({
       if (onChange) {
         onChange(token);
       }
-
-      setNotificationToken(token);
     } catch (error) {
-      // TODO: add toast
+      toast({
+        title: "Notifications",
+        description: "Failed to allow notifications",
+        status: "error",
+        isClosable: true,
+        position: "top",
+      });
+
       console.error(error);
     } finally {
       setApprovingNotifications(false);

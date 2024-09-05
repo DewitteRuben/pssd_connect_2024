@@ -1,5 +1,6 @@
 import { Button, Text } from "@chakra-ui/react";
 import { observer } from "mobx-react";
+import { useMessagingSupported } from "../../firebase/messaging";
 import React from "react";
 import RegistrationViewContainer from "../../components/RegistrationViewContainer";
 import { useNavigate } from "react-router-dom";
@@ -14,6 +15,7 @@ const AllowNotifications = () => {
     user: { user: userData },
   } = useStore();
 
+  const isMessagingSupported = useMessagingSupported();
   const [notificationToken, setNotificationToken] = React.useState<string>(
     userData?.notificationToken ?? ""
   );
@@ -34,7 +36,7 @@ const AllowNotifications = () => {
 
   return (
     <RegistrationViewContainer title="Enable Notifications">
-      {!notificationToken && (
+      {!notificationToken && isMessagingSupported && (
         <>
           <Text align="center">
             We will send you a notification whenever a match has been found.
@@ -46,6 +48,20 @@ const AllowNotifications = () => {
       {notificationToken && (
         <>
           <Text align="center">We've successfully read your location</Text>
+          <Button onClick={onContinue} colorScheme="green" size="lg">
+            FINISH REGISTRATION
+          </Button>
+        </>
+      )}
+
+      {!notificationToken && !isMessagingSupported && (
+        <>
+          <Text align="center">
+            Unfortunately, notifications are not supported in your browser.
+          </Text>
+          <Text align="center">
+            Consider using a different browser after finishing the registration.
+          </Text>
           <Button onClick={onContinue} colorScheme="green" size="lg">
             FINISH REGISTRATION
           </Button>
