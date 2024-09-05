@@ -45,7 +45,7 @@ const AllowNotifications = () => {
 
   return (
     <RegistrationViewContainer title="Enable Notifications">
-      {!notificationToken && isFbMessagingSupported && !isGetTokenSupported && (
+      {!notificationToken && isFbMessagingSupported && isGetTokenSupported && (
         <>
           <Text align="center">
             We will send you a notification whenever a match has been found.
