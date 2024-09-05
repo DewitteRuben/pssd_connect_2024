@@ -31,7 +31,3 @@ export const firebaseAuth = initializeAuth(app, {
 
 export const isMessagingSupported = isSupported;
 export const messaging = getMessaging(app);
-
-// Required to prevent errors in Safari, see: https://github.com/firebase/firebase-js-sdk/issues/6620
-// @ts-ignore
-messaging.vapidKey = import.meta.env.VITE_PUBLIC_VAPID_KEY;
