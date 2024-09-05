@@ -1,12 +1,7 @@
-import {
-  getMessaging,
-  getToken,
-  NotificationPayload,
-  onMessage,
-} from "firebase/messaging";
+import { getToken, NotificationPayload, onMessage } from "firebase/messaging";
 import { serviceWorkerRegistration } from "../main";
 import { useToast } from "@chakra-ui/react";
-import { isMessagingSupported } from "./firebase";
+import { isMessagingSupported, messaging } from "./firebase";
 import React from "react";
 
 export const useMessagingSupported = () => {
@@ -26,8 +21,6 @@ export const useMessagingSupported = () => {
 
 export const getMessagingToken = async () => {
   const hasPermission = await hasNotificationPermission();
-
-  const messaging = getMessaging();
 
   if (hasPermission) {
     return getToken(messaging, {
@@ -83,8 +76,6 @@ interface NotificationQueue extends EventTarget {
 class NotificationQueue extends EventTarget {
   constructor() {
     super();
-    const messaging = getMessaging();
-
     onMessage(messaging, ({ data }) => {
       if (data) {
         this.dispatchEvent(new CustomEvent("notification-received", { detail: data }));
