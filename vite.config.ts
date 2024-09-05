@@ -1,3 +1,4 @@
+import { sentryVitePlugin } from "@sentry/vite-plugin";
 import { defineConfig } from "vite";
 import { nodePolyfills } from "vite-plugin-node-polyfills";
 import { VitePWA } from "vite-plugin-pwa";
@@ -6,6 +7,7 @@ import react from "@vitejs/plugin-react";
 export default defineConfig({
   build: {
     outDir: "nginx/dist",
+    sourcemap: true,
   },
   base: "https://pssdconnect.org",
   plugins: [
@@ -41,6 +43,10 @@ export default defineConfig({
           },
         ],
       },
+    }),
+    sentryVitePlugin({
+      org: "pssd-network",
+      project: "javascript-react",
     }),
   ],
 });
