@@ -22,17 +22,15 @@ export const useMessagingSupported = () => {
 export const getMessagingToken = async () => {
   const hasPermission = await hasNotificationPermission();
 
-  if (hasPermission) {
-    return getToken(messaging, {
-      vapidKey: import.meta.env.VITE_PUBLIC_VAPID_KEY,
-      serviceWorkerRegistration,
-    });
-  }
+  if (!hasPermission) throw new Error("noNotificationPermissions");
 
-  throw new Error("noNotificationPermissions");
+  return getToken(messaging, {
+    vapidKey: import.meta.env.VITE_PUBLIC_VAPID_KEY,
+    serviceWorkerRegistration,
+  });
 };
 
-const hasNotificationPermission = () => {
+const hasNotificationPermission = (): Promise<boolean> => {
   return new Promise((res, rej) => {
     Notification.requestPermission()
       .then((permission) => res(permission === "granted"))

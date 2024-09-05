@@ -15,14 +15,23 @@ const AllowNotifications = () => {
     user: { user: userData },
   } = useStore();
 
-  const isMessagingSupported = useMessagingSupported();
+  const isFbMessagingSupported = useMessagingSupported();
+  const [isGetTokenSupported, setGetTokenSupported] = React.useState(true);
+
   const [notificationToken, setNotificationToken] = React.useState<string>(
     userData?.notificationToken ?? ""
   );
 
-  const handleOnAllowNotifications = (notificationToken: string) => {
-    setNotificationToken(notificationToken);
-    registration.updateRegistrationData({ notificationToken });
+  const handleOnAllowNotifications = (
+    notificationToken: string,
+    isSupported: boolean
+  ) => {
+    if (isSupported) {
+      setNotificationToken(notificationToken);
+      registration.updateRegistrationData({ notificationToken });
+    } else {
+      setGetTokenSupported(false);
+    }
   };
 
   const onContinue = async () => {
@@ -36,7 +45,7 @@ const AllowNotifications = () => {
 
   return (
     <RegistrationViewContainer title="Enable Notifications">
-      {!notificationToken && isMessagingSupported && (
+      {!notificationToken && isFbMessagingSupported && (
         <>
           <Text align="center">
             We will send you a notification whenever a match has been found.
@@ -54,7 +63,7 @@ const AllowNotifications = () => {
         </>
       )}
 
-      {!notificationToken && !isMessagingSupported && (
+      {!notificationToken && (!isFbMessagingSupported || !isGetTokenSupported) && (
         <>
           <Text align="center">
             Unfortunately, notifications are not supported in your browser.

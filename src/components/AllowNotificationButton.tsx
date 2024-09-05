@@ -4,7 +4,7 @@ import React from "react";
 import { getMessagingToken } from "../firebase/messaging";
 
 type TAllowNotificationButtonProps = {
-  onChange?: (token: string) => void;
+  onChange?: (token: string, isSupported: boolean) => void;
   size?: ThemingProps<"Button">["size"];
 };
 
@@ -22,9 +22,10 @@ const AllowNotificationButton: React.FC<TAllowNotificationButtonProps> = ({
       const token = await getMessagingToken();
 
       if (onChange) {
-        onChange(token);
+        onChange(token, true);
       }
-    } catch (error) {
+    } catch (e) {
+      const error = e as { code: string };
       toast({
         title: "Notifications",
         description: "Failed to allow notifications",
@@ -33,7 +34,14 @@ const AllowNotificationButton: React.FC<TAllowNotificationButtonProps> = ({
         position: "top",
       });
 
-      console.error(error);
+      if (onChange) {
+        switch (error.code) {
+          case "messaging/token-subscribe-failed": {
+            onChange("", false);
+            break;
+          }
+        }
+      }
     } finally {
       setApprovingNotifications(false);
     }
