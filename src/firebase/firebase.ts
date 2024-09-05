@@ -1,6 +1,10 @@
 import { initializeApp } from "firebase/app";
-
-import { getAuth } from "firebase/auth";
+import {
+  browserLocalPersistence,
+  browserSessionPersistence,
+  indexedDBLocalPersistence,
+  initializeAuth,
+} from "firebase/auth";
 import { isSupported } from "firebase/messaging";
 
 export const firebaseConfig = {
@@ -14,7 +18,15 @@ export const firebaseConfig = {
   measurementId: "G-T1N612GH4R",
 };
 
-// Initialize Firebase
 const app = initializeApp(firebaseConfig);
-export const firebaseAuth = getAuth(app);
+
+// Need to use initializeAuth to fix iframe error on Safari, see https://stackoverflow.com/questions/69197475/firebase-auth-breaks-with-cross-origin-isolation-i-e-when-using-cross-origin-r
+export const firebaseAuth = initializeAuth(app, {
+  persistence: [
+    indexedDBLocalPersistence,
+    browserLocalPersistence,
+    browserSessionPersistence,
+  ],
+});
+
 export const isMessagingSupported = isSupported;
