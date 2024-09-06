@@ -6,7 +6,6 @@ import {
   Button,
   VStack,
   Box,
-  FormHelperText,
   Text,
 } from "@chakra-ui/react";
 import { Form, FormikProps, withFormik } from "formik";
@@ -15,7 +14,7 @@ import * as Yup from "yup";
 import { FormikSubmit } from "../types/formik";
 
 const NameSchema = Yup.object().shape({
-  firstName: Yup.string().required("Required"),
+  firstName: Yup.string().trim().required("Required"),
 });
 
 export type NameFormValues = {
