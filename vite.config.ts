@@ -46,7 +46,7 @@ export default defineConfig({
     }),
     sentryVitePlugin({
       org: "pssd-network",
-      project: "javascript-react",
+      project: "pssd-connect",
       authToken: process.env.SENTRY_AUTH_TOKEN,
     }),
   ],
