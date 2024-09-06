@@ -4,13 +4,13 @@ import { initializeApp } from "firebase/app";
 import { clientsClaim } from 'workbox-core';
 import { onBackgroundMessage } from "firebase/messaging/sw";
 
-precacheAndRoute(self.__WB_MANIFEST);
-
-cleanupOutdatedCaches();
-
 self.skipWaiting();
 
 clientsClaim();
+
+cleanupOutdatedCaches();
+
+precacheAndRoute(self.__WB_MANIFEST);
 
 const firebaseApp = initializeApp({
     apiKey: "AIzaSyA3-pw6utfIFyi1yDC7qHIlyj33g-TAJDQ",
