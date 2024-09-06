@@ -1,8 +1,10 @@
-import { cleanupOutdatedCaches, precacheAndRoute } from 'workbox-precaching';
+import { cleanupOutdatedCaches, precacheAndRoute } from "workbox-precaching";
 import { getMessaging } from "firebase/messaging/sw";
 import { initializeApp } from "firebase/app";
-import { clientsClaim } from 'workbox-core';
+import { clientsClaim } from "workbox-core";
 import { onBackgroundMessage } from "firebase/messaging/sw";
+import { registerRoute, Route } from "workbox-routing";
+import { CacheFirst } from "workbox-strategies";
 
 self.skipWaiting();
 
@@ -11,6 +13,17 @@ clientsClaim();
 cleanupOutdatedCaches();
 
 precacheAndRoute(self.__WB_MANIFEST);
+
+const firebaseImageRoute = new Route(({ url }) =>
+    url.hostname === "firebasestorage.googleapis.com" &&
+    url.pathname.includes("%2Fimages%2F"),
+    new CacheFirst({
+        cacheName: "firebase-images",
+        fetchOptions: {
+            mode: "cors",
+            credentials: "omit",
+        }
+    }));
 
 const firebaseApp = initializeApp({
     apiKey: "AIzaSyA3-pw6utfIFyi1yDC7qHIlyj33g-TAJDQ",
@@ -27,7 +40,7 @@ const messaging = getMessaging(firebaseApp);
 
 onBackgroundMessage(messaging, (payload) => {
     if (!payload.data) {
-        console.warn('[sw.js] Unknown notification on message ', payload);
+        console.warn("[sw.js] Unknown notification on message ", payload);
         return
     }
 
@@ -35,15 +48,15 @@ onBackgroundMessage(messaging, (payload) => {
     const notificationTitle = title;
     const notificationOptions = {
         body,
-        icon: '/android-icon-192x192.png'
+        icon: "/android-icon-192x192.png"
     };
 
     self.registration.showNotification(notificationTitle, notificationOptions)
 })
 
 
-self.addEventListener('notificationclick', event => {
-    const rootUrl = new URL('/', location).href;
+self.addEventListener("notificationclick", event => {
+    const rootUrl = new URL("/", location).href;
     event.notification.close();
     // Enumerate windows, and call window.focus(), or open a new one.
     event.waitUntil(
@@ -57,3 +70,6 @@ self.addEventListener('notificationclick', event => {
         })
     );
 });
+
+
+registerRoute(firebaseImageRoute)
