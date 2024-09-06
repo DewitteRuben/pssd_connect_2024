@@ -27,10 +27,9 @@ class PSSDSocialApi {
     onSuggestion?: (data: any) => void;
     onMatch?: (data: any) => void;
   }) {
-
     if (this.eventsInitialized) {
-      this.socket?.emit("suggestion")
-      return
+      this.socket?.emit("suggestion");
+      return;
     }
 
     const jwtTokenId = await this.getToken();
@@ -146,6 +145,10 @@ class PSSDSocialApi {
     }).then((e) => e.json());
 
     return result as T;
+  }
+
+  cancelRegistration(uid: string) {
+    return this.delete<{ success: boolean }>("/registration/cancel/" + uid);
   }
 
   createUser(user: User) {

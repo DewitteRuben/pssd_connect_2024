@@ -1,13 +1,16 @@
 import { ArrowBackIcon } from "@chakra-ui/icons";
 import { IconButton, Heading, Box } from "@chakra-ui/react";
 import React from "react";
+import { IoMdClose } from "react-icons/io";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 
 type THeader = {
+  onCancel?: () => void;
   title?: string;
   path?: string;
   hr?: boolean;
+  close?: boolean;
   goBack?: boolean;
   sticky?: boolean;
 };
@@ -26,7 +29,15 @@ export const StickyHeader = styled(Box)<{ $sticky: boolean; $hr: boolean }>`
   }
 `;
 
-const Header: React.FC<THeader> = ({ path, title, sticky, hr, goBack }) => {
+const Header: React.FC<THeader> = ({
+  path,
+  title,
+  sticky,
+  hr,
+  goBack,
+  close,
+  onCancel,
+}) => {
   sticky = sticky === undefined ? true : sticky;
   hr = hr === undefined ? true : hr;
 
@@ -40,12 +51,19 @@ const Header: React.FC<THeader> = ({ path, title, sticky, hr, goBack }) => {
     }
   };
 
+  const handleOnClose = () => {
+    if (onCancel) {
+      onCancel();
+    }
+  };
+
   return (
     <StickyHeader
       $hr={hr}
       $sticky={sticky}
       display="flex"
       minHeight="61px"
+      position="relative"
       alignItems="center"
       padding="12px"
     >
@@ -54,11 +72,22 @@ const Header: React.FC<THeader> = ({ path, title, sticky, hr, goBack }) => {
           background="none"
           aria-label="back"
           cursor="pointer"
-          boxSize="36px"
           onClick={onHandleClick}
-          as={ArrowBackIcon}
+          icon={<ArrowBackIcon fontSize={32} />}
         />
       ) : null}
+
+      {close && (
+        <IconButton
+          background="none"
+          aria-label="stop"
+          onClick={handleOnClose}
+          cursor="pointer"
+          position="absolute"
+          right="12px"
+          icon={<IoMdClose fontSize={32} />}
+        />
+      )}
       <Heading marginLeft="24px" size="md">
         {title}
       </Heading>

@@ -94,7 +94,6 @@ export class UserStore {
       const notificationToken = await getMessagingToken();
 
       this.updateUser({ notificationToken });
-
     } catch (error) {
       console.error("Failed to update notification token", error);
     } finally {
@@ -111,7 +110,7 @@ export class UserStore {
       this.loading = true;
     });
 
-    if (!firebaseUID) {
+    if (!firebaseUID || this.root.registration.isInProgress) {
       runInAction(() => {
         this.initialized = true;
         this.loading = false;

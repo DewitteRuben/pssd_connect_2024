@@ -2,6 +2,7 @@ import express from "express";
 import cors from "cors";
 import compression from "compression";
 import userRoute from "./routes/user_route.js";
+import registrationRoute from "./routes/registration_route.js";
 import relationshipRoute from "./routes/relationship_route.js";
 import { ExpressError } from "./errors.js";
 import { MongoDB } from "./database/mongo.js";
@@ -32,6 +33,7 @@ app.use(express.json());
 
 app.use("/user", firebaseAuthMiddleware, userRoute);
 app.use("/relationship", firebaseAuthMiddleware, relationshipRoute);
+app.use("/registration", firebaseAuthMiddleware, registrationRoute);
 app.get("/health", (_, res) => res.send("ok"));
 app.use(
   (

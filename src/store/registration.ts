@@ -27,17 +27,29 @@ type OptionalUserWithoutUID = RecursivePartial<UserWithoutUID>;
 
 const initRegistrationFlow = () => {
   return [
-    { step: "email", datingOnly: false, goBack: true, done: false },
-    { step: "phone", datingOnly: false, goBack: false, done: false },
-    { step: "name", datingOnly: false, goBack: false, done: false },
-    { step: "birthdate", datingOnly: false, goBack: true, done: false },
-    { step: "gender", datingOnly: false, goBack: true, done: false },
-    { step: "mode", datingOnly: false, goBack: true, done: false },
-    { step: "showme", datingOnly: true, goBack: true, done: false },
-    { step: "pssd-duration", datingOnly: false, goBack: true, done: false },
-    { step: "photos", datingOnly: false, goBack: true, done: false },
-    { step: "location", datingOnly: false, goBack: true, done: false },
-    { step: "notification", datingOnly: false, goBack: true, done: false },
+    { step: "email", datingOnly: false, goBack: true, done: false, cancelable: false },
+    { step: "phone", datingOnly: false, goBack: false, done: false, cancelable: true },
+    { step: "name", datingOnly: false, goBack: false, done: false, cancelable: true },
+    { step: "birthdate", datingOnly: false, goBack: true, done: false, cancelable: true },
+    { step: "gender", datingOnly: false, goBack: true, done: false, cancelable: true },
+    { step: "mode", datingOnly: false, goBack: true, done: false, cancelable: true },
+    { step: "showme", datingOnly: true, goBack: true, done: false, cancelable: true },
+    {
+      step: "pssd-duration",
+      datingOnly: false,
+      goBack: true,
+      done: false,
+      cancelable: true,
+    },
+    { step: "photos", datingOnly: false, goBack: true, done: false, cancelable: true },
+    { step: "location", datingOnly: false, goBack: true, done: false, cancelable: true },
+    {
+      step: "notification",
+      datingOnly: false,
+      goBack: true,
+      done: false,
+      cancelable: true,
+    },
   ];
 };
 
@@ -66,6 +78,7 @@ export class RegistrationStore {
     this.root = root;
     makeAutoObservable(this);
     autoSave(this, REGISTRATION_LOCALSTORAGE_KEY);
+    this.updateRegistrationFlow();
   }
 
   getData(key: keyof OptionalUserWithoutUID) {
@@ -79,6 +92,28 @@ export class RegistrationStore {
   reset() {
     this.registrationData = initRegistrationData();
     this.registrationFlow = initRegistrationFlow();
+  }
+
+  async cancel() {
+    if (this.root.auth.user) {
+      return pssdsAPI
+        .cancelRegistration(this.root.auth.user.uid)
+        .then(() => this.reset());
+    }
+  }
+
+  updateRegistrationFlow() {
+    const updatedFlow = initRegistrationFlow();
+
+    const mergedData = updatedFlow.map((updatedStep) => {
+      const originalStep = this.registrationFlow.find(
+        (orig) => orig.step === updatedStep.step
+      );
+
+      return { ...updatedStep, done: originalStep ? originalStep.done : false };
+    });
+
+    this.registrationFlow = mergedData;
   }
 
   updateRegistrationData(payload: OptionalUserWithoutUID) {

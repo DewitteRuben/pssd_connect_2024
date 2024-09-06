@@ -15,12 +15,13 @@ import PSSDDurationSelection from "../Signup/PSSDDurationSelection";
 import AddPhotos from "../Signup/AddPhotos";
 import AllowLocation from "../Signup/AllowLocation";
 import AppModeSelection from "../Signup/AppModeSelection";
-import { Box, Spinner } from "@chakra-ui/react";
+import { Box, Spinner, useDisclosure } from "@chakra-ui/react";
 import { runInAction } from "mobx";
 import { useStore } from "../../store/store";
 import { useToastNotifications } from "../../firebase/messaging";
 import Header from "../../components/Header";
 import React from "react";
+import CancelRegistrationDialog from "../../components/CancelRegistrationDialog";
 
 export const ProtectedRoute = observer(() => {
   const {
@@ -49,6 +50,7 @@ export const LoginRouteHandler = observer(() => {
 
 export const RegRouteHandler = observer(() => {
   const { registration, auth, user } = useStore();
+  const { isOpen, onOpen, onClose } = useDisclosure();
   const { step } = useParams<{ step: Step }>();
 
   React.useEffect(() => {
@@ -121,12 +123,15 @@ export const RegRouteHandler = observer(() => {
   return (
     <Box>
       <Header
+        onCancel={onOpen}
         path={currentStep?.goBack ? previousStep?.step ?? "/" : undefined}
+        close={currentStep?.cancelable}
         hr={false}
       />
       <Box>
         <StepComponent />
       </Box>
+      <CancelRegistrationDialog isOpen={isOpen} onClose={onClose} />
     </Box>
   );
 });
