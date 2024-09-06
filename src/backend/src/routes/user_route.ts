@@ -94,8 +94,8 @@ router.put("/", async (req, res, next) => {
       });
     }
 
-    // Refresh suggestions if preferences or gender have changed
-    if (userDiff.preferences || userDiff.gender) {
+    // Refresh suggestions if certain fields have updated
+    if (userDiff.preferences || userDiff.gender || userDiff.mode) {
       suggestionManager.refresh(uid);
     }
 
