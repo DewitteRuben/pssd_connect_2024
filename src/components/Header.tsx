@@ -13,9 +13,14 @@ type THeader = {
   close?: boolean;
   goBack?: boolean;
   sticky?: boolean;
+  margin?: boolean;
 };
 
-export const StickyHeader = styled(Box)<{ $sticky: boolean; $hr: boolean }>`
+export const StickyHeader = styled(Box)<{
+  $sticky: boolean;
+  $hr: boolean;
+  $margin: boolean;
+}>`
   position: ${(props) => (props.$sticky ? "fixed" : "static")};
   top: 0;
   width: 100%;
@@ -25,21 +30,20 @@ export const StickyHeader = styled(Box)<{ $sticky: boolean; $hr: boolean }>`
     props.$hr ? "1px solid var(--chakra-colors-chakra-border-color)" : "0px"};
 
   & + div {
-    margin-top: 60px;
+    margin-top: ${(props) => (props.$margin ? "60px" : "0")};
   }
 `;
 
 const Header: React.FC<THeader> = ({
   path,
   title,
-  sticky,
-  hr,
+  sticky = true,
+  hr = true,
   goBack,
   close,
   onCancel,
+  margin = true,
 }) => {
-  sticky = sticky === undefined ? true : sticky;
-  hr = hr === undefined ? true : hr;
 
   const navigate = useNavigate();
 
@@ -60,6 +64,7 @@ const Header: React.FC<THeader> = ({
   return (
     <StickyHeader
       $hr={hr}
+      $margin={margin}
       $sticky={sticky}
       display="flex"
       minHeight="61px"

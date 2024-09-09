@@ -8,22 +8,22 @@ type TMessageHeader = {
   name: string;
   sticky?: boolean;
   hr?: boolean;
+  margin?: boolean;
   onSafetyClick?: () => void;
   onBack?: () => void;
 };
 
 const MessageHeader: React.FC<TMessageHeader> = ({
   name,
-  sticky,
+  sticky = true,
   onSafetyClick,
   onBack,
-  hr,
+  hr = true,
+  margin = true,
 }) => {
-  sticky = sticky === undefined ? true : sticky;
-  hr = hr === undefined ? true : hr;
-
   return (
     <StickyHeader
+      $margin={margin}
       $sticky={sticky}
       $hr={hr}
       display="flex"

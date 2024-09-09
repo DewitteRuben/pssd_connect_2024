@@ -136,7 +136,7 @@ const Messages = () => {
           name={selectedUser?.name}
         />
       )}
-      {!channelSelected && <Header title="Messages" />}
+      {!channelSelected && <Header title="Messages" margin={false} />}
       <Chat client={client} i18nInstance={i18nInstance}>
         {!channelSelected && (
           <ChannelList

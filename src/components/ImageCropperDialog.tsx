@@ -27,13 +27,11 @@ const ImageCropperDialog: React.FC<TImageCropperDialog> = ({
   isOpen,
   onClose,
   onCrop,
-  aspectRatio,
+  aspectRatio = 7 / 10,
 }) => {
   const cropperJS = useRef<Cropper>();
   const [imageRef, setImageRef] = React.useState<HTMLImageElement | null>();
   const [processing, setProcessing] = React.useState<boolean>(false);
-
-  aspectRatio = aspectRatio === undefined ? 7 / 10 : aspectRatio;
 
   React.useEffect(() => {
     if (imageRef) {
