@@ -5,7 +5,6 @@ import "./index.css";
 import { BrowserRouter } from "react-router-dom";
 import { ChakraProvider, Container } from "@chakra-ui/react";
 import App from "./pages/App/App";
-import PWAPrompt from "react-ios-pwa-prompt";
 
 Sentry.init({
   dsn: "https://8c2cced3dccc63c53235b042667506bc@o4507900307963904.ingest.de.sentry.io/4507900310519888",
@@ -49,7 +48,6 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
     <ChakraProvider>
       <Container padding="0" maxW="768px">
-        <PWAPrompt appIconPath="/apple-icon.png" />
         <BrowserRouter basename="/">
           <App />
         </BrowserRouter>
