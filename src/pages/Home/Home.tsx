@@ -65,7 +65,7 @@ const Home = () => {
 
   return (
     <Tabs isFitted index={tabIndex} onChange={handleTabsChange} height="100%">
-      <StyledTabPanel height="calc(100% - 41px - env(safe-area-inset-bottom))" overflow="scroll">
+      <StyledTabPanel height="calc(100% - 42px - env(safe-area-inset-bottom))" overflow="scroll">
         <Routes>
           <Route path="profile" element={<Profile />} />
           <Route path="profile/preview" element={<PreviewProfile />} />

@@ -53,7 +53,7 @@ export const PreviewProfile = () => {
   return (
     <>
       <Header path="/profile" title="Profile preview" />
-      <Box display="flex" maxWidth="640px" height="640px" overflow="hidden">
+      <Box overflow="hidden">
         <SwipeableCard
           swipeRequirementType="position"
           swipeThreshold={Math.floor(screenWidth / 2)}
@@ -92,11 +92,11 @@ export const PreviewProfile = () => {
           </Box>
         </SwipeableCard>
       </Box>
-      <Box>
+      <Box position="absolute" bottom="42px" width="100%" zIndex={100}>
         {viewProfile && (
           <Card position="relative">
             <CardBody>
-              <Box overflow="scroll" minH={260} maxH={280}>
+              <Box overflow="scroll" minH={300} maxH={340}>
                 <Text marginBottom={2} fontWeight="bold" color="black" fontSize="24px">
                   {userData.firstName},{" "}
                   {differenceInYears(new Date(), new Date(userData.birthdate) as Date)}
@@ -184,7 +184,15 @@ export const PreviewProfile = () => {
           </Card>
         )}
       </Box>
-      <Box display="flex" justifyContent="center" gap="40px">
+      <Box
+        position="absolute"
+        left="50%"
+        bottom="10%"
+        transform="translate(-50%, -50%);"
+        display="flex"
+        justifyContent="center"
+        gap="40px"
+      >
         <IconButton
           isRound={true}
           variant="solid"

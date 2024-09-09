@@ -151,7 +151,7 @@ const Match = () => {
 
   return (
     <>
-      <Box display="flex" maxWidth="640px" height="640px" overflow="hidden">
+      <Box overflow="hidden">
         {relationship.relationships.suggestions_info.map((si, index) => (
           <SwipeableCardContainer key={si.uid}>
             <SwipeableCard
@@ -197,11 +197,11 @@ const Match = () => {
           </SwipeableCardContainer>
         ))}
       </Box>
-      <Box>
+      <Box position="absolute" bottom="42px" width="100%" zIndex={100}>
         {viewProfile && relationship.currentSuggestion && (
           <Card position="relative">
             <CardBody>
-              <Box overflow="scroll" minH={260} maxH={280}>
+              <Box overflow="scroll" minH={300} maxH={340}>
                 <Text marginBottom={2} fontWeight="bold" color="black" fontSize="24px">
                   {relationship.currentSuggestion.firstName},{" "}
                   {differenceInYears(
@@ -296,7 +296,15 @@ const Match = () => {
           </Card>
         )}
       </Box>
-      <Box display="flex" justifyContent="center" gap="40px">
+      <Box
+        position="absolute"
+        display="flex"
+        left="50%"
+        bottom="10%"
+        transform="translate(-50%, -50%);"
+        justifyContent="center"
+        gap="40px"
+      >
         <IconButton
           isRound={true}
           variant="solid"
