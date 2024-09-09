@@ -1,13 +1,4 @@
-import {
-  Box,
-  Button,
-  Icon,
-  Tab,
-  TabList,
-  TabPanel,
-  TabPanels,
-  Tabs,
-} from "@chakra-ui/react";
+import { Icon, Tab, TabList, TabPanels, Tabs } from "@chakra-ui/react";
 import { AiOutlineUser } from "react-icons/ai";
 import { AiOutlineFire } from "react-icons/ai";
 import { TbMessageCircle2 } from "react-icons/tb";
@@ -73,20 +64,8 @@ const Home = () => {
   };
 
   return (
-    <Tabs
-      isFitted
-      index={tabIndex}
-      onChange={handleTabsChange}
-      display="flex"
-      flexDirection="column"
-      height="100%"
-    >
-      <StyledTabPanel
-        display="flex"
-        overflow="scroll"
-        flexDirection="column"
-        flexGrow="1"
-      >
+    <Tabs isFitted index={tabIndex} onChange={handleTabsChange} height="100%">
+      <StyledTabPanel height="calc(100% - 41px - env(safe-area-inset-bottom))" overflow="scroll">
         <Routes>
           <Route path="profile" element={<Profile />} />
           <Route path="profile/preview" element={<PreviewProfile />} />

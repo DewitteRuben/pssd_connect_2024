@@ -48,7 +48,7 @@ if ("serviceWorker" in navigator) {
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
     <ChakraProvider>
-      <Container padding="0" maxW="768px" minHeight="100vh">
+      <Container padding="0" maxW="768px">
         <PWAPrompt appIconPath="/apple-icon.png" />
         <BrowserRouter basename="/">
           <App />
