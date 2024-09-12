@@ -140,10 +140,11 @@ export class UserStore {
 
       if (code === 404) {
         message = "The data for the user you requested was not found";
-        this.root.auth.logout();
       }
 
       throw new DatabaseError({ code, message });
+    } catch (ex) {
+      console.error(ex);
     } finally {
       runInAction(() => {
         this.initialized = true;

@@ -90,9 +90,6 @@ export class AuthStore {
           message = "The password you have entered is invalid";
           break;
         }
-        default: {
-          message = (e as DatabaseError).message as string;
-        }
       }
 
       return { success: false, message };
