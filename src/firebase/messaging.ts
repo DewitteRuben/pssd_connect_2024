@@ -32,6 +32,12 @@ export const getMessagingToken = async () => {
 
 const hasNotificationPermission = (): Promise<boolean> => {
   return new Promise((res, rej) => {
+    const hasNotificationInWindow = "Notification" in window;
+
+    if (!hasNotificationInWindow) {
+      return rej(new Error("Unsupported"));
+    }
+
     Notification.requestPermission()
       .then((permission) => res(permission === "granted"))
       .catch(rej);
@@ -95,7 +101,7 @@ export const useToastNotifications = () => {
         title: data.title,
         description: data.body,
         status: "info",
-        
+
         isClosable: true,
       });
     },

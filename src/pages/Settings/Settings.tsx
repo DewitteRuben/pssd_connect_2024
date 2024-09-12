@@ -32,6 +32,12 @@ import AllowNotificationButton from "../../components/AllowNotificationButton";
 import ContentContainer from "../../components/ContentContainer";
 
 const notificationPermissionStatusText = (notificationToken?: string) => {
+  const hasNotificationInWindow = "Notification" in window;
+
+  if (!hasNotificationInWindow) {
+    return "Unsupported";
+  }
+
   if (Notification.permission === "denied") return "Denied (requires reset in browser)";
 
   if (Notification.permission === "granted") {
@@ -84,7 +90,6 @@ const Settings = () => {
         description: "We've successfully updated your notification preferences",
         status: "success",
         isClosable: true,
-        
       });
 
       userStore.fetchUserMetadata();
@@ -110,7 +115,6 @@ const Settings = () => {
         description: "We've successfully updated your location",
         status: "success",
         isClosable: true,
-        
       });
 
       userStore.fetchUserMetadata();
@@ -133,7 +137,6 @@ const Settings = () => {
         description: "We've successfully updated your gender preference",
         status: "success",
         isClosable: true,
-        
       });
 
       userStore.fetchUserMetadata();
@@ -155,7 +158,6 @@ const Settings = () => {
         description: "We've successfully updated your discovery mode",
         status: "success",
         isClosable: true,
-        
       });
 
       userStore.fetchUserMetadata();
@@ -179,7 +181,6 @@ const Settings = () => {
         description: "We've successfully updated your preferred distance unit",
         status: "success",
         isClosable: true,
-        
       });
 
       userStore.fetchUserMetadata();
@@ -196,7 +197,6 @@ const Settings = () => {
         description: "We've successfully updated your prefered age range",
         status: "success",
         isClosable: true,
-        
       });
     } catch (error) {
       console.error("Failed to update age range", error);
@@ -205,7 +205,6 @@ const Settings = () => {
         description: "Failed to update your prefered age range",
         status: "error",
         isClosable: true,
-        
       });
     }
   };
@@ -218,7 +217,6 @@ const Settings = () => {
         description: "We've successfully updated your max. distance",
         status: "success",
         isClosable: true,
-        
       });
     } catch (error) {
       console.error("Failed to update age range", error);
@@ -227,7 +225,6 @@ const Settings = () => {
         description: "Failed to update your max. distance",
         status: "error",
         isClosable: true,
-        
       });
     }
   };
@@ -263,9 +260,7 @@ const Settings = () => {
               <Text color="grey" marginBottom={2} fontSize="xs">
                 Your email address is not visible to others.
               </Text>
-              <Text>
-                {userData.email}
-              </Text>
+              <Text>{userData.email}</Text>
             </Box>
           </CardBody>
         </Card>
