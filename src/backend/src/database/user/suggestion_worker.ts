@@ -62,17 +62,23 @@ export class SuggestionWorker {
   }
 
   async update() {
-    await taskQueue.queue(new SuggestionTask(this.uid));
-    const relationships = await getSuggestionsByRelationship(this.uid);
-
-    return relationships;
+    try {
+      await taskQueue.queue(new SuggestionTask(this.uid));
+      const relationships = await getSuggestionsByRelationship(this.uid);
+      return relationships;
+    } catch (err) {
+      const error = err as Error;
+      console.error("Error during SuggestionWorker", error);
+      if (error.message.includes("user was not found")) {
+        this.stop();
+      }
+    }
   }
 
   async run() {
     this.workerProcess = setInterval(async () => {
       const suggestions = await this.update();
-
-      if (this.callback) {
+      if (suggestions && this.callback) {
         this.callback(suggestions);
       }
     }, this.intervalinMS);
@@ -82,8 +88,7 @@ export class SuggestionWorker {
     this.stop();
 
     const suggestions = await this.update();
-
-    if (this.callback) {
+    if (suggestions && this.callback) {
       this.callback(suggestions);
     }
 
