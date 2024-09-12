@@ -9,7 +9,7 @@ import { differenceInYears } from "date-fns";
 export const findSuggestionsForUser = async (uid: string) => {
   const user = await UserModel.findOne({ uid }).exec();
 
-  if (!user) throw new Error("user with id " + uid + " was not found");
+  if (!user) throw new Error(`user was not found (${uid})`);
 
   const {
     mode,
