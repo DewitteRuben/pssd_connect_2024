@@ -5,6 +5,7 @@ import io, { Socket } from "socket.io-client";
 type MongoDBResult<T> = {
   success: boolean;
   message?: string;
+  shortcode?: string;
   code: number;
   result: T;
 };

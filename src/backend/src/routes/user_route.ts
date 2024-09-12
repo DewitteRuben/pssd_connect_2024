@@ -20,6 +20,7 @@ router.get("/:uid", async (req, res, next) => {
       return next(
         new ExpressError({
           code: 404,
+          shortcode: "auth/user-not-found",
           message: "No user was found with id " + uid,
         })
       );

@@ -82,14 +82,18 @@ export class AuthStore {
 
       return { success: true };
     } catch (e) {
-      const err = e as AuthError;
+      const err = e as AuthError & DatabaseError;
 
       let message;
       switch (err.code) {
-        case AuthErrorCodes.INVALID_PASSWORD: {
-          message = "The password you have entered is invalid";
+        case AuthErrorCodes.INVALID_PASSWORD:
+        case AuthErrorCodes.USER_DELETED:
+          message = "The email address or password you have entered is invalid";
           break;
-        }
+      }
+
+      if (err.shortcode === "auth/user-not-found") {
+        message = "The user you attempted to log in as does not exist";
       }
 
       return { success: false, message };

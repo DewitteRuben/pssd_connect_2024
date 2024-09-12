@@ -122,8 +122,8 @@ export class UserStore {
 
     try {
       const payload = await pssdsAPI.getUser(firebaseUID);
-      const { success, code, result } = payload;
-      let message = payload.message;
+      const { success, code, result, shortcode } = payload;
+      const message = payload.message;
 
       if (success) {
         runInAction(() => {
@@ -138,13 +138,7 @@ export class UserStore {
         return;
       }
 
-      if (code === 404) {
-        message = "The data for the user you requested was not found";
-      }
-
-      throw new DatabaseError({ code, message });
-    } catch (ex) {
-      console.error(ex);
+      throw new DatabaseError({ code, message, shortcode });
     } finally {
       runInAction(() => {
         this.initialized = true;
