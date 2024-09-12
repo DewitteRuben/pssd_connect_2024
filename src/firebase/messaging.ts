@@ -95,7 +95,7 @@ export const useToastNotifications = () => {
         title: data.title,
         description: data.body,
         status: "info",
-        position: "top",
+        
         isClosable: true,
       });
     },

@@ -46,7 +46,7 @@ if ("serviceWorker" in navigator) {
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
-    <ChakraProvider>
+    <ChakraProvider toastOptions={{ defaultOptions: { position: "top" } }}>
       <Container padding="0" maxW="768px">
         <BrowserRouter basename="/">
           <App />

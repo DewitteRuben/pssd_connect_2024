@@ -31,7 +31,7 @@ const AllowNotificationButton: React.FC<TAllowNotificationButtonProps> = ({
         description: "Failed to allow notifications",
         status: "error",
         isClosable: true,
-        position: "top",
+        
       });
 
       if (onChange) {

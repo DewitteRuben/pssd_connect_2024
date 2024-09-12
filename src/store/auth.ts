@@ -13,6 +13,7 @@ import {
 } from "firebase/auth";
 import { RootStore } from "./store";
 import pssdsAPI from "../api/pssds";
+import { DatabaseError } from "../backend/src/errors";
 
 export class AuthStore {
   public user?: User | null;
@@ -88,6 +89,9 @@ export class AuthStore {
         case AuthErrorCodes.INVALID_PASSWORD: {
           message = "The password you have entered is invalid";
           break;
+        }
+        default: {
+          message = (e as DatabaseError).message as string;
         }
       }
 

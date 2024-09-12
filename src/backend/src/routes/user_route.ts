@@ -19,7 +19,7 @@ router.get("/:uid", async (req, res, next) => {
     if (!existingUser) {
       return next(
         new ExpressError({
-          code: 500,
+          code: 404,
           message: "No user was found with id " + uid,
         })
       );

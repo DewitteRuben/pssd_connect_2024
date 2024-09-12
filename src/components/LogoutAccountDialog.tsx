@@ -44,7 +44,7 @@ const LogoutAccountDialog = () => {
         description: "Failed to logout your account",
         status: "error",
         isClosable: true,
-        position: "top",
+        
       });
     } finally {
       onClose();

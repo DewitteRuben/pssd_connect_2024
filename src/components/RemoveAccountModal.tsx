@@ -39,7 +39,7 @@ const RemoveAccountModal = () => {
         description: "We've successfully deleted your account",
         status: "success",
         isClosable: true,
-        position: "top",
+        
       });
 
       navigate(0);
@@ -50,7 +50,7 @@ const RemoveAccountModal = () => {
         description: "Failed to delete your account",
         status: "error",
         isClosable: true,
-        position: "top",
+        
       });
     } finally {
       onClose();

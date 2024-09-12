@@ -3,6 +3,7 @@ import { makeAutoObservable, reaction, runInAction, toJS } from "mobx";
 import { RootStore } from "./store";
 import { Relationship } from "../backend/src/database/user/types.js";
 import pssdsAPI from "../api/pssds";
+import { DatabaseError } from "../backend/src/errors.js";
 
 export class RelationshipStore {
   private root: RootStore;
@@ -57,14 +58,14 @@ export class RelationshipStore {
     if (!firebaseUID) return;
 
     try {
-      const { success, message } = await pssdsAPI.likeUser(firebaseUID, likedUser);
+      const { success, message, code } = await pssdsAPI.likeUser(firebaseUID, likedUser);
       if (success) {
         return;
       }
 
-      throw new Error(message);
+      throw new DatabaseError({ code, message });
     } catch (error) {
-      console.warn("Failed to get user", error);
+      console.warn("Failed to like user", error);
     }
   }
 
@@ -74,14 +75,17 @@ export class RelationshipStore {
     if (!firebaseUID) return;
 
     try {
-      const { success, message } = await pssdsAPI.dislikeUser(firebaseUID, dislikedUser);
+      const { success, message, code } = await pssdsAPI.dislikeUser(
+        firebaseUID,
+        dislikedUser
+      );
       if (success) {
         return;
       }
 
-      throw new Error(message);
+      throw new DatabaseError({ code, message });
     } catch (error) {
-      console.warn("Failed to get user", error);
+      console.warn("Failed to dislike user", error);
     }
   }
 
@@ -91,7 +95,7 @@ export class RelationshipStore {
     if (!firebaseUID) return;
 
     try {
-      const { success, message } = await pssdsAPI.unmatchUser(
+      const { success, message, code } = await pssdsAPI.unmatchUser(
         firebaseUID,
         unmatchUserUid
       );
@@ -99,14 +103,14 @@ export class RelationshipStore {
         return;
       }
 
-      throw new Error(message);
+      throw new DatabaseError({ code, message });
     } catch (error) {
-      console.warn("Failed to get user", error);
+      console.warn("Failed to unmatch user", error);
     }
   }
 
   async onSuggestion(data: any) {
-    const { success, message, result } = data;
+    const { success, message, result, code } = data;
     if (success) {
       runInAction(() => {
         const updateIndex = !_.isEqual(result, toJS(this.relationships));
@@ -120,7 +124,7 @@ export class RelationshipStore {
       return;
     }
 
-    throw new Error(message);
+    throw new DatabaseError({ code, message });
   }
 
   async initRelationshipUpdates() {
@@ -136,7 +140,7 @@ export class RelationshipStore {
         onSuggestion: this.onSuggestion.bind(this),
       });
     } catch (error) {
-      console.warn("Failed to get user", error);
+      console.warn("Failed to init relationship updates", error);
     } finally {
       runInAction(() => {
         this.initialized = true;

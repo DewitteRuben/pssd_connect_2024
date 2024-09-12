@@ -23,7 +23,7 @@ const Login = observer(() => {
           description: message,
           status: "error",
           isClosable: true,
-          position: "top",
+          
         });
 
         return;

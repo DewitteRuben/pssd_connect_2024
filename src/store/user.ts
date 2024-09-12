@@ -1,10 +1,11 @@
-import { makeAutoObservable, reaction, runInAction, toJS } from "mobx";
+import { makeAutoObservable, reaction, runInAction } from "mobx";
 import { User } from "../backend/src/database/user/types";
 import { RootStore } from "./store";
 import pssdsAPI from "../api/pssds";
 import { RecursivePartial } from "../types/global";
 import _ from "lodash";
 import { getMessagingToken } from "../firebase/messaging";
+import { DatabaseError } from "../backend/src/errors";
 
 export class UserStore {
   private root: RootStore;
@@ -120,7 +121,10 @@ export class UserStore {
     }
 
     try {
-      const { success, message, result } = await pssdsAPI.getUser(firebaseUID);
+      const payload = await pssdsAPI.getUser(firebaseUID);
+      const { success, code, result } = payload;
+      let message = payload.message;
+
       if (success) {
         runInAction(() => {
           this.user = result;
@@ -134,9 +138,12 @@ export class UserStore {
         return;
       }
 
-      throw new Error(message);
-    } catch (error) {
-      console.warn("Failed to get user", error);
+      if (code === 404) {
+        message = "The data for the user you requested was not found";
+        this.root.auth.logout();
+      }
+
+      throw new DatabaseError({ code, message });
     } finally {
       runInAction(() => {
         this.initialized = true;

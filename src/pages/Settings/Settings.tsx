@@ -84,7 +84,7 @@ const Settings = () => {
         description: "We've successfully updated your notification preferences",
         status: "success",
         isClosable: true,
-        position: "top",
+        
       });
 
       userStore.fetchUserMetadata();
@@ -110,7 +110,7 @@ const Settings = () => {
         description: "We've successfully updated your location",
         status: "success",
         isClosable: true,
-        position: "top",
+        
       });
 
       userStore.fetchUserMetadata();
@@ -133,7 +133,7 @@ const Settings = () => {
         description: "We've successfully updated your gender preference",
         status: "success",
         isClosable: true,
-        position: "top",
+        
       });
 
       userStore.fetchUserMetadata();
@@ -155,7 +155,7 @@ const Settings = () => {
         description: "We've successfully updated your discovery mode",
         status: "success",
         isClosable: true,
-        position: "top",
+        
       });
 
       userStore.fetchUserMetadata();
@@ -179,7 +179,7 @@ const Settings = () => {
         description: "We've successfully updated your preferred distance unit",
         status: "success",
         isClosable: true,
-        position: "top",
+        
       });
 
       userStore.fetchUserMetadata();
@@ -196,7 +196,7 @@ const Settings = () => {
         description: "We've successfully updated your prefered age range",
         status: "success",
         isClosable: true,
-        position: "top",
+        
       });
     } catch (error) {
       console.error("Failed to update age range", error);
@@ -205,7 +205,7 @@ const Settings = () => {
         description: "Failed to update your prefered age range",
         status: "error",
         isClosable: true,
-        position: "top",
+        
       });
     }
   };
@@ -218,7 +218,7 @@ const Settings = () => {
         description: "We've successfully updated your max. distance",
         status: "success",
         isClosable: true,
-        position: "top",
+        
       });
     } catch (error) {
       console.error("Failed to update age range", error);
@@ -227,7 +227,7 @@ const Settings = () => {
         description: "Failed to update your max. distance",
         status: "error",
         isClosable: true,
-        position: "top",
+        
       });
     }
   };
