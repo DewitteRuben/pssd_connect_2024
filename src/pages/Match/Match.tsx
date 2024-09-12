@@ -54,30 +54,56 @@ const Match = () => {
 
   const [viewProfile, setViewProfile] = React.useState(false);
   const [screenWidth, setScreenWidth] = React.useState(window.screen.width);
+  const [imageDimensions, setImageDimensions] = React.useState<{
+    width: number;
+    height: number;
+  }>();
+
+  const swipeableRefs = React.useRef<Map<string, any> | null>(null);
+  const imageRefs = React.useRef<Map<string, HTMLImageElement> | null>(null);
 
   const [endOfStackReached, setEndOfStackReached] = React.useState(false);
   const unitDistance = useUnitDistance(relationship?.currentSuggestion?.distance ?? 0);
 
-  if (!userData) throw new Error("User data was not found");
+  function getSwipeableRefsMap() {
+    if (!swipeableRefs.current) {
+      swipeableRefs.current = new Map();
+    }
+    return swipeableRefs.current;
+  }
 
-  const swipableRefs = (relationship.relationships?.suggestions_info ?? []).map(() =>
-    React.createRef()
-  ) as any;
-
-  const cardContainerRefs = (relationship.relationships?.suggestions_info ?? []).map(() =>
-    React.createRef()
-  ) as any;
+  function getImageRefsMap() {
+    if (!imageRefs.current) {
+      imageRefs.current = new Map();
+    }
+    return imageRefs.current;
+  }
 
   React.useLayoutEffect(() => {
+    const updateImageDimensions = () => {
+      const map = getImageRefsMap();
+      if (relationship.currentSuggestion) {
+        const image = map.get(relationship.currentSuggestion?.uid);
+        if (image) {
+          const { width, height } = image.getBoundingClientRect();
+
+          setImageDimensions({ width, height });
+        }
+      }
+    };
+
     const resizeListener = () => {
       setScreenWidth(window.screen.width);
+      updateImageDimensions();
     };
+
+    updateImageDimensions();
 
     window.addEventListener("resize", resizeListener);
     return () => {
       window.removeEventListener("resize", resizeListener);
     };
-  }, []);
+  }, [imageRefs, relationship.currentSuggestion, relationship.index]);
 
   React.useEffect(() => {
     if (relationship.index >= 0) {
@@ -86,6 +112,8 @@ const Match = () => {
       }
     }
   }, [endOfStackReached, relationship.index]);
+
+  if (!userData) throw new Error("User data was not found");
 
   const onSwipe = (direction: string, uid: string, index: number) => {
     switch (direction) {
@@ -153,20 +181,39 @@ const Match = () => {
     <>
       <Box overflow="hidden">
         {relationship.relationships.suggestions_info.map((si, index) => (
-          <SwipeableCardContainer key={si.uid}>
+          <SwipeableCardContainer
+            width={imageDimensions?.width}
+            height={imageDimensions?.height}
+            key={si.uid}
+          >
             <SwipeableCard
-              ref={swipableRefs[index]}
+              ref={(el) => {
+                const map = getSwipeableRefsMap();
+                if (el) {
+                  map.set(si.uid, el);
+                } else {
+                  map.delete(si.uid);
+                }
+              }}
               swipeRequirementType="position"
               onCardLeftScreen={onCardLeftScreen}
               onSwipe={(direction) => onSwipe(direction, si.uid, index)}
               swipeThreshold={Math.floor(screenWidth / 2)}
               preventSwipe={["up", "down"]}
             >
-              <Box ref={cardContainerRefs[index]} position="relative">
+              <Box position="relative">
                 <Box position="relative">
                   <Image
                     maxHeight="640px"
                     maxWidth="640px"
+                    ref={(el) => {
+                      const map = getImageRefsMap();
+                      if (el) {
+                        map.set(si.uid, el);
+                      } else {
+                        map.delete(si.uid);
+                      }
+                    }}
                     width="100%"
                     aspectRatio="7 / 10"
                     src={si.images[0]}
@@ -197,7 +244,12 @@ const Match = () => {
           </SwipeableCardContainer>
         ))}
       </Box>
-      <Box position="absolute" bottom="42px" width="100%" zIndex={100}>
+      <Box
+        position="absolute"
+        bottom="calc(42px + env(safe-area-inset-bottom))"
+        width="100%"
+        zIndex={100}
+      >
         {viewProfile && relationship.currentSuggestion && (
           <Card position="relative">
             <CardBody>
@@ -296,15 +348,7 @@ const Match = () => {
           </Card>
         )}
       </Box>
-      <Box
-        position="absolute"
-        display="flex"
-        left="50%"
-        bottom="10%"
-        transform="translate(-50%, -50%);"
-        justifyContent="center"
-        gap="40px"
-      >
+      <Box display="flex" justifyContent="center" gap="40px" marginTop={4}>
         <IconButton
           isRound={true}
           variant="solid"
@@ -313,8 +357,9 @@ const Match = () => {
           aria-label="dislike"
           fontSize="36px"
           onClick={() => {
+            const map = getSwipeableRefsMap();
             if (relationship.currentSuggestion) {
-              swipableRefs[relationship.index].current.swipe("left");
+              map.get(relationship.currentSuggestion.uid).swipe("left");
             }
           }}
           icon={<MdClose color="red" />}
@@ -327,8 +372,9 @@ const Match = () => {
           fontSize="24px"
           aria-label="like"
           onClick={() => {
+            const map = getSwipeableRefsMap();
             if (relationship.currentSuggestion) {
-              swipableRefs[relationship.index].current.swipe("right");
+              map.get(relationship.currentSuggestion.uid).swipe("right");
             }
           }}
           icon={<FaHeart color="green" />}

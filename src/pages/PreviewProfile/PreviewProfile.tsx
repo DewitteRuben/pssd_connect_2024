@@ -92,7 +92,12 @@ export const PreviewProfile = () => {
           </Box>
         </SwipeableCard>
       </Box>
-      <Box position="absolute" bottom="42px" width="100%" zIndex={100}>
+      <Box
+        position="absolute"
+        bottom="calc(42px + env(safe-area-inset-bottom))"
+        width="100%"
+        zIndex={100}
+      >
         {viewProfile && (
           <Card position="relative">
             <CardBody>
@@ -183,34 +188,6 @@ export const PreviewProfile = () => {
             />
           </Card>
         )}
-      </Box>
-      <Box
-        position="absolute"
-        left="50%"
-        bottom="10%"
-        transform="translate(-50%, -50%);"
-        display="flex"
-        justifyContent="center"
-        gap="40px"
-      >
-        <IconButton
-          isRound={true}
-          variant="solid"
-          width="60px"
-          height="60px"
-          aria-label="dislike"
-          fontSize="36px"
-          icon={<MdClose color="red" />}
-        />
-        <IconButton
-          isRound={true}
-          variant="solid"
-          width="60px"
-          height="60px"
-          fontSize="24px"
-          aria-label="like"
-          icon={<FaHeart color="green" />}
-        />
       </Box>
     </>
   );
