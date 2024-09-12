@@ -30,7 +30,6 @@ import { useUnitDistance } from "../../utils/math";
 import LogoutAccountDialog from "../../components/LogoutAccountDialog";
 import AllowNotificationButton from "../../components/AllowNotificationButton";
 import ContentContainer from "../../components/ContentContainer";
-import { MdInfo } from "react-icons/md";
 
 const notificationPermissionStatusText = (notificationToken?: string) => {
   const hasNotificationInWindow = "Notification" in window;
