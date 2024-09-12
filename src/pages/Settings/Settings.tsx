@@ -30,12 +30,13 @@ import { useUnitDistance } from "../../utils/math";
 import LogoutAccountDialog from "../../components/LogoutAccountDialog";
 import AllowNotificationButton from "../../components/AllowNotificationButton";
 import ContentContainer from "../../components/ContentContainer";
+import { MdInfo } from "react-icons/md";
 
 const notificationPermissionStatusText = (notificationToken?: string) => {
   const hasNotificationInWindow = "Notification" in window;
 
   if (!hasNotificationInWindow) {
-    return "Unsupported";
+    return "Unsupported Browser";
   }
 
   if (Notification.permission === "denied") return "Denied (requires reset in browser)";
@@ -229,6 +230,10 @@ const Settings = () => {
     }
   };
 
+  const notificationPermissionText = notificationPermissionStatusText(
+    userData.notificationToken
+  );
+
   return (
     <>
       <Header path="/profile" title="Settings" />
@@ -418,11 +423,16 @@ const Settings = () => {
               <Heading color="green" size="xs">
                 Notification settings
               </Heading>
+              {notificationPermissionText === "Unsupported Browser" && (
+                <Box display="flex" alignContent="center">
+                  <Text fontSize="sm">
+                    If you're using iOS, consider using Chrome to enable notifications.
+                  </Text>
+                </Box>
+              )}
               <Box marginTop={4} display="flex" justifyContent="space-between">
                 <AllowNotificationButton onChange={handleOnNotificationToken} size="md" />
-                <Text fontSize="sm">
-                  {notificationPermissionStatusText(userData.notificationToken)}
-                </Text>
+                <Text fontSize="sm">{notificationPermissionText}</Text>
               </Box>
             </Box>
           </CardBody>
