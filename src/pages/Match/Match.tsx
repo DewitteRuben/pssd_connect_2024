@@ -181,11 +181,7 @@ const Match = () => {
     <>
       <Box overflow="hidden">
         {relationship.relationships.suggestions_info.map((si, index) => (
-          <SwipeableCardContainer
-            width={imageDimensions?.width}
-            height={imageDimensions?.height}
-            key={si.uid}
-          >
+          <SwipeableCardContainer key={si.uid}>
             <SwipeableCard
               ref={(el) => {
                 const map = getSwipeableRefsMap();
@@ -348,7 +344,13 @@ const Match = () => {
           </Card>
         )}
       </Box>
-      <Box display="flex" justifyContent="center" gap="40px" marginTop={4}>
+      <Box
+        display="flex"
+        justifyContent="center"
+        gap="40px"
+        paddingTop={`${imageDimensions?.height}px`}
+        marginTop={4}
+      >
         <IconButton
           isRound={true}
           variant="solid"
