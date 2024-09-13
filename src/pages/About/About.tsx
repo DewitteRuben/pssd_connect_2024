@@ -15,7 +15,7 @@ const About = () => {
             justifyContent="center"
             alignItems="center"
           >
-            <Image width="96px" src="/pssdconnect_logo.svg" marginBottom={6} />
+            <Image width="96px" src="/pssdconnect_logo.svg" marginY={4} />
           </Box>
           <Heading as="h1" size="lg">
             PSSD Connect
