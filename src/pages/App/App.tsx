@@ -142,13 +142,7 @@ const App = observer(() => {
 
   if (!auth.isReady || !user.isInitialized || auth.isLoggingIn) {
     return (
-      <Box
-        width="100vw"
-        height="100vh"
-        display="flex"
-        justifyContent="center"
-        alignItems="center"
-      >
+      <Box position="absolute" top="50%" left="50%" transform="translate(-50%, -50%);">
         <Spinner size="xl" />
       </Box>
     );
