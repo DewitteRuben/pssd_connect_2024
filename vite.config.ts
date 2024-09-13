@@ -3,6 +3,7 @@ import { defineConfig } from "vite";
 import { nodePolyfills } from "vite-plugin-node-polyfills";
 import { VitePWA } from "vite-plugin-pwa";
 import react from "@vitejs/plugin-react";
+import babel from "vite-plugin-babel";
 
 export default defineConfig({
   build: {
@@ -11,6 +12,7 @@ export default defineConfig({
   },
   base: "https://pssdconnect.org",
   plugins: [
+    babel(),
     nodePolyfills(),
     react(),
     VitePWA({
