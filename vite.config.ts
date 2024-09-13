@@ -12,7 +12,13 @@ export default defineConfig({
   },
   base: "https://pssdconnect.org",
   plugins: [
-    babel(),
+    babel({
+      babelConfig: {
+        babelrc: false,
+        configFile: false,
+        plugins: ["@babel/plugin-transform-nullish-coalescing-operator"],
+      },
+    }),
     nodePolyfills(),
     react(),
     VitePWA({
