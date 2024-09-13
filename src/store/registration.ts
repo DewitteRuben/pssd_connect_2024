@@ -214,10 +214,10 @@ export class RegistrationStore {
     const curIndex = this.registrationFlow.findIndex((rf) => rf.step === this.step);
 
     let index = curIndex + 1;
-    let nextStep = this.registrationFlow.at(index);
+    let nextStep = this.registrationFlow[index];
     if (this.mode !== "dating") {
       while (nextStep?.datingOnly) {
-        nextStep = this.registrationFlow.at(index + 1);
+        nextStep = this.registrationFlow[index + 1];
         index++;
       }
     }

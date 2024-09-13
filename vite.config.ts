@@ -7,6 +7,7 @@ import react from "@vitejs/plugin-react";
 export default defineConfig({
   build: {
     outDir: "nginx/dist",
+    target: "es2015",
     sourcemap: true,
   },
   base: "https://pssdconnect.org",
