@@ -1,4 +1,4 @@
-import { Button, Text } from "@chakra-ui/react";
+import { Button, Stack, Text } from "@chakra-ui/react";
 import { observer } from "mobx-react";
 import { useMessagingSupported } from "../../firebase/messaging";
 import React from "react";
@@ -16,6 +16,8 @@ const AllowNotifications = () => {
   } = useStore();
 
   const isFbMessagingSupported = useMessagingSupported();
+  const [continueWithoutNotifications, setContinueWithoutNotifications] =
+    React.useState(false);
   const [isGetTokenSupported, setGetTokenSupported] = React.useState(true);
 
   const [notificationToken, setNotificationToken] = React.useState<string>(
@@ -45,18 +47,40 @@ const AllowNotifications = () => {
 
   return (
     <RegistrationViewContainer title="Enable Notifications">
-      {!notificationToken && isFbMessagingSupported && isGetTokenSupported && (
-        <>
-          <Text align="center">
-            We will send you a notification whenever a match has been found.
-          </Text>
-          <AllowNotificationButton onChange={handleOnAllowNotifications} size="md" />
-        </>
-      )}
+      {!continueWithoutNotifications &&
+        !notificationToken &&
+        isFbMessagingSupported &&
+        isGetTokenSupported && (
+          <>
+            <Text align="center">
+              We will send you a notification whenever a match has been found.
+            </Text>
+            <Stack spacing={4}>
+              <AllowNotificationButton onChange={handleOnAllowNotifications} size="md" />
+              <Button
+                width="100%"
+                onClick={() => setContinueWithoutNotifications(true)}
+                colorScheme="gray"
+              >
+                Continue without notifications
+              </Button>
+            </Stack>
+            <Text fontSize="xs">You can enable notifications later in the settings.</Text>
+          </>
+        )}
 
       {notificationToken && (
         <>
-          <Text align="center">We've successfully read your location</Text>
+          <Text align="center">Notifications have been successfully enabled.</Text>
+          <Button onClick={onContinue} colorScheme="green" size="lg">
+            FINISH REGISTRATION
+          </Button>
+        </>
+      )}
+
+      {continueWithoutNotifications && (
+        <>
+          <Text align="center">Your preferences have been saved.</Text>
           <Button onClick={onContinue} colorScheme="green" size="lg">
             FINISH REGISTRATION
           </Button>
