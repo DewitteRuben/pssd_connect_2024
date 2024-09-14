@@ -3,7 +3,7 @@ import { defineConfig } from "vite";
 import { nodePolyfills } from "vite-plugin-node-polyfills";
 import { VitePWA } from "vite-plugin-pwa";
 import react from "@vitejs/plugin-react";
-import babel from "vite-plugin-babel";
+import legacy from "@vitejs/plugin-legacy";
 
 export default defineConfig({
   build: {
@@ -50,5 +50,6 @@ export default defineConfig({
       project: "pssd-connect",
       authToken: process.env.SENTRY_AUTH_TOKEN,
     }),
+    legacy(),
   ],
 });
