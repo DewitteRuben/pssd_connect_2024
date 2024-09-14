@@ -1,0 +1,13 @@
+[
+    {
+        "maxAgeSeconds": 3600,
+        "method": [
+            "GET"
+        ],
+        "origin": [
+            "http://localhost:5173",
+            "http://localhost:4173",
+            "https://pssdconnect.org"
+        ]
+    }
+]
