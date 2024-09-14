@@ -31,7 +31,6 @@ const AllowNotificationButton: React.FC<TAllowNotificationButtonProps> = ({
         description: "Failed to allow notifications",
         status: "error",
         isClosable: true,
-        
       });
 
       if (onChange) {
@@ -49,6 +48,7 @@ const AllowNotificationButton: React.FC<TAllowNotificationButtonProps> = ({
 
   return (
     <Button
+      width="100%"
       onClick={onAllowNotificationSubmit}
       colorScheme="green"
       isLoading={approvingNotification}

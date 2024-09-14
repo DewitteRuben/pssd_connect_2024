@@ -429,10 +429,10 @@ const Settings = () => {
                   </Text>
                 </Box>
               )}
-              <Box marginTop={4} display="flex" justifyContent="space-between">
+              <Stack marginTop={4}>
+                <Text fontSize="sm">Status: {notificationPermissionText}</Text>
                 <AllowNotificationButton onChange={handleOnNotificationToken} size="md" />
-                <Text fontSize="sm">{notificationPermissionText}</Text>
-              </Box>
+              </Stack>
             </Box>
           </CardBody>
         </Card>
