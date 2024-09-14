@@ -24,6 +24,7 @@ export const StickyHeader = styled(Box)<{
   position: ${(props) => (props.$sticky ? "fixed" : "static")};
   top: 0;
   width: 100%;
+  max-width: 480px;
   z-index: 100;
   background: var(--chakra-colors-chakra-body-bg);
   border-bottom: ${(props) =>
