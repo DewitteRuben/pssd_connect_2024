@@ -130,7 +130,7 @@ export class UserStore {
           this.user = result;
 
           // Update the FCM token on initial load of the application
-          if (!this.tokenUpdated) {
+          if (!this.tokenUpdated && this.user.notificationToken) {
             this.updateNotificationToken();
           }
         });
