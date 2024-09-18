@@ -6,6 +6,13 @@ import { differenceInYears } from "date-fns";
 import { RelationshipModel } from "../user/relationship";
 import { calculateDistance } from "../../routes/helpers";
 
+const suggestionsWithoutLocalUsers = async (uid: string) => {
+  const suggestions = await findSuggestionsForUser(uid);
+
+  // Suggestions need to actually be just filtered down to the users added by the mock test, not other local users
+  return suggestions.filter((s) => mockUsers.find((mockUser) => s.uid === mockUser.uid));
+};
+
 describe("insert", () => {
   beforeAll(async () => {
     await MongoDB.connect();
@@ -44,8 +51,7 @@ describe("insert", () => {
   });
 
   it("should find suggestions", async () => {
-
-    const suggestions = await findSuggestionsForUser(mockUser1.uid);
+    const suggestions = await suggestionsWithoutLocalUsers(mockUser1.uid);
     expect(suggestions.find((s) => s.uid === "2")).toBeDefined();
   });
 
@@ -59,7 +65,7 @@ describe("insert", () => {
       { $set: { likes: allOtherMockUsers } }
     );
 
-    const suggestions = await findSuggestionsForUser(mockUser1.uid);
+    const suggestions = await suggestionsWithoutLocalUsers(mockUser1.uid);
 
     // filter out non-mock users
     expect(suggestions.filter((s) => allMockUsers.includes(s.uid)).length).toBe(0);
@@ -77,7 +83,7 @@ describe("insert", () => {
       }
     );
 
-    const suggestions = await findSuggestionsForUser(mockUser1.uid);
+    const suggestions = await suggestionsWithoutLocalUsers(mockUser1.uid);
 
     suggestions.forEach(({ location }) => {
       const distance = calculateDistance(
@@ -115,7 +121,7 @@ describe("insert", () => {
       }
     );
 
-    const suggestions = await findSuggestionsForUser(mockUser1.uid);
+    const suggestions = await suggestionsWithoutLocalUsers(mockUser1.uid);
 
     expect(suggestions.length).toBe(1);
     // Should no longer match with user2
@@ -129,7 +135,7 @@ describe("insert", () => {
       { $set: { preferences: { ...mockUser1.preferences, ageStart: 25, ageEnd: 50 } } }
     );
 
-    const suggestions = await findSuggestionsForUser(mockUser1.uid);
+    const suggestions = await suggestionsWithoutLocalUsers(mockUser1.uid);
     expect(
       suggestions.every((s) => {
         const age = differenceInYears(new Date(), new Date(s.birthdate));

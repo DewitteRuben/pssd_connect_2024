@@ -31,6 +31,6 @@
     "stream-chat": "^8.39.0"
   },
   "scripts": {
-    "test": "jest"
+    "test": "DOTENV_CONFIG_PATH=.env.test jest --setupFiles dotenv/config --silent=false"
   }
 }

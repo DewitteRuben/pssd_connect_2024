@@ -17,6 +17,7 @@ const config: Config = {
 
   // Automatically clear mock calls, instances, contexts and results before every test
   clearMocks: true,
+  setupFiles: ["dotenv/config"],
 
   // Indicates whether the coverage information should be collected while executing the test
   collectCoverage: true,
@@ -84,7 +85,7 @@ const config: Config = {
   // moduleNameMapper: {},
 
   // An array of regexp pattern strings, matched against all module paths before considered 'visible' to the module loader
-  modulePathIgnorePatterns: ['dist/'],
+  modulePathIgnorePatterns: ["dist/"],
 
   // Activates notifications for test results
   // notify: false,
@@ -168,7 +169,12 @@ const config: Config = {
 
   // A map from regular expressions to paths to transformers
   transform: {
-    "^.+\\.(t|j)s$": "ts-jest",
+    "^.+\\.ts?$": [
+      "ts-jest",
+      {
+        diagnostics: false,
+      },
+    ],
   },
   // An array of regexp pattern strings that are matched against all source file paths, matched files will skip transformation
   transformIgnorePatterns: ["node_modules/"],

@@ -4,6 +4,9 @@ up:
 build:
 	docker compose build
 
+test-backend:
+	cd src/backend/src && npm run test
+
 build-bundle:
 	npm run build
 
