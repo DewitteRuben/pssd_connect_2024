@@ -168,7 +168,7 @@ const Settings = () => {
 
   const updateDistanceUnit = async (event: React.ChangeEvent<HTMLSelectElement>) => {
     try {
-      const distanceUnit = event.target.value;
+      const distanceUnit = event.target.value as DistanceUnit;
 
       setDistanceUnit(distanceUnit);
 
