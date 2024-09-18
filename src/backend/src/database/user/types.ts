@@ -30,7 +30,7 @@ export type UserLocation = {
 
 export const relationshipMode = ["dating", "friends"] as const;
 export const genderPreferences = ["men", "women", "everyone"] as const;
-export const distanceUnits = ["km", "mi"];
+export const distanceUnits = ["km", "mi"] as const;
 
 export type RelationshipMode = (typeof relationshipMode)[number];
 export type Gender = "man" | "woman" | "other";
@@ -69,7 +69,7 @@ export type User = {
   firstName: string;
   birthdate: string | Date;
   gender: Gender;
-  distanceUnit: DistanceUnit;
+  distanceUnit?: DistanceUnit;
   mode: RelationshipMode;
   profile: UserProfile;
   preferences: UserPreferences;

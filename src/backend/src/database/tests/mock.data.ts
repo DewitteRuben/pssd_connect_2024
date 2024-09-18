@@ -121,7 +121,7 @@ export const mockUser4: User = {
   firstName: "Alice",
   birthdate: "1997-04-10T00:00:00.000Z", // Age ~27 years
   gender: "woman",
-  mode: "networking",
+  mode: "friends",
   images: ["https://example.com/images/alice.jpg"],
   preferences: {
     genderPreference: "men",
@@ -203,7 +203,7 @@ export const mockUser6: User = {
   firstName: "Emily",
   birthdate: "1997-07-12T00:00:00.000Z", // Age ~26 years
   gender: "woman",
-  mode: "networking",
+  mode: "dating",
   images: ["https://example.com/images/emily.jpg"],
   preferences: {
     genderPreference: "women",
@@ -324,7 +324,7 @@ export const mockUser9: User = {
   firstName: "Chris",
   birthdate: "2000-09-05T00:00:00.000Z", // Age ~24 years
   gender: "man",
-  mode: "networking",
+  mode: "dating",
   images: ["https://example.com/images/chris.jpg"],
   preferences: {
     genderPreference: "everyone",
