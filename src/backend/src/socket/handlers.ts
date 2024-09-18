@@ -19,15 +19,17 @@ export const onSuggestionRequest = (socket: Socket) => async () => {
 
   try {
     const result = await new SuggestionWorker(uid).update();
-    const resultJSON = JSON.stringify(successResponse(result[0]));
-    socket.emit("suggestion", resultJSON);
+    if (result?.length) {
+      const resultJSON = JSON.stringify(successResponse(result[0]));
+      socket.emit("suggestion", resultJSON);
+    }
 
     suggestionManager.add(uid, async (suggestions) => {
       const suggestionsJSON = JSON.stringify(successResponse(suggestions[0]));
       socket.emit("suggestion", suggestionsJSON);
     });
   } catch (error) {
-    console.error("Failed to setup suggestions", error)
+    console.error("Failed to setup suggestions", error);
   }
 };
 
