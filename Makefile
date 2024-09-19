@@ -1,5 +1,5 @@
 up:
-	docker compose up -d
+	docker compose up backend database -d
 
 build:
 	docker compose build
