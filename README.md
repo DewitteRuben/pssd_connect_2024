@@ -22,60 +22,31 @@ Suggestions are updated at regular intervals via a direct WebSocket connection u
 
 Firebase manages user authentication, generating a unique JWT token for each authenticated user. This token is used to authorize the user on the backend, where it is verified using custom Express.js middleware.
 
-## Development
+### Development
+
+### Setup
+
+1. Run `npm i` in the root directory.
+2. Run `npm i` in the `backend/src` directory.
+3. Run `make build` in the root directory.
+4. Run `npm run dev` in the root directory.
+5. Open [http://localhost:5173](http://localhost:5173) to start using the project.
+
+### Test Phone Numbers for Account Verification
+
+| Phone Number      | Verification Code |
+|-------------------|-------------------|
+| +31 622733030     | 123456            |
+| +31 622733031     | 123456            |
+| +31 622733032     | 123456            |
+| +31 622733033     | 123456            |
+| +31 622733034     | 123456            |
+| +31 622733035     | 123456            |
+| +31 622733036     | 123456            |
+| +31 622733037     | 123456            |
+| +31 622733038     | 123456            |
+| +31 622733039     | 123456            |
 
 ### Configuration
 
-Before running the project, set up the following `.env` file:
-
-```
-MONGO_USERNAME=
-MONGO_PASSWORD=
-ENVIRONMENT
-GEOAPIFY_API_KEY=
-STREAM_API_KEY=
-STREAM_API_SECRET=
-ADMIN_ID=
-MONGO_INITDB_ROOT_USERNAME=
-MONGO_INITDB_ROOT_PASSWORD=
-MONGO_INITDB_DATABASE=
-DATABASE_URL=
-VITE_GETSTREAM_CLIENT_KEY=
-VITE_PUBLIC_VAPID_KEY=
-```
-
-Additionally, you need to add the Firebase service account key file to the project. Place the `serviceAccountKey.json` file in the `src/backend/src` folder.
-
-### Start the Backend and Database
-
-Run the following command to start the Node.js backend and the MongoDB database in Docker containers:
-
-```bash
-make up
-```
-
-This command will launch the containers in the background.
-
-### Start the Frontend
-
-In a separate terminal, run the frontend using:
-
-```bash
-npm run dev
-```
-
-This command will start the development server for the frontend, which needs to run concurrently with the backend.
-
-### Updating the Backend
-
-To apply updates to the backend, use the following command:
-
-```bash
-make update-backend
-```
-
-This command copies the updated files into the backend container and restarts the Bun runtime to apply the changes.
-
-## Deployment and updating
-
-The scripts found in the `scripts` folder can help with remote management of the application
+This demo projects comes with credentials zipped together, so there is no need for additional configuration.
