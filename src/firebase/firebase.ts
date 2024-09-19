@@ -8,14 +8,12 @@ import {
 import { getMessaging, isSupported } from "firebase/messaging";
 
 export const firebaseConfig = {
-  apiKey: "AIzaSyA3-pw6utfIFyi1yDC7qHIlyj33g-TAJDQ",
-  authDomain: "pssd-app.firebaseapp.com",
-  databaseURL: "https://pssd-app-default-rtdb.firebaseio.com",
-  projectId: "pssd-app",
-  storageBucket: "pssd-app.appspot.com",
-  messagingSenderId: "141538485092",
-  appId: "1:141538485092:web:76fb20bbbe96bc6c649071",
-  measurementId: "G-T1N612GH4R",
+  apiKey: "AIzaSyAQWJdRvxFJxZu2HWgOQfPpwVr98bgqNLU",
+  authDomain: "pssd-connect-demo.firebaseapp.com",
+  projectId: "pssd-connect-demo",
+  storageBucket: "pssd-connect-demo.appspot.com",
+  messagingSenderId: "22704590714",
+  appId: "1:22704590714:web:575c320d5d9b36b22710c3"
 };
 
 const app = initializeApp(firebaseConfig);
