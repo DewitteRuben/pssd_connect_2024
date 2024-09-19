@@ -27,7 +27,7 @@ Firebase manages user authentication, generating a unique JWT token for each aut
 ### Setup
 
 1. Run `npm i` in the root directory.
-2. Run `npm i` in the `backend/src` directory.
+2. Run `npm i` in the `src/backend` directory.
 3. Run `make build` in the root directory.
 4. Run `npm run dev` in the root directory.
 5. Open [http://localhost:5173](http://localhost:5173) to start using the project.
